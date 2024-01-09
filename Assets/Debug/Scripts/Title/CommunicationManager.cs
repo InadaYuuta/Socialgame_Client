@@ -4,18 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
-[Serializable]
-public class ResponseObjects
-{
-    public UsersModel usersModel;
-}
+
 
 public class CommunicationManager : MonoBehaviour
 {
    public static IEnumerator ConnectServer(string endpoint, string paramater,Action action = null)
     {
         // *** リクエストの送付 ***
-        UnityWebRequest unityWebRequest = UnityWebRequest.Get(GameUtil.Const.SERVER_URL + endpoint + paramater);
+        UnityWebRequest unityWebRequest = UnityWebRequest.Get(GameUtil.Const.RESISTRATION_URL + endpoint + paramater);
         yield return unityWebRequest.SendWebRequest();
         // エラーの場合
         if (!string.IsNullOrEmpty(unityWebRequest.error))
