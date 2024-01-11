@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using TMPro;
+using System.Runtime.CompilerServices;
+
 
 [Serializable]
 public class ResponseObjects
@@ -19,7 +21,7 @@ public class TestScript : MonoBehaviour
 {
     [SerializeField] TMP_InputField input;
 
-    [SerializeField] string name = "ユウタ";
+    [SerializeField] string name = "tanaka";
 
     // DBモデル
     UsersModel usersModel;
@@ -27,27 +29,80 @@ public class TestScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI uuidTex;
     string uuid;
 
+    LoginChecker loginChecker;
+
+    [SerializeField] GameObject registerUI;
+    [SerializeField] GameObject startUI;
+
+
     private void Awake()
     {
-        Debug.Log("ユニークID" + SystemInfo.deviceUniqueIdentifier);
+        loginChecker = FindObjectOfType<LoginChecker>();
+
+        string deviceId = string.Format("デバイスのユニークID:{0}", SystemInfo.deviceUniqueIdentifier);
+        Debug.Log(deviceId);
+
         // SQLiteのDBファイル作成
         string DBPath = Application.persistentDataPath + "/" + GameUtil.Const.SQLITE_FILE_NAME;
         if (!File.Exists(DBPath))
         {
             File.Create(DBPath);
         }
-        // テーブル作成処理
-        Users.CreateTable();
+
+        // 確認用後から消す
+        // Users.DropTable();
+        usersModel = Users.Get();
+
+        if (usersModel == null)
+        {
+            // テーブル作成処理
+            Users.CreateTable();
+            usersModel = Users.Get();
+        }
+
+        if (!string.IsNullOrEmpty(usersModel.user_id))
+        {
+            loginChecker.OnLoginFlag();
+        }
+
+        registerUI = GameObject.Find("RegisterUI");
+        startUI = GameObject.Find("StartUI");
     }
 
     private void Start()
     {
-        // Usersの取得
-        usersModel = Users.Get();
+        GetUserID();
+        DisplayUI();
+    }
+
+    private void Update()
+    {
+        GetUserID();
+        DisplayUI();
+    }
+
+
+    // ログインしていればスタート用のUIをしていなければ登録用のUIを表示
+    void DisplayUI()
+    {
+        if (!registerUI || !startUI) { return; }
+        if (!loginChecker.IsLogin)
+        {
+            registerUI.SetActive(true);
+            startUI.SetActive(false);
+        }
+        else
+        {
+            registerUI.SetActive(false);
+            startUI.SetActive(true);
+        }
+    }
+
+    void GetUserID()
+    {
+        if (usersModel.user_id == null) { return; }
         if (!string.IsNullOrEmpty(usersModel.user_id))
         {
-            string debugStr = string.Format("User:{0}", usersModel.user_name);
-            Debug.Log(debugStr);
             uuid = string.Format("UUID:{0}", usersModel.user_id);
             uuidTex.text = uuid;
         }
@@ -57,30 +112,17 @@ public class TestScript : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        var a = Keyboard.current;
-        var b = a.digit1Key.wasPressedThisFrame;
-        if (b)
-        {
-            // Usersの取得
-            usersModel = Users.Get();
-            if (!string.IsNullOrEmpty(usersModel.user_id))
-            {
-                string debugStr = string.Format("User:{0}", usersModel.user_name);
-                Debug.Log(debugStr);
-            }
-            else
-            {
-                Debug.Log("未登録");
-            }
-        }
-    }
-
     public void TestResist()
     {
         name = input.text;
-        StartCoroutine(Resist());
+        if (name.Length < 16)
+        {
+            StartCoroutine(Resist());
+        }
+        else
+        {
+            Debug.Log("名前が長すぎる");
+        }
     }
 
     // 登録処理
@@ -117,6 +159,7 @@ public class TestScript : MonoBehaviour
                         action();
                         action = null;
                     }
+                    loginChecker.OnLoginFlag(); // 登録完了
                 }
             }
         }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 [Serializable]
 public class UsersModel
@@ -14,6 +15,7 @@ public class UsersModel
     public int login_days;           // 累計ログイン日数
     public int max_stamina;          // 最大スタミナ
     public int last_stamina;         // 最終更新時スタミナ
+
 }
 
 public class Users : MonoBehaviour
@@ -22,6 +24,14 @@ public class Users : MonoBehaviour
     public static void CreateTable()
     {
         string query = "create table if not exists users(manage_id bigint,user_id varchar,user_name varchar,handover_passhash varchar,has_weapon_exp_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,primary key(manage_id),unique (user_id))";
+        SqliteDatabase sqlDB = new SqliteDatabase(GameUtil.Const.SQLITE_FILE_NAME);
+        sqlDB.ExecuteQuery(query);
+    }
+
+    // 一旦確認用に作成、後から消す
+    public static void DropTable()
+    {
+        string query = "drop table users";
         SqliteDatabase sqlDB = new SqliteDatabase(GameUtil.Const.SQLITE_FILE_NAME);
         sqlDB.ExecuteQuery(query);
     }
@@ -56,4 +66,12 @@ public class Users : MonoBehaviour
         }
         return usersModel;
     }
+
+    // レコード更新
+    //public static void UpdateRecord(UsersModel users)
+    //{
+    //    string query = "update users set user_name = \"" users.user_name "\",handover_passhash = \"" users.handover_passhash "\",has_weapon_exp_point = " users.has_weapon_exp_point ",user_rank = " users.user_rank ",user_rank_exp = " users.has_weapon_exp_point ",login_days = " users.login_days ",max_stamina = " users.max_stamina ",last_stamina values =" users.last_stamina "where user_id = \"" users.user_id "\")";
+    //    SqliteDatabase sqlDB = new SqliteDatabase(GameUtil.Const.SQLITE_FILE_NAME);
+    //    sqlDB.ExecuteQuery(query);
+    //}
 }

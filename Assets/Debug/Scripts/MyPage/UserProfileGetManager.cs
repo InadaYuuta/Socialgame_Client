@@ -11,6 +11,7 @@ public class UserProfileGetManager : MonoBehaviour
     string userName;
 
     int lastStamina;
+    int maxStamina;
 
     UsersModel usersModel;
 
@@ -20,12 +21,13 @@ public class UserProfileGetManager : MonoBehaviour
         if (!string.IsNullOrEmpty(usersModel.user_name))
         {
             userName = usersModel.user_name;
-            userNameText.text = userName;
+            userNameText.text = string.Format("UserName:{0}", userName);
         }
-        if (usersModel.last_stamina != null)
+        if (usersModel.last_stamina != null && usersModel.max_stamina != null)
         {
             lastStamina = usersModel.last_stamina;
-            staminaText.text = string.Format("Stamina:{0}", lastStamina.ToString());
+            maxStamina = usersModel.max_stamina;
+            staminaText.text = string.Format("Stamina:{0}/{1}", lastStamina.ToString(), maxStamina.ToString());
         }
     }
 
