@@ -9,19 +9,19 @@ using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using TMPro;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 
-public class TestLoginManager : MonoBehaviour
+public class TestLoginManager : UsersBase
 {
     [SerializeField] string userId;
 
-    UsersModel usersModel;
 
-    private void Awake()
+    void Awake()
     {
-        usersModel = Users.Get();
+        base.Awake();
     }
 
-    private void Start()
+    void Start()
     {
         userId = usersModel.user_id;
     }

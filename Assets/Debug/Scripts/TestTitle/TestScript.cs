@@ -17,14 +17,11 @@ public class ResponseObjects
     public UsersModel usersModel;
 }
 
-public class TestScript : MonoBehaviour
+public class TestScript : UsersBase
 {
     [SerializeField] TMP_InputField input;
 
     [SerializeField] string name = "tanaka";
-
-    // DBモデル
-    UsersModel usersModel;
 
     [SerializeField] TextMeshProUGUI uuidTex;
     string uuid;
@@ -37,6 +34,7 @@ public class TestScript : MonoBehaviour
 
     private void Awake()
     {
+        base.Awake();
         loginChecker = FindObjectOfType<LoginChecker>();
 
         string deviceId = string.Format("デバイスのユニークID:{0}", SystemInfo.deviceUniqueIdentifier);
@@ -51,7 +49,6 @@ public class TestScript : MonoBehaviour
 
         // 確認用後から消す
         // Users.DropTable();
-        usersModel = Users.Get();
 
         if (usersModel == null)
         {
