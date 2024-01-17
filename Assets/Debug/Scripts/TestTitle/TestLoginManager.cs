@@ -1,15 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
-using TMPro;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 
 public class TestLoginManager : UsersBase
 {
@@ -51,11 +44,7 @@ public class TestLoginManager : UsersBase
                 {
                     string text = webRequest.downloadHandler.text;
                     Debug.Log(text);
-
-                    //// *** SQLiteへの保存処理 ***
-                    //ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-                    //if (!string.IsNullOrEmpty(responseObjects.usersModel.user_id))
-                    //    Users.Set(responseObjects.usersModel);
+                    FadeManager.Instance.LoadScene("MyPageScene");
                     // 正常終了アクション実行
                     if (action != null)
                     {

@@ -5,7 +5,6 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 [Serializable]
 public class UsersModel
 {
-    public int manage_id;            // ユーザー管理ID
     public string user_id;           // ユーザーID
     public string user_name;         // 表示名
     public string handover_passhash; // 引き継ぎパスワードハッシュ
@@ -23,7 +22,7 @@ public class Users : MonoBehaviour
     // テーブル作成
     public static void CreateTable()
     {
-        string query = "create table if not exists users(manage_id bigint,user_id varchar,user_name varchar,handover_passhash varchar,has_weapon_exp_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,primary key(manage_id),unique (user_id))";
+        string query = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_weapon_exp_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,primary key(manage_id),unique (user_id))";
         SqliteDatabase sqlDB = new SqliteDatabase(GameUtil.Const.SQLITE_FILE_NAME);
         sqlDB.ExecuteQuery(query);
     }
@@ -39,7 +38,7 @@ public class Users : MonoBehaviour
     // レコード登録処理
     public static void Set(UsersModel users)
     {
-        string query = "insert or replace into users(manage_id ,user_id ,user_name ,handover_passhash ,has_weapon_exp_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina) values( " + users.manage_id + ",\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_weapon_exp_point + "," + users.user_rank + "," + users.has_weapon_exp_point + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ")";
+        string query = "insert or replace into users(user_id ,user_name ,handover_passhash ,has_weapon_exp_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina) values(\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_weapon_exp_point + "," + users.user_rank + "," + users.has_weapon_exp_point + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ")";
         SqliteDatabase sqlDB = new SqliteDatabase(GameUtil.Const.SQLITE_FILE_NAME);
         sqlDB.ExecuteQuery(query);
     }
@@ -53,7 +52,6 @@ public class Users : MonoBehaviour
         UsersModel usersModel = new UsersModel();
         foreach (DataRow dr in dataTable.Rows)
         {
-            usersModel.manage_id = int.Parse(dr["manage_id"].ToString());
             usersModel.user_id = dr["user_id"].ToString();
             usersModel.user_name = dr["user_name"].ToString();
             usersModel.handover_passhash = dr["handover_passhash"].ToString();
