@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 using TMPro;
-using System.Runtime.CompilerServices;
 
-public class TestScript : UsersBase
+[Serializable]
+public class ResponseObjects
+{
+    public UsersModel usersModel;
+    public WalletsModel walletsModel;
+}
+
+public class RegistrationController : UsersBase
 {
     [SerializeField] TMP_InputField input;
 
@@ -33,25 +36,8 @@ public class TestScript : UsersBase
         string deviceId = string.Format("デバイスのユニークID:{0}", SystemInfo.deviceUniqueIdentifier);
         Debug.Log(deviceId);
 
-        // SQLiteのDBファイル作成
-        string DBPath = Application.persistentDataPath + "/" + GameUtil.Const.SQLITE_FILE_NAME;
-        if (!File.Exists(DBPath))
-        {
-            File.Create(DBPath);
-        }
-
-        if (usersModel == null)
-        {
-            // テーブル作成処理
-            Users.CreateTable();
-            usersModel = Users.Get();
-        }
-
-        if (walletsModel == null)
-        {
-            Wallets.CreateTable();
-            walletsModel = Wallets.Get();
-        }
+        CreateSQLiteFile();
+        CheckCreateTables();
 
         if (!string.IsNullOrEmpty(usersModel.user_id))
         {
@@ -73,7 +59,6 @@ public class TestScript : UsersBase
         GetUserID();
         DisplayUI();
     }
-
 
     // ログインしていればスタート用のUIをしていなければ登録用のUIを表示
     void DisplayUI()
@@ -110,7 +95,7 @@ public class TestScript : UsersBase
         name = input.text;
         if (name.Length < 16)
         {
-            StartCoroutine(Resist());
+            StartCoroutine(Registration());
         }
         else
         {
@@ -118,8 +103,34 @@ public class TestScript : UsersBase
         }
     }
 
+    void CreateSQLiteFile()
+    {
+        // SQLiteのDBファイル作成
+        string DBPath = Application.persistentDataPath + "/" + GameUtil.Const.SQLITE_FILE_NAME;
+        if (!File.Exists(DBPath))
+        {
+            File.Create(DBPath);
+        }
+    }
+
+    void CheckCreateTables()
+    {
+        // ユーザーテーブル
+        if (usersModel == null)
+        {
+            Users.CreateTable();
+            usersModel = Users.Get();
+        }
+        // ウォレットテーブル
+        if (walletsModel == null)
+        {
+            Wallets.CreateTable();
+            walletsModel = Wallets.Get();
+        }
+    }
+
     // 登録処理
-    IEnumerator Resist(Action action = null)
+    IEnumerator Registration(Action action = null)
     {
         // var deviceId = SystemInfo.deviceUniqueIdentifier;
 
@@ -145,7 +156,13 @@ public class TestScript : UsersBase
                     // *** SQLiteへの保存処理 ***
                     ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
                     if (!string.IsNullOrEmpty(responseObjects.usersModel.user_id))
+                    {
                         Users.Set(responseObjects.usersModel);
+                    }
+                    if (!string.IsNullOrEmpty(responseObjects.walletsModel.free_amount.ToString()))
+                    {
+                        Wallets.Set(responseObjects.walletsModel);
+                    }
                     // 正常終了アクション実行
                     if (action != null)
                     {

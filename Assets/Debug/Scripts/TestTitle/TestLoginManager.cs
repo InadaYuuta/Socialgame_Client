@@ -8,21 +8,11 @@ public class TestLoginManager : UsersBase
 {
     [SerializeField] string userId;
 
+    void Awake() => base.Awake();
 
-    void Awake()
-    {
-        base.Awake();
-    }
+    void Start() => userId = usersModel.user_id;
 
-    void Start()
-    {
-        userId = usersModel.user_id;
-    }
-
-    public void TestLogin()
-    {
-        StartCoroutine(Login());
-    }
+    public void TestLogin() => StartCoroutine(Login());
 
     // 登録処理
     IEnumerator Login(Action action = null)
@@ -42,9 +32,7 @@ public class TestLoginManager : UsersBase
             {
                 if (webRequest.downloadHandler != null)
                 {
-                    string text = webRequest.downloadHandler.text;
-                    Debug.Log(text);
-                    FadeManager.Instance.LoadScene("MyPageScene");
+                    FadeManager.Instance.LoadScene("MyPageScene"); // マイページに飛ぶ
                     // 正常終了アクション実行
                     if (action != null)
                     {

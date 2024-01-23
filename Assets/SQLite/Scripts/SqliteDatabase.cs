@@ -283,8 +283,10 @@ public class SqliteDatabase
 	private IntPtr Prepare (string query)
 	{
 		IntPtr stmHandle;
+
+		int byteCount = System.Text.Encoding.UTF8.GetByteCount (query); // マルチバイト文字を使えるようにする
         
-		if (sqlite3_prepare_v2 (_connection, query, query.Length, out stmHandle, IntPtr.Zero) != SQLITE_OK) {
+		if (sqlite3_prepare_v2 (_connection, query, byteCount, out stmHandle, IntPtr.Zero) != SQLITE_OK) {
 			IntPtr errorMsg = sqlite3_errmsg (_connection);
 			throw new SqliteException (Marshal.PtrToStringAnsi (errorMsg));
 		}

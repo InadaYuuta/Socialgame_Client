@@ -1715,9 +1715,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1827482910}
-  - component: {fileID: 1827482909}
   - component: {fileID: 1827482912}
   - component: {fileID: 1827482913}
+  - component: {fileID: 1827482914}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -1725,23 +1725,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1827482909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1827482908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e12dd34da7acd4f8653a12fae1fb96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  input: {fileID: 1267715673}
-  name: "\u30BF\u30CA\u30AB"
-  uuidTex: {fileID: 724455055}
-  registerUI: {fileID: 0}
-  startUI: {fileID: 0}
 --- !u!4 &1827482910
 Transform:
   m_ObjectHideFlags: 0
@@ -1782,6 +1765,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userId: 
+--- !u!114 &1827482914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1827482908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 316e12d6e3ffd1a4fbcb37fb0b42f384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 1267715673}
+  name: tanaka
+  uuidTex: {fileID: 724455055}
+  registerUI: {fileID: 0}
+  startUI: {fileID: 0}
 --- !u!1 &1900578228
 GameObject:
   m_ObjectHideFlags: 0
@@ -2001,7 +2001,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1827482909}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TestScript, Assembly-CSharp
         m_MethodName: TestResist
         m_Mode: 1
