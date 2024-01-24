@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class MouseMove : MonoBehaviour
 {
-   // MyGameInput mouseInput;
+    MouseActionMap mouseInput;
 
     [SerializeField, Header("マウスの感度")] float mouseSensitivity = 0.01f;
 
@@ -19,7 +19,7 @@ public class MouseMove : MonoBehaviour
     public GameObject PointerGameObj { get { return pointerGameObj; } }       // カーソルの下にあるオブジェクト(外部参照)
     public GameObject PointerGameObjOld { get { return pointerGameObjOld; } } // カーソルの下にあったオブジェクト(外部参照)
 
-   [SerializeField] RectTransform mouseImage;
+    [SerializeField] RectTransform mouseImage;
 
     Vector2 rectPos; // UI座標系の自分の座標
 
@@ -32,26 +32,26 @@ public class MouseMove : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-       // mouseInput = new MyGameInput();
+        mouseInput = new();
         ScreenMousePos = new Vector2(Screen.width / 2, Screen.height / 2);
-       // mouseInput.MouseInput.Move.performed += OnMouseMove;
+        mouseInput.Mouse.Move.performed += OnMouseMove;
     }
 
     void OnEnable()
     {
-        //mouseInput.Enable();
-        //mouseInput.MouseInput.Move.performed += OnMouseMove;
+        mouseInput.Enable();
+        mouseInput.Mouse.Move.performed += OnMouseMove;
     }
 
     void OnDisable()
     {
-        //mouseInput.Disable();
-        //mouseInput.MouseInput.Move.performed -= OnMouseMove;
+        mouseInput.Disable();
+        mouseInput.Mouse.Move.performed -= OnMouseMove;
     }
 
     void OnDestroy()
     {
-     //   mouseInput.Dispose();
+        mouseInput.Dispose();
     }
 
     void RayHitMove()
@@ -125,31 +125,31 @@ public class MouseMove : MonoBehaviour
     // マウスが動いたときに呼ばれるコールバック
     void OnMouseMove(InputAction.CallbackContext context)
     {
-        //Vector2 mouseInputVal = mouseInput.MouseInput.Move.ReadValue<Vector2>();             // マウスの移動量
-        //Vector3 worldMouseInputVal = new Vector3(mouseInputVal.x, mouseInputVal.y, 0f);      // 三次元空間のマウスの移動量
+        Vector2 mouseInputVal = mouseInput.Mouse.Move.ReadValue<Vector2>();             // マウスの移動量
+        Vector3 worldMouseInputVal = new Vector3(mouseInputVal.x, mouseInputVal.y, 0f);      // 三次元空間のマウスの移動量
 
-        //if (Mathf.Abs(worldMouseInputVal.x) > 0.1f || Mathf.Abs(worldMouseInputVal.y) > 0.1f)
-        //{
-        //    var rect = GetComponent<RectTransform>();
+        if (Mathf.Abs(worldMouseInputVal.x) > 0.1f || Mathf.Abs(worldMouseInputVal.y) > 0.1f)
+        {
+            var rect = GetComponent<RectTransform>();
 
-        //    rectPos = mouseImage.transform.position;
+            rectPos = mouseImage.transform.position;
 
-        //    Vector3 newPos = rect.transform.position + (Vector3)mouseInputVal * mouseSensitivity;
+            Vector3 newPos = rect.transform.position + (Vector3)mouseInputVal * mouseSensitivity;
 
-        //    // 画面の外に出ないように移動制限
-        //    Vector2 screenPos = Camera.main.ScreenToViewportPoint(newPos);
-        //    Vector2 viewClamp = new Vector2(screenPos.x, screenPos.y);
-        //    if (0 <= viewClamp.x && viewClamp.x <= 1 && viewClamp.y <= 1 && 0 <= viewClamp.y)
-        //    {
-        //        rect.transform.position = newPos;
+            // 画面の外に出ないように移動制限
+            Vector2 screenPos = Camera.main.ScreenToViewportPoint(newPos);
+            Vector2 viewClamp = new Vector2(screenPos.x, screenPos.y);
+            if (0 <= viewClamp.x && viewClamp.x <= 1 && viewClamp.y <= 1 && 0 <= viewClamp.y)
+            {
+                rect.transform.position = newPos;
 
-        //        WorldMousePos = transform.position;
+                WorldMousePos = transform.position;
 
-        //        ScreenMousePos = rect.transform.position;
-        //    }
-        //    RayHitMove();
+                ScreenMousePos = rect.transform.position;
+            }
+            RayHitMove();
 
-        //    pointerGameObjOld = pointerGameObj;
-        //}
+            pointerGameObjOld = pointerGameObj;
+        }
     }
 }

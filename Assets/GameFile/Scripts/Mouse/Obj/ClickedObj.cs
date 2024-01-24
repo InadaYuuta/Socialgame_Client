@@ -31,8 +31,13 @@ public class ClickedObj : MonoBehaviour
         var clickedTag = clickedObj.tag;
         switch (clickedTag)
         {
-            case "": // plusButtonのタグを作って入れる
+            case "StaminaPlusButton":
                 // ここにショップへの遷移処理を書く
+                Debug.Log("スタミナショップへ遷移");
+                break;
+            case "WalletPlusButton":
+                // ここにショップへの遷移処理を書く
+                Debug.Log("通貨ショップへ遷移");
                 break;
             default:
                 ClickedLayerMove();

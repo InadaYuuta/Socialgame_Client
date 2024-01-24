@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class LeftClick : MonoBehaviour
 {
-   // MyGameInput mouseInput;
+    MouseActionMap mouseInput;
 
     public GameObject clickedGameObj { get; private set; }      // クリックされているオブジェクト、外部から参照可
     public GameObject clickedGameObjOld { get; private set; }   // ひとつ前にクリックされていたオブジェクト
@@ -21,37 +21,35 @@ public class LeftClick : MonoBehaviour
     bool dragStart = false;   // ドラッグを始めるかどうか
     public bool DragStart { get { return dragStart; } }
 
-    [SerializeField] RectTransform rect;
+   [SerializeField] RectTransform rect;
 
-
-    [SerializeField] Sprite[] mouseSprites;
+    //[SerializeField] Sprite[] mouseSprites;
     Image image;
 
     void OnEnable()
     {
-        //mouseInput.Enable();
-        //// コールバック登録
-        //mouseInput.MouseInput.LeftClick.performed += OnLeftClick;
-        //mouseInput.MouseInput.LeftClick.canceled += OnLeftClickUp;
+        mouseInput.Enable();
+        // コールバック登録
+        mouseInput.Mouse.LeftClick.performed += OnLeftClick;
+        mouseInput.Mouse.LeftClick.canceled += OnLeftClickUp;
     }
 
     void OnDisable()
     {
-        //mouseInput.Disable();
-        //// コールバック削除
-        //mouseInput.MouseInput.LeftClick.performed -= OnLeftClick;
-        //mouseInput.MouseInput.LeftClick.canceled -= OnLeftClickUp;
+        // コールバック削除
+        mouseInput.Mouse.LeftClick.performed -= OnLeftClick;
+        mouseInput.Mouse.LeftClick.canceled -= OnLeftClickUp;
+        mouseInput.Disable();
     }
 
     void OnDestroy()
     {
-       // mouseInput.Dispose();
+        mouseInput.Dispose();
     }
 
     void Awake()
     {
-        //mouseInput = new MyGameInput();
-        //gameManager = FindObjectOfType<GameManager>();
+        mouseInput = new();
         rect = GetComponent<RectTransform>();
         image = GetComponent<Image>();
     }
@@ -60,7 +58,7 @@ public class LeftClick : MonoBehaviour
     // クリックされている間に呼ばれるメソッド
     void OnLeftClick(InputAction.CallbackContext context)
     {
-        image.sprite = mouseSprites[0];
+        //image.sprite = mouseSprites[0];
         isLeftClick = true;
         isLeftClickUp = false;
         Vector3 objPos = rect.transform.position;
@@ -94,13 +92,12 @@ public class LeftClick : MonoBehaviour
     // クリックが離された時のメソッド
     void OnLeftClickUp(InputAction.CallbackContext context)
     {
-        image.sprite = mouseSprites[1];
+        // image.sprite = mouseSprites[1];
         ClickUpSetFlag();
         Vector3 objPos = rect.transform.position;
 
         // マウスの位置にRayを飛ばす
         Ray ray = Camera.main.ScreenPointToRay(objPos);
-
         // RayCastで当たったオブジェクトを取得
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
