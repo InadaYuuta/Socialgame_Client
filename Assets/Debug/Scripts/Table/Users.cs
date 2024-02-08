@@ -6,13 +6,12 @@ public class UsersModel
     public string user_id;           // ユーザーID
     public string user_name;         // 表示名
     public string handover_passhash; // 引き継ぎパスワードハッシュ
-    public int has_weapon_exp_point; // 所持武器経験値
+    public int has_reinforce_point;  // 所持強化ポイント
     public int user_rank;            // ユーザーランク
     public int user_rank_exp;        // ユーザーランク用の経験値
     public int login_days;           // 累計ログイン日数
     public int max_stamina;          // 最大スタミナ
     public int last_stamina;         // 最終更新時スタミナ
-
 }
 
 public class Users : TableBase
@@ -20,7 +19,7 @@ public class Users : TableBase
     // テーブル作成
     public static void CreateTable()
     {
-        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_weapon_exp_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,unique (user_id))";
+        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_reinforce_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,unique (user_id))";
         RunQuery(createQuery);
     }
 
@@ -35,7 +34,7 @@ public class Users : TableBase
     // レコード登録処理
     public static void Set(UsersModel users)
     {
-        setQuery = "insert or replace into users(user_id ,user_name ,handover_passhash ,has_weapon_exp_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina) values(\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_weapon_exp_point + "," + users.user_rank + "," + users.has_weapon_exp_point + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ")";
+        setQuery = "insert or replace into users(user_id ,user_name ,handover_passhash ,has_reinforce_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina) values(\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_reinforce_point + "," + users.user_rank + "," + users.user_rank_exp + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ")";
         RunQuery(setQuery);
     }
 
@@ -50,7 +49,7 @@ public class Users : TableBase
             usersModel.user_id = dr["user_id"].ToString();
             usersModel.user_name = dr["user_name"].ToString();
             usersModel.handover_passhash = dr["handover_passhash"].ToString();
-            usersModel.has_weapon_exp_point = int.Parse(dr["has_weapon_exp_point"].ToString());
+            usersModel.has_reinforce_point = int.Parse(dr["has_reinforce_point"].ToString());
             usersModel.user_rank = int.Parse(dr["user_rank"].ToString());
             usersModel.user_rank_exp = int.Parse(dr["user_rank_exp"].ToString());
             usersModel.login_days = int.Parse(dr["login_days"].ToString());

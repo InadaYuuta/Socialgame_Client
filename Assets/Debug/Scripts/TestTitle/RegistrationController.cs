@@ -6,13 +6,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
 
-[Serializable]
-public class ResponseObjects
-{
-    public UsersModel usersModel;
-    public WalletsModel walletsModel;
-}
-
 public class RegistrationController : UsersBase
 {
     [SerializeField] TMP_InputField input;
@@ -27,6 +20,7 @@ public class RegistrationController : UsersBase
     [SerializeField] GameObject registerUI;
     [SerializeField] GameObject startUI;
 
+    [SerializeField] ResponseObjects responseObj; // テスト用
 
     private void Awake()
     {
@@ -56,6 +50,7 @@ public class RegistrationController : UsersBase
 
     private void Update()
     {
+        base.Update();
         GetUserID();
         DisplayUI();
     }
@@ -127,6 +122,12 @@ public class RegistrationController : UsersBase
             Wallets.CreateTable();
             walletsModel = Wallets.Get();
         }
+        // アイテムテーブル
+        //if (itemsModel == null)
+        //{
+        //    Items.CreateTable();
+        //    itemsModel = Items.Get();
+        //}
     }
 
     // 登録処理
@@ -154,15 +155,24 @@ public class RegistrationController : UsersBase
                     Debug.Log(text);
 
                     // *** SQLiteへの保存処理 ***
+                    responseObj = JsonUtility.FromJson<ResponseObjects>(text);
                     ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-                    if (!string.IsNullOrEmpty(responseObjects.usersModel.user_id))
+
+                    // ユーザーテーブル
+                    if (!string.IsNullOrEmpty(responseObjects.users.user_id))
                     {
-                        Users.Set(responseObjects.usersModel);
+                        Users.Set(responseObjects.users);
                     }
-                    if (!string.IsNullOrEmpty(responseObjects.walletsModel.free_amount.ToString()))
+                    // ウォレットテーブル
+                    if (!string.IsNullOrEmpty(responseObjects.wallets.free_amount.ToString()))
                     {
-                        Wallets.Set(responseObjects.walletsModel);
+                        Wallets.Set(responseObjects.wallets, responseObj.users.user_id);
                     }
+                    // アイテムテーブル
+                    //if (!string.IsNullOrEmpty(responseObjects.itemsModel.item_id.ToString()))
+                    //{
+                    //    Items.Set(responseObjects.itemsModel);
+                    //}
                     // 正常終了アクション実行
                     if (action != null)
                     {

@@ -144,8 +144,8 @@ public class TestScript : UsersBase
 
                     // *** SQLiteへの保存処理 ***
                     ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-                    if (!string.IsNullOrEmpty(responseObjects.usersModel.user_id))
-                        Users.Set(responseObjects.usersModel);
+                    if (!string.IsNullOrEmpty(responseObjects.users.user_id))
+                        Users.Set(responseObjects.users);
                     // 正常終了アクション実行
                     if (action != null)
                     {

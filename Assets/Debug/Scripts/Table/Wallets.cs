@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 [Serializable]
 public class WalletsModel
@@ -13,14 +14,16 @@ public class Wallets : TableBase
     // テーブル作成
     public static void CreateTable()
     {
-        createQuery = "create table if not exists wallets(free_amount mediumint,paid_amount mediumint,max_amount mediumint)";
+        createQuery = "create table if not exists wallets(user_id varchar,free_amount mediumint,paid_amount mediumint,max_amount mediumint,primary key(user_id))";
         RunQuery(createQuery);
     }
 
     // レコード登録処理
-    public static void Set(WalletsModel walles)
+    public static void Set(WalletsModel walles, string user_id)
     {
-        setQuery = "insert or replace into wallets(free_amount,paid_amount,max_amount) values(," + walles.free_amount + "," + walles.paid_amount + "," + walles.max_amount + ")";
+        Debug.WriteLine("なんやこれ");
+        if (walles == null || user_id == null) { return; }
+        setQuery = "insert or replace into wallets(user_id,free_amount,paid_amount,max_amount) values(\"" + user_id + "\"," + walles.free_amount + "," + walles.paid_amount + "," + walles.max_amount + ")";
         RunQuery(setQuery);
     }
 
@@ -32,9 +35,9 @@ public class Wallets : TableBase
         WalletsModel walletsModel = new();
         foreach (DataRow dr in dataTable.Rows)
         {
-            walletsModel.free_amount = int.Parse(dr[""].ToString());
-            walletsModel.paid_amount = int.Parse(dr[""].ToString());
-            walletsModel.max_amount = int.Parse(dr[""].ToString());
+            walletsModel.free_amount = int.Parse(dr["free_amount"].ToString());
+            walletsModel.paid_amount = int.Parse(dr["paid_amount"].ToString());
+            walletsModel.max_amount = int.Parse(dr["max_amount"].ToString());
         }
         return walletsModel;
     }
