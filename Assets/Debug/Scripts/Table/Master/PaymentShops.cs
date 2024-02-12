@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
 
 [Serializable]
 public class PaymentShopModel
@@ -32,34 +30,15 @@ public class PaymentShops : TableBase
         }
     }
 
-    // レコード取得処理
-    //public static Dictionary<int, PaymentShopModel> GetPaymentShops()
-    //{
-    //    Dictionary<int, PaymentShopModel> list = new();
-    //    getQuery = "select * from payment_shops";
-    //    DataTable dataTable = RunQuery(getQuery);
-    //    PaymentShopModel paymentShopsModel = new();
-    //    foreach (DataRow dr in dataTable.Rows)
-    //    {
-    //        paymentShopsModel.product_id = int.Parse(dr["product_id"].ToString());
-    //        paymentShopsModel.product_name = dr["product_name"].ToString();
-    //        paymentShopsModel.price = int.Parse(dr["price"].ToString());
-    //        paymentShopsModel.paid_currency = int.Parse(dr["paid_currency"].ToString());
-    //        paymentShopsModel.bonus_currency = int.Parse(dr["bonus_currency"].ToString());
-    //        list.Add(paymentShopsModel.product_id, paymentShopsModel);
-    //    }
-    //    return list;
-    //}
-
-
-    public static PaymentShopModel[] GetPaymentShops()
+    // 全ての商品を取得
+    public static PaymentShopModel[] GetPaymentShopAll()
     {
-        List<PaymentShopModel> list = new List<PaymentShopModel>();
+        List<PaymentShopModel> list = new();
         getQuery = "select * from payment_shops";
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            PaymentShopModel paymentShopsModel = new PaymentShopModel();
+            PaymentShopModel paymentShopsModel = new();
             paymentShopsModel.product_id = int.Parse(dr["product_id"].ToString());
             paymentShopsModel.product_name = dr["product_name"].ToString();
             paymentShopsModel.price = int.Parse(dr["price"].ToString());
@@ -70,7 +49,7 @@ public class PaymentShops : TableBase
         return list.ToArray(); // Listを配列に変換して返す
     }
 
-
+    // 指定された商品IDの商品だけを取得
     public static PaymentShopModel GetPaymentShop(string product_id)
     {
         PaymentShopModel paymentShopsModel = new();

@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TitleBackManager : MonoBehaviour
 {
+    bool isFinish = false;
+
     public void TitleBack()
     {
-        FadeManager.Instance.LoadScene("TestScene");
+        if (!isFinish)
+        {
+            isFinish = true;
+            FadeManager.Instance.LoadScene("TestScene", 0.5f);
+        }
     }
 }

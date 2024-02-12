@@ -17,7 +17,7 @@ public class GetPaymentShopData : MonoBehaviour
         Debug.Log(b.product_name);
 
 
-        PaymentShopModel[] list = PaymentShops.GetPaymentShops();
+        PaymentShopModel[] list = PaymentShops.GetPaymentShopAll();
         int count = 0;
         foreach (var element in list)
         {

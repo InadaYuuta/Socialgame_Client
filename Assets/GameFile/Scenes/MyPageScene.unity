@@ -371,7 +371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &63170030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1732,7 +1732,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 342604209}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 68785919}
+        m_TargetAssemblyTypeName: ChangeHomeMode, Assembly-CSharp
+        m_MethodName: ChoiceBag
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &342604209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6971,7 +6983,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 68785919}
         m_TargetAssemblyTypeName: ChangeHomeMode, Assembly-CSharp
-        m_MethodName: ChoiceHome
+        m_MethodName: ChoiceOption
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7037,7 +7049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1320117272
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7260,7 +7272,7 @@ RectTransform:
   m_Children:
   - {fileID: 1086863676}
   m_Father: {fileID: 643230418}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9286,7 +9298,7 @@ RectTransform:
   m_Children:
   - {fileID: 980758212}
   m_Father: {fileID: 801482363}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

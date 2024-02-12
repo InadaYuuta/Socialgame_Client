@@ -11,7 +11,7 @@ public class ResponseObjects
     public int master_data_version;
     public UsersModel users;
     public WalletsModel wallets;
-    public ItemsModel items;
+    //public ItemsModel items;
     public ItemCategoryModel[] item_category;
     public PaymentShopModel[] payment_shop;
 }

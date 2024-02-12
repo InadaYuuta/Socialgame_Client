@@ -9,7 +9,7 @@ public class TestTitleManager : MonoBehaviour
     {
         if(itemCategoryModel == null)
         {
-        //ItemCategories.CreateTable();
+        ItemCategories.CreateTable();
         }
         if(paymentShopModel == null)
         {

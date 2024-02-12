@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class UsersBase : MonoBehaviour
 {
-   [SerializeField] protected UsersModel usersModel;      // ユーザーテーブル
+    [SerializeField] protected UsersModel usersModel;      // ユーザーテーブル
     [SerializeField] protected WalletsModel walletsModel; // ウォレットテーブル
-    protected ItemsModel itemsModel;
+    //protected ItemsModel itemsModel;
 
     protected virtual void Awake()
     {

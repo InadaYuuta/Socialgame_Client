@@ -13,6 +13,13 @@ public class ChangeHomeMode : MonoBehaviour
         shopCanvas.SetActive(false);
     }
 
+    // オプションが選択された時
+    public void ChoiceOption()
+    {
+        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        currentMode = HomeMode.Option;
+    }
+
     // ホームが選択された時
     public void ChoiceHome()
     {
@@ -25,5 +32,12 @@ public class ChangeHomeMode : MonoBehaviour
     {
         shopCanvas.SetActive(true);
         currentMode = HomeMode.Shop;
+    }
+
+    // バッグが選択された時
+    public void ChoiceBag()
+    {
+        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        currentMode = HomeMode.Bag;
     }
 }
