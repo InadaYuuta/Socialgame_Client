@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class ItemMasterModel
@@ -14,7 +15,10 @@ public class ItemsMaster : TableBase
     // テーブル作成
     public static void CreateTable()
     {
-        createQuery = "create table if not exists item_masters(item_id bigint,item_name varchar,item_category tinyint,primary key(item_id),index(item_category))";
+        createQuery = "create table if not exists item_masters(item_id bigint,item_name varchar,item_category tinyint,primary key(item_id))";
+        RunQuery(createQuery);
+        // インデックス作成
+        createQuery = "CREATE INDEX IF NOT EXISTS item_category_index ON item_masters(item_category);";
         RunQuery(createQuery);
     }
 
@@ -23,8 +27,8 @@ public class ItemsMaster : TableBase
     {
         foreach (ItemMasterModel itemMasterModel in item_master_model_list)
         {
-            setQuery = "insert or replace into item_masters(item_id,item_name,item_category) values(" + itemMasterModel.item_id + ",\"" + itemMasterModel.item_name + "," + itemMasterModel.item_category + ")";
-            RunQuery(createQuery);
+            setQuery = "insert or replace into item_masters(item_id, item_name, item_category) values(" + itemMasterModel.item_id + ", '" + itemMasterModel.item_name + "', " + itemMasterModel.item_category + ")";
+            RunQuery(setQuery);
         }
     }
 

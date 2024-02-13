@@ -1,29 +1,24 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[SelectionBase]
+[Serializable]
 public class ItemCategoryModel
 {
-    public int item_category;
-    public string category_name;
+    public int item_category;    // アイテムカテゴリー
+    public string category_name; // カテゴリーの名前
 }
 
 public class ItemCategories : TableBase
 {
-    public enum CategoryType
-    {
-        Stamina = 1, // スタミナ
-        ReInForce,   // 強化
-        ExChange,    // 交換
-        Convex,      // 凸
-    }
-
+    // テーブル作成
     public static void CreateTable()
     {
         createQuery = "create table if not exists item_categories (item_category tinyint, category_name varchar,primary key(item_category))";
         RunQuery(createQuery);
     }
 
+    // レコード登録処理
     public static void Set(ItemCategoryModel[] item_category_model_list)
     {
         foreach (ItemCategoryModel itemCategoryModel in item_category_model_list)
@@ -50,7 +45,7 @@ public class ItemCategories : TableBase
     }
 
     // 指定したカテゴリーだけを取得
-    public static ItemCategoryModel GetItemCategory(string item_category)
+    public static ItemCategoryModel GetItemCategory(int item_category)
     {
         ItemCategoryModel itemCategoryModel = new();
         getQuery = "select * from item_categories where item_category" + item_category;

@@ -1383,7 +1383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30BD\u30FC\u30B7\u30E3\u30EB\u30B2\u30FC\u30E0"
+  m_text: "\u30BD\u30FC\u30B7\u30E3\u30EB\u30B2\u30FC\u30E0(\u4EEE)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1d1c9a4afebce9b4e81bafa03082eaa2, type: 2}
   m_sharedMaterial: {fileID: 1849275437776445626, guid: 1d1c9a4afebce9b4e81bafa03082eaa2, type: 2}
@@ -2225,27 +2225,6 @@ MonoBehaviour:
   uuidTex: {fileID: 724455055}
   registerUI: {fileID: 1663309343}
   startUI: {fileID: 1125472519}
-  responseObj:
-    master_data_version: 0
-    users:
-      user_id: 
-      user_name: 
-      handover_passhash: 
-      has_reinforce_point: 0
-      user_rank: 0
-      user_rank_exp: 0
-      login_days: 0
-      max_stamina: 0
-      last_stamina: 0
-    wallets:
-      free_amount: 0
-      paid_amount: 0
-      max_amount: 0
-    items:
-      item_id: 0
-      has_stamina_item_num: 0
-      has_exchange_item_num: 0
-    payment_shop: []
 --- !u!1 &1900578228
 GameObject:
   m_ObjectHideFlags: 0

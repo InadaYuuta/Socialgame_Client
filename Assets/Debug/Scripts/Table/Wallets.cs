@@ -21,7 +21,6 @@ public class Wallets : TableBase
     // ÉåÉRÅ[Éhìoò^èàóù
     public static void Set(WalletsModel walles, string user_id)
     {
-        Debug.WriteLine("Ç»ÇÒÇ‚Ç±ÇÍ");
         if (walles == null || user_id == null) { return; }
         setQuery = "insert or replace into wallets(user_id,free_amount,paid_amount,max_amount) values(\"" + user_id + "\"," + walles.free_amount + "," + walles.paid_amount + "," + walles.max_amount + ")";
         RunQuery(setQuery);

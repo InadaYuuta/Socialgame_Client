@@ -8,12 +8,16 @@ using UnityEngine.Networking;
 [Serializable]
 public class ResponseObjects
 {
-    public int master_data_version;
     public UsersModel users;
     public WalletsModel wallets;
-    //public ItemsModel items;
+    public ItemsModel[] items;
+    // マスターデータ
+    public int master_data_version;
+    public ItemMasterModel[] item_master;
     public ItemCategoryModel[] item_category;
+    public ExchangeItemCategoryModel[] exchange_item_category;
     public PaymentShopModel[] payment_shop;
+    public ExchangeShopModel[] exchange_item_shop;
 }
 
 public class CommunicationManager : MonoBehaviour
@@ -32,6 +36,119 @@ public class CommunicationManager : MonoBehaviour
         {
             Destroy(this);
             return;
+        }
+    }
+
+    /// <summary>
+    /// ユーザー情報更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateUserData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
+        {
+            Users.Set(responseObjects.users);
+        }
+    }
+
+    /// <summary>
+    /// ウォレット情報更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateWalletData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.wallets != null)
+        {
+            UsersModel usersModel = Users.Get();
+            Wallets.Set(responseObjects.wallets, usersModel.user_id);
+        }
+    }
+
+    /// <summary>
+    /// アイテム情報更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateItemData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.items != null)
+        {
+            Items.Set(responseObjects.items);
+        }
+    }
+
+    /// <summary>
+    /// マスターデータの更新
+    /// </summary>
+    /// <param name="requireComponent"></param>
+    static void UpdateMasterData(ResponseObjects responseObjects)
+    {
+        // バージョン保存
+        if (responseObjects.master_data_version != null)
+        {
+            SaveManager.Instance.SetMasterDataVersion(responseObjects.master_data_version);
+        }
+        // カテゴリー保存
+        if (responseObjects.item_category != null)
+        {
+            ItemCategories.Set(responseObjects.item_category);
+        }
+        // 交換ショップのカテゴリー保存
+        if (responseObjects.exchange_item_category != null)
+        {
+           ExchangeShopCategories.Set(responseObjects.exchange_item_category);
+        }
+        // アイテムマスタのデータ保存
+        if (responseObjects.item_master != null)
+        {
+            ItemsMaster.Set(responseObjects.item_master);
+        }
+        // 通貨ショップ情報保存
+        if (responseObjects.payment_shop != null)
+        {
+            PaymentShops.Set(responseObjects.payment_shop);
+        }
+        // 交換ショップ情報保存
+        if (responseObjects.exchange_item_shop != null)
+        {
+            ExchangeShops.Set(responseObjects.exchange_item_shop);
+        }
+    }
+
+    /// <summary>
+    /// リンクごとに情報の更新、保存を行う
+    /// </summary>
+    /// <param name="connectURL"></param>
+    /// <param name="responseObjects"></param>
+    static void ConnectMove(string connectURL, ResponseObjects responseObjects)
+    {
+        switch (connectURL)
+        {
+            case GameUtil.Const.LOGIN_URL:
+            case GameUtil.Const.STAMINA_CONSUMPTION:
+                UpdateUserData(responseObjects);
+                break;
+            case GameUtil.Const.BUY_CURRENCY_URL:
+                UpdateWalletData(responseObjects);
+                break;
+            case GameUtil.Const.ITEM_REGISTRATION_URL:
+            case GameUtil.Const.ITEM_UPDATE_URL:
+                UpdateItemData(responseObjects);
+                break;
+            case GameUtil.Const.REGISTRATION_URL:
+                UpdateUserData(responseObjects);
+                UpdateWalletData(responseObjects);
+                break;
+            case GameUtil.Const.STAMINA_RECOVERY_URL:
+            case GameUtil.Const.BUY_EXCHANGE_SHOP_URL:
+                UpdateUserData(responseObjects);
+                UpdateWalletData(responseObjects);
+                UpdateItemData(responseObjects);
+                break;
+            case GameUtil.Const.MASTER_GET_URL:
+                UpdateMasterData(responseObjects);
+                break;
+            default:
+                break;
         }
     }
 
@@ -79,58 +196,7 @@ public class CommunicationManager : MonoBehaviour
 
                 // *** SQLiteへの保存処理 ***
                 ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-
-                switch (connectURL)
-                {
-                    case GameUtil.Const.RESISTRATION_URL:
-                    case GameUtil.Const.STAMINA_RECOVERY_URL:
-                        // ユーザー情報保存
-                        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
-                        {
-                            Users.Set(responseObjects.users);
-                        }
-                        // 通貨情報保存
-                        if (responseObjects.wallets != null)
-                        {
-                            UsersModel usersModel = Users.Get();
-                            Wallets.Set(responseObjects.wallets, usersModel.user_id);
-                        }
-                        break;
-                    case GameUtil.Const.LOGIN_URL:
-                    case GameUtil.Const.STAMINA_CONSUMPTION:
-                        // ユーザー情報保存
-                        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
-                        {
-                            Users.Set(responseObjects.users);
-                        }
-                        break;
-                    case GameUtil.Const.BUY_CURRENCY_URL:
-                        // 通貨情報保存
-                        if (responseObjects.wallets != null)
-                        {
-                            UsersModel usersModel = Users.Get();
-                            Wallets.Set(responseObjects.wallets, usersModel.user_id);
-                        }
-                        break;
-                    // TODO:アイテムのテーブルができたら、スタミナ回復用のケースを用意する
-                    default:
-                        // バージョン保存
-                        if (responseObjects.master_data_version != null)
-                        {
-                            SaveManager.Instance.SetMasterDataVersion(responseObjects.master_data_version);
-                        }
-                        // カテゴリー保存
-                        if (responseObjects.item_category != null)
-                        {
-                            ItemCategories.Set(responseObjects.item_category);
-                        }
-                        // 通貨ショップ情報保存
-                        if (responseObjects.payment_shop != null)
-                        {
-                            PaymentShops.Set(responseObjects.payment_shop);
-                        }
-                        break;
-                }
+                ConnectMove(connectURL, responseObjects);
 
                 // 正常終了アクション実行
                 if (action != null)

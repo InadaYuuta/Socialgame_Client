@@ -32,10 +32,11 @@ public class StaminaRecoveryController : MonoBehaviour
         maxStamina = Users.Get().max_stamina;
     }
 
-    public void StaminaRecovery()
+     void StaminaRecovery()
     {
         if (currentStamina >= maxStamina)
         {
+            unRecoveryStr = "これ以上スタミナを回復できない";
             StartCoroutine(ResultPanelController.DisplayResultPanel(unRecoveryStr));
         }
         else
@@ -45,6 +46,39 @@ public class StaminaRecoveryController : MonoBehaviour
             recoveryForm.Add(new MultipartFormDataSection("remode", recoveryMode));
             StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.STAMINA_RECOVERY_URL, recoveryForm, null));
             StartCoroutine(ResultPanelController.DisplayResultPanel(recoveryStr));
+        }
+
+    }
+
+    // 通貨でのスタミナ回復
+    public void StaminaRecoveryCurrency()
+    {
+        int wallet = Wallets.Get().free_amount + Wallets.Get().paid_amount;
+        if (wallet > 5)
+        {
+            recoveryStr = "スタミナを回復した\r\n通貨を5消費した";
+            StaminaRecovery();
+        }
+        else
+        {
+            unRecoveryStr = "通貨が足りない";
+            StartCoroutine(ResultPanelController.DisplayResultPanel(unRecoveryStr));
+        }
+    }
+
+    // アイテムでのスタミナ回復
+    public void StaminaRecoveryItem()
+    {
+        int staminaItem = Items.GetItemData(10001).item_num;
+        if(staminaItem > 0)
+        {
+        recoveryStr = "スタミナを回復した\r\nスタミナアイテムを１消費した";
+        StaminaRecovery();
+        }
+        else
+        {
+            unRecoveryStr = "スタミナ回復アイテムが足りない";
+            StartCoroutine(ResultPanelController.DisplayResultPanel(unRecoveryStr));
         }
 
     }

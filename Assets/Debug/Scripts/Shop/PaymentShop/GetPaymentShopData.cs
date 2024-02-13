@@ -13,7 +13,7 @@ public class GetPaymentShopData : MonoBehaviour
     void Start()
     {
         //model = PaymentShops.Get();
-        var b = PaymentShops.GetPaymentShop("10001");
+        var b = PaymentShops.GetPaymentShop(10001);
         Debug.Log(b.product_name);
 
 

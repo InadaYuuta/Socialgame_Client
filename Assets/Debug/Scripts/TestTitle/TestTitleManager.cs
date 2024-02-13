@@ -1,25 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class TestTitleManager : MonoBehaviour
 {
-    ItemCategoryModel itemCategoryModel;
-    PaymentShopModel paymentShopModel;
-
     void Awake()
     {
-        if(itemCategoryModel == null)
-        {
+        // 各マスターテーブル作成
+        ItemsMaster.CreateTable();
         ItemCategories.CreateTable();
-        }
-        if(paymentShopModel == null)
-        {
+        ExchangeShopCategories.CreateTable();
         PaymentShops.CreateTable();
-        }
+        ExchangeShops.CreateTable();
     }
 
     void Start()
     {
         // マスターデータチェック
         StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
+
+        List<IMultipartFormSection> form = new();
+        form.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
+        // アイテムデータ作成
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.ITEM_REGISTRATION_URL, form, null));
     }
 }

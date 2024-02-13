@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
@@ -20,7 +18,7 @@ public class RegistrationController : UsersBase
     [SerializeField] GameObject registerUI;
     [SerializeField] GameObject startUI;
 
-    [SerializeField] ResponseObjects responseObj; // テスト用
+    ItemsModel[] itemsModel;
 
     private void Awake()
     {
@@ -40,6 +38,11 @@ public class RegistrationController : UsersBase
 
         registerUI = GameObject.Find("RegisterUI");
         startUI = GameObject.Find("StartUI");
+
+        if(Items.GetItemData(10001).item_id != null)
+        {
+            itemsModel = Items.GetItemDataAll();
+        }
     }
 
     private void Start()
@@ -90,7 +93,13 @@ public class RegistrationController : UsersBase
         name = input.text;
         if (name.Length < 16)
         {
-            StartCoroutine(Registration());
+            List<IMultipartFormSection> registForm = new(); // WWWFormの新しいやり方
+            registForm.Add(new MultipartFormDataSection("un", name));
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.REGISTRATION_URL, registForm, null));
+            if (Users.Get().user_id != null)
+            {
+                loginChecker.OnLoginFlag(); // 登録完了
+            }
         }
         else
         {
@@ -123,66 +132,12 @@ public class RegistrationController : UsersBase
             walletsModel = Wallets.Get();
         }
         // アイテムテーブル
-        //if (itemsModel == null)
-        //{
-        //    Items.CreateTable();
-        //    itemsModel = Items.Get();
-        //}
-    }
-
-    // 登録処理
-    IEnumerator Registration(Action action = null)
-    {
-        // var deviceId = SystemInfo.deviceUniqueIdentifier;
-
-        List<IMultipartFormSection> form = new List<IMultipartFormSection>(); // WWWFormの新しいやり方
-        form.Add(new MultipartFormDataSection("un", name));
-        //  form.Add(new MultipartFormDataSection("did", deviceId));
-
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(GameUtil.Const.RESISTRATION_URL, form))
+        if (itemsModel == null)
         {
-            webRequest.timeout = 10; // 10秒でタイムアウト
-            yield return webRequest.SendWebRequest();
-            if (webRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                if (webRequest.downloadHandler != null)
-                {
-                    string text = webRequest.downloadHandler.text;
-                    Debug.Log(text);
-
-                    // *** SQLiteへの保存処理 ***
-                    responseObj = JsonUtility.FromJson<ResponseObjects>(text);
-                    ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-
-                    // ユーザーテーブル
-                    if (!string.IsNullOrEmpty(responseObjects.users.user_id))
-                    {
-                        Users.Set(responseObjects.users);
-                    }
-                    // ウォレットテーブル
-                    if (!string.IsNullOrEmpty(responseObjects.wallets.free_amount.ToString()))
-                    {
-                        Wallets.Set(responseObjects.wallets, responseObj.users.user_id);
-                    }
-                    // アイテムテーブル
-                    //if (!string.IsNullOrEmpty(responseObjects.itemsModel.item_id.ToString()))
-                    //{
-                    //    Items.Set(responseObjects.itemsModel);
-                    //}
-                    // 正常終了アクション実行
-                    if (action != null)
-                    {
-                        action();
-                        action = null;
-                    }
-                    loginChecker.OnLoginFlag(); // 登録完了
-                }
-            }
+            Items.CreateTable();
+            itemsModel = Items.GetItemDataAll();
         }
 
+        // TODO:現状だと初めてゲームを開いた状態だと、Getの中身がないからエラー出る、それをSetしてから取得する処理に変える
     }
 }

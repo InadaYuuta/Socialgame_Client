@@ -50,7 +50,7 @@ public class PaymentShops : TableBase
     }
 
     // w’è‚³‚ê‚½¤•iID‚Ì¤•i‚¾‚¯‚ğæ“¾
-    public static PaymentShopModel GetPaymentShop(string product_id)
+    public static PaymentShopModel GetPaymentShop(int product_id)
     {
         PaymentShopModel paymentShopsModel = new();
         getQuery = "select * from payment_shops where product_id =" + product_id;

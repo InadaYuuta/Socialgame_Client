@@ -25,8 +25,8 @@ public class StaminaShopTextManager : MonoBehaviour
     void ChangeTexts()
     {
         string resultCurrencyStr = string.Format("{0}{1}ŒÂ", currencyStr, free_currency + paid_currency);
-        // string resultItemStr = string.Format("{0}{1}ŒÂ", itemStr);
+        string resultItemStr = string.Format("{0}{1}ŒÂ", itemStr, Items.GetItemData(10001).item_num);
         currencyText.text = resultCurrencyStr;
-        //itemText.text = resultItemStr;
+        itemText.text = resultItemStr;
     }
 }

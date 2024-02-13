@@ -127,7 +127,7 @@ public class TestScript : UsersBase
         form.Add(new MultipartFormDataSection("un", name));
         //  form.Add(new MultipartFormDataSection("did", deviceId));
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(GameUtil.Const.RESISTRATION_URL, form))
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(GameUtil.Const.REGISTRATION_URL, form))
         {
             webRequest.timeout = 10; // 10秒でタイムアウト
             yield return webRequest.SendWebRequest();
