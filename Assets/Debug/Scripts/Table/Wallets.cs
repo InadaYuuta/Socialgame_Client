@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 
 [Serializable]
 public class WalletsModel

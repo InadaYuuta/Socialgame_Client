@@ -18,6 +18,11 @@ public class ResponseObjects
     public ExchangeItemCategoryModel[] exchange_item_category;
     public PaymentShopModel[] payment_shop;
     public ExchangeShopModel[] exchange_item_shop;
+    // 武器データ
+    public WeaponsMasterModel[] weapon_master;
+    public WeaponCategoryModel[] weapon_category;
+    public WeaponRarityModel[] weapon_rarity;
+    public GachaWeaponModel[] gacha_weapon;
 }
 
 public class CommunicationManager : MonoBehaviour
@@ -95,7 +100,7 @@ public class CommunicationManager : MonoBehaviour
         // 交換ショップのカテゴリー保存
         if (responseObjects.exchange_item_category != null)
         {
-           ExchangeShopCategories.Set(responseObjects.exchange_item_category);
+            ExchangeShopCategories.Set(responseObjects.exchange_item_category);
         }
         // アイテムマスタのデータ保存
         if (responseObjects.item_master != null)
@@ -111,6 +116,26 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.exchange_item_shop != null)
         {
             ExchangeShops.Set(responseObjects.exchange_item_shop);
+        }
+        // 武器マスタデータ情報保存
+        if (responseObjects.weapon_master != null)
+        {
+            WeaponsMaster.Set(responseObjects.weapon_master);
+        }
+        // 武器カテゴリー保存
+        if (responseObjects.weapon_category != null)
+        {
+            WeaponCategories.Set(responseObjects.weapon_category);
+        }
+        // 武器レアリティ保存
+        if (responseObjects.weapon_rarity != null)
+        {
+            WeaponRarities.Set(responseObjects.weapon_rarity);
+        }
+        // ガチャ武器データ保存
+        if (responseObjects.gacha_weapon != null)
+        {
+            GachaWeapons.Set(responseObjects.gacha_weapon);
         }
     }
 
