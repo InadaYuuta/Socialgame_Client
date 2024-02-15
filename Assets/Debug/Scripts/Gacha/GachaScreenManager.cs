@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class GachaScreenManager : MonoBehaviour
 {
@@ -9,10 +11,13 @@ public class GachaScreenManager : MonoBehaviour
     int amountNum;
     int fragmentItemNum;
 
+    GachaMove gachaMoveManager;
+
     void Start()
     {
         gachaCanvas.SetActive(false);
         UpdateNum();
+        gachaMoveManager = FindObjectOfType<GachaMove>();
     }
 
     void Update()
@@ -61,7 +66,14 @@ public class GachaScreenManager : MonoBehaviour
     // 単発ガチャボタンが押されたら
     public void PushSingleGachaButton()
     {
-        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 0)
+        {
+            gachaMoveManager.SingleMove();
+        }
+        else
+        {
+            StartCoroutine(ResultPanelController.DisplayResultPanel("ジェムが足りない!"));
+        }
     }
 
     // 十連ガチャボタンが押されたら

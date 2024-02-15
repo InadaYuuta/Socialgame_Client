@@ -20,6 +20,7 @@ public class Weapons : TableBase
     public static void CreateTable()
     {
         createQuery = "create table if not exists weapons(user_id varchar,weapon_id bigint,rarity_id bigint,level tinyint,level_max tinyint,current_exp int,limit_break tinyint,limit_break_max tinyint,evolution tinyint,primary key(user_id,weapon_id))";
+        RunQuery(createQuery);
     }
 
     // ƒŒƒR[ƒh“o˜^ˆ—

@@ -5,4 +5,7 @@ using UnityEngine;
 public class SaveData
 {
     public int version;
+    public int fragmentNum;
+    public string[] newWeapons;
+    public string[] gacha_result;
 }

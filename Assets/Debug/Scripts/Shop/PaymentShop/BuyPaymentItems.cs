@@ -26,6 +26,7 @@ public class BuyPaymentItems : MonoBehaviour
         buyForm.Add(new MultipartFormDataSection("uid", user_id));
         buyForm.Add(new MultipartFormDataSection("pid", product_id));
         StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.BUY_CURRENCY_URL, buyForm, null));
+        Invoke("DisplayButton", 1);
     }
 
     void SetProductText()
@@ -34,4 +35,10 @@ public class BuyPaymentItems : MonoBehaviour
         productStr = string.Format("¤•i–¼:{0}\n{1}‰~\n—L•ª:{2}ŒÂ\n–³•ª{3}ŒÂ", product.product_name, product.price, product.paid_currency, product.bonus_currency);
         productText.text = productStr;
     }
+
+    void DisplayButton()
+    {
+        buyButton.SetActive(true);
+    }
+
 }

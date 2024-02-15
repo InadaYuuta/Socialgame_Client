@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SaveManager : MonoBehaviour
@@ -13,6 +10,8 @@ public class SaveManager : MonoBehaviour
     const string FileName = "/savedata.dat";
     // セーブデータのデフォルト値
     static readonly int DefaultVersion = 0;
+    static readonly string[] DefaultNewWeapons = { "", "", "", "", "", "", "", "", "", "" };
+    static readonly int DefaultFragmentNum = 0;
     // ->今後データの追加をするならここ
 
     FileStream file;
@@ -32,9 +31,6 @@ public class SaveManager : MonoBehaviour
             Destroy(this);
             return;
         }
-
-        // ファイルパスセット
-        filePath = Application.persistentDataPath + FileName;
     }
 
     // ファイル更新共通準備
@@ -80,6 +76,8 @@ public class SaveManager : MonoBehaviour
             // セーブデータを生成
             SaveData data = new();
             data.version = DefaultVersion;
+            data.newWeapons = DefaultNewWeapons;
+            data.fragmentNum = DefaultFragmentNum;
             bf.Serialize(file, data);
         }
         catch (IOException)
@@ -116,6 +114,66 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    public void SetNewWeapons(string[] newWeapons)
+    {
+        try
+        {
+            InitFileSave();
+
+            SaveData data = new();
+            data.newWeapons = newWeapons;
+            bf.Serialize(file, data);
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+    }
+
+    public void SetFragmentItem(int fragmentItem)
+    {
+        try
+        {
+            InitFileSave();
+
+            SaveData data = new();
+            data.fragmentNum = fragmentItem;
+            bf.Serialize(file, data);
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+    }
+
+    public void SetResultWeapons(string[] gacha_result)
+    {
+        try
+        {
+            InitFileSave();
+
+            SaveData data = new();
+            data.gacha_result = gacha_result;
+            bf.Serialize(file, data);
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+    }
+
     // バージョンロード
     public int GetMasterDataVersion()
     {
@@ -137,5 +195,72 @@ public class SaveManager : MonoBehaviour
             if (file != null) { file.Close(); }
         }
         return version;
+    }
+
+    public string[] GetNewWeapons()
+    {
+        string[] newWeapons = DefaultNewWeapons;
+        try
+        {
+            InitFileLoad();
+
+            // セーブデータ読み込み
+            SaveData data = bf.Deserialize(file) as SaveData;
+            newWeapons = data.newWeapons;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+        return newWeapons;
+    }
+
+    public int GetFragmentItem()
+    {
+        int fragmentItem = DefaultFragmentNum;
+        try
+        {
+            InitFileLoad();
+
+            // セーブデータ読み込み
+            SaveData data = bf.Deserialize(file) as SaveData;
+            fragmentItem = data.fragmentNum;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+        return fragmentItem;
+    }
+
+    public string[] GetWeaponsResult(int count)
+    {
+        string[] weaponModel = new string[count];
+
+        try
+        {
+            InitFileLoad();
+
+            // セーブデータ読み込み
+            SaveData data = bf.Deserialize(file) as SaveData;
+            weaponModel = data.gacha_result;
+        }
+        catch (IOException)
+        {
+            Debug.LogError("failed to open file");
+        }
+        finally
+        {
+            if (file != null) { file.Close(); }
+        }
+        return weaponModel;
     }
 }

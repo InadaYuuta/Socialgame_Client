@@ -11,6 +11,7 @@ public class ResponseObjects
     public UsersModel users;
     public WalletsModel wallets;
     public ItemsModel[] items;
+    public WeaponModel[] weapons;
     // マスターデータ
     public int master_data_version;
     public ItemMasterModel[] item_master;
@@ -23,6 +24,11 @@ public class ResponseObjects
     public WeaponCategoryModel[] weapon_category;
     public WeaponRarityModel[] weapon_rarity;
     public GachaWeaponModel[] gacha_weapon;
+
+    // ガチャ用
+    public string[] new_weaponIds;
+    public string[] gacha_result;
+    public int fragment_num;
 }
 
 public class CommunicationManager : MonoBehaviour
@@ -82,13 +88,47 @@ public class CommunicationManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 武器情報更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateWeaponData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.weapons != null)
+        {
+            UsersModel usersModel = Users.Get();
+            Weapons.Set(responseObjects.weapons, usersModel.user_id);
+        }
+    }
+
+    static void GachaMove(ResponseObjects responseObjects)
+    {
+        UpdateWeaponData(responseObjects);
+        UpdateItemData(responseObjects);
+        UpdateWalletData(responseObjects);
+        UpdateMasterData(responseObjects);
+        if (responseObjects.new_weaponIds != null)
+        {
+            SaveManager.Instance.SetNewWeapons(responseObjects.new_weaponIds);
+        }
+        if (responseObjects.fragment_num != null && responseObjects.fragment_num >= 0)
+        {
+            SaveManager.Instance.SetFragmentItem(responseObjects.fragment_num);
+        }
+        if (responseObjects.weapons != null)
+        {
+            SaveManager.Instance.SetResultWeapons(responseObjects.gacha_result);
+        }
+
+    }
+
+    /// <summary>
     /// マスターデータの更新
     /// </summary>
     /// <param name="requireComponent"></param>
     static void UpdateMasterData(ResponseObjects responseObjects)
     {
         // バージョン保存
-        if (responseObjects.master_data_version != null)
+        if (responseObjects.master_data_version != null && responseObjects.master_data_version != 0)
         {
             SaveManager.Instance.SetMasterDataVersion(responseObjects.master_data_version);
         }
@@ -171,6 +211,9 @@ public class CommunicationManager : MonoBehaviour
                 break;
             case GameUtil.Const.MASTER_GET_URL:
                 UpdateMasterData(responseObjects);
+                break;
+            case GameUtil.Const.GACHA_URL:
+                GachaMove(responseObjects);
                 break;
             default:
                 break;

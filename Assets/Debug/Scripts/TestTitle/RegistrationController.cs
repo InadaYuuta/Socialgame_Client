@@ -28,10 +28,10 @@ public class RegistrationController : UsersBase
         string deviceId = string.Format("デバイスのユニークID:{0}", SystemInfo.deviceUniqueIdentifier);
         Debug.Log(deviceId);
 
-        CreateSQLiteFile();
-        CheckCreateTables();
+        //CreateSQLiteFile();
+        //CheckCreateTables();
 
-        if (!string.IsNullOrEmpty(usersModel.user_id))
+        if (usersModel != null && !string.IsNullOrEmpty(usersModel.user_id))
         {
             loginChecker.OnLoginFlag();
         }
@@ -39,7 +39,7 @@ public class RegistrationController : UsersBase
         registerUI = GameObject.Find("RegisterUI");
         startUI = GameObject.Find("StartUI");
 
-        if(Items.GetItemData(10001).item_id != null)
+        if (Items.GetItemDataAll() != null && Items.GetItemData(10001).item_id != null)
         {
             itemsModel = Items.GetItemDataAll();
         }
@@ -47,12 +47,18 @@ public class RegistrationController : UsersBase
 
     private void Start()
     {
+        if (Users.Get() == null) { return; }
         GetUserID();
         DisplayUI();
     }
 
     private void Update()
     {
+        if (Users.Get() == null) { return; }
+        if (usersModel != null && !string.IsNullOrEmpty(usersModel.user_id))
+        {
+            loginChecker.OnLoginFlag();
+        }
         base.Update();
         GetUserID();
         DisplayUI();

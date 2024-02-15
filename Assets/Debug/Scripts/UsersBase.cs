@@ -3,8 +3,7 @@ using UnityEngine;
 public class UsersBase : MonoBehaviour
 {
     [SerializeField] protected UsersModel usersModel;      // ユーザーテーブル
-    [SerializeField] protected WalletsModel walletsModel; // ウォレットテーブル
-    //protected ItemsModel itemsModel;
+    [SerializeField] protected WalletsModel walletsModel;  // ウォレットテーブル
 
     protected virtual void Awake()
     {
@@ -16,10 +15,6 @@ public class UsersBase : MonoBehaviour
         {
             walletsModel = Wallets.Get();
         }
-        //if (Items.Get() != null)
-        //{
-        //    itemsModel = Items.Get();
-        //}
     }
 
     protected virtual void Update()

@@ -9,7 +9,14 @@ public class TestLoginManager : UsersBase
 
     void Awake() => base.Awake();
 
-    void Start() => userId = usersModel.user_id;
+    private void Update()
+    {
+        base.Update();
+        if (usersModel != null)
+        {
+            userId = usersModel.user_id;
+        }
+    }
 
     public void TestLogin()
     {
