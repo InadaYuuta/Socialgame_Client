@@ -1,23 +1,23 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class GachaScreenManager : MonoBehaviour
 {
-    [SerializeField] GameObject gachaCanvas, ePPanel;
+    [SerializeField] GameObject gachaCanvas, ePPanel, gachaLogPanel;
     [SerializeField] TextMeshProUGUI amountText, fragmentText;
 
     int amountNum;
     int fragmentItemNum;
 
     GachaMove gachaMoveManager;
+    GachaLogManager gachaLogManager;
 
     void Start()
     {
         gachaCanvas.SetActive(false);
         UpdateNum();
         gachaMoveManager = FindObjectOfType<GachaMove>();
+        gachaLogManager = FindObjectOfType<GachaLogManager>();
     }
 
     void Update()
@@ -60,7 +60,8 @@ public class GachaScreenManager : MonoBehaviour
     // ガチャ履歴ボタンが押されたら
     public void PushGachaLogButton()
     {
-        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        gachaLogManager.GetGachaLog();
+        gachaLogPanel.SetActive(true);
     }
 
     // 単発ガチャボタンが押されたら
@@ -79,6 +80,6 @@ public class GachaScreenManager : MonoBehaviour
     // 十連ガチャボタンが押されたら
     public void PushMultiGachaButton()
     {
-        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        gachaMoveManager.MultiMove();
     }
 }

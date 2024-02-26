@@ -5,7 +5,7 @@ public class TableBase : MonoBehaviour
 {
     protected static string createQuery = "";
     protected static string setQuery = "";
-    protected static string getQuery = "";
+    protected static string getQuery = "select * from weapons";
 
     // TODO:メソッドとかも一括で継承すればできるようにする
     //// テーブル作成

@@ -31,6 +31,7 @@ public class TestTitleManager : MonoBehaviour
         WeaponRarities.CreateTable();
         Weapons.CreateTable();
         GachaWeapons.CreateTable();
+        GachaLogs.Createtable();
     }
 
     private void Update()

@@ -35,10 +35,10 @@ public class Weapons : TableBase
     }
 
     // 全ての武器データの取得
-    public static WeaponModel[] GetWeaponDataAll()
+    public static WeaponModel[] GetWeaponDataDefault(string selectQuery)
     {
         List<WeaponModel> weaponsList = new();
-        getQuery = "select * from weapons";
+        getQuery = selectQuery;
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
@@ -54,6 +54,36 @@ public class Weapons : TableBase
             weaponsList.Add(weaponModel);
         }
         return weaponsList.ToArray();
+    }
+
+    // 全ての武器データの取得
+    public static WeaponModel[] GetWeaponDataAll()
+    {
+        WeaponModel[] weaponsList;
+        getQuery = "select * from weapons";
+        weaponsList = GetWeaponDataDefault(getQuery);
+        return weaponsList;
+    }
+
+    /// <summary>
+    /// レアリティ順に並び替えてデータを取得
+    /// isDescがtrueなら昇順、falseなら降順
+    /// </summary>
+    /// <param name="isDesc"></param>
+    /// <returns></returns>
+    public static WeaponModel[] GetRaritySortDesc(bool isDesc)
+    {
+        WeaponModel[] weaponsList;
+        getQuery = "select * from weapons";
+        if (isDesc)
+        {
+            weaponsList = GetWeaponDataDefault(string.Format("{0}{1}", getQuery, " order by weapon_id asc"));
+        }
+        else
+        {
+            weaponsList = GetWeaponDataDefault(string.Format("{0}{1}", getQuery, " order by weapon_id desc"));
+        }
+        return weaponsList;
     }
 
     // 指定された武器IDの武器だけを取得

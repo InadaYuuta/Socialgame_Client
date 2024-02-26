@@ -4,116 +4,83 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
-public class GachaMove : MonoBehaviour
+public class GachaMove : WeaponBase
 {
     [SerializeField] GameObject gachaSingleResult, gachaMultiResult;
     [SerializeField] GameObject resultWeapon, panel;
-    [SerializeField] TextMeshProUGUI fragmentText;
+    [SerializeField] TextMeshProUGUI[] fragmentText;
     [SerializeField] Sprite[] weaponsSprites;
     GameObject[] weaponClone;
 
     [SerializeField] Vector3[] MultiPos;
 
     int fragmentNum = 0;
-    string[] newWeapons, resultWeapons = { };
-
-    bool[] singleAnimStart = { false, false, false, false };
+    int[] newWeapons, resultWeapons = { };
 
     void Start()
     {
         weaponClone = new GameObject[10];
         gachaSingleResult.SetActive(false);
-        resultWeapons = new string[10];
-        newWeapons = new string[10];
+        resultWeapons = new int[10];
+        newWeapons = new int[10];
 
         gachaMultiResult.SetActive(false);
         panel.SetActive(false);
     }
 
-    void GenerateWeaponClone(GameObject weaponClone, int weapon_id)
-    {
-        Outline outline = weaponClone.GetComponent<Outline>();
-        Image image = weaponClone.transform.GetChild(0).GetComponent<Image>();
-        switch (weapon_id)
-        {
-            case 1010001:
-                outline.effectColor = Color.blue;
-                image.sprite = weaponsSprites[0];
-                break;
-            case 1020001:
-                outline.effectColor = Color.blue;
-                image.sprite = weaponsSprites[1];
-                break;
-            case 1030001:
-                outline.effectColor = Color.blue;
-                image.sprite = weaponsSprites[2];
-                break;
-            case 2020001:
-                outline.effectColor = Color.red;
-                image.sprite = weaponsSprites[3];
-                break;
-            case 3010001:
-                outline.effectColor = Color.yellow;
-                image.sprite = weaponsSprites[4];
-                break;
-            default:
-                break;
-        }
-    }
-
     // 単発ガチャの時の動き
     public void SingleMove()
     {
-        if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 0)
+        if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 30)
         {
             panel.SetActive(true);
             List<IMultipartFormSection> gachaForm = new();
             gachaForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
             gachaForm.Add(new MultipartFormDataSection("gCount", "1"));
             StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm));
-            Invoke("TestWait", 1f);
+            Invoke("SingleWait", 1f);
         }
         else
         {
             StartCoroutine(ResultPanelController.DisplayResultPanel("ジェムが足りない!"));
         }
-
     }
 
     // 十連ガチャの時の動き
     public void MultiMove()
     {
-        List<IMultipartFormSection> gachaForm = new();
-        gachaForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
-        gachaForm.Add(new MultipartFormDataSection("gCount", "1"));
-        StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm));
-        Invoke("TestWaitMulti", 1f);
+        if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 300)
+        {
+            panel.SetActive(true);
+            List<IMultipartFormSection> gachaForm = new();
+            gachaForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
+            gachaForm.Add(new MultipartFormDataSection("gCount", "10"));
+            StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm));
+            Invoke("MultiWait", 1f);
+        }
+        else
+        {
+            StartCoroutine(ResultPanelController.DisplayResultPanel("ジェムが足りない!"));
+        }
     }
 
-    void TestWait()
+    void SingleWait()
     {
         gachaSingleResult.SetActive(true);
         weaponClone[0] = Instantiate(resultWeapon, new Vector3(0, 0, 0), Quaternion.identity);
         weaponClone[0].transform.SetParent(gachaSingleResult.transform, false);
-        int weaponId = int.Parse(resultWeapons[0]);
-        GenerateWeaponClone(weaponClone[0], weaponId);
-        fragmentText.text = string.Format("取得かけら数:{0}個", fragmentNum);
-        Invoke("HidePanel", 0.5f);
+        int weaponId = resultWeapons[0];
+        WeaponSetting(weaponClone[0], weaponId);
+        fragmentText[0].text = string.Format("取得かけら数:{0}個", fragmentNum);
+        Invoke("HidePanel", 1f);
     }
 
-    void TestWaitMulti()
+    void MultiWait()
     {
         gachaMultiResult.SetActive(true);
-        for (int i = 0; i < 9; i++)
-        {
-            weaponClone[i] = Instantiate(resultWeapon, MultiPos[i], Quaternion.identity);
-            weaponClone[i].transform.SetParent(gachaSingleResult.transform, false);
-            int weaponId = int.Parse(resultWeapons[i]);
-            GenerateWeaponClone(weaponClone[i], weaponId);
-        }
-        fragmentText.text = string.Format("取得かけら数:{0}個", fragmentNum);
+        StartCoroutine(MultiGachaResult());
+        fragmentText[1].text = string.Format("取得かけら数:{0}個", fragmentNum);
     }
 
     public void PushBackButton()
@@ -123,7 +90,8 @@ public class GachaMove : MonoBehaviour
         gachaMultiResult.SetActive(false);
     }
 
-    void TestGachaMove(ResponseObjects responseObjects)
+    // サーバーからの情報を保存する
+    void GachaSetting(ResponseObjects responseObjects)
     {
         if (responseObjects.weapons != null)
         {
@@ -153,7 +121,17 @@ public class GachaMove : MonoBehaviour
         }
         if (responseObjects.weapons != null)
         {
-            resultWeapons = responseObjects.gacha_result;
+            int[] gachaResult = new int[10];
+            int count = 0;
+            foreach (string s in responseObjects.gacha_result.Split('/')) // /区切りでIDを出力する
+            {
+                if (count > 0)
+                {
+                    gachaResult[count - 1] = int.Parse(s);
+                }
+                count++;
+            }
+            resultWeapons = gachaResult;
         }
 
     }
@@ -163,6 +141,7 @@ public class GachaMove : MonoBehaviour
         panel.SetActive(false);
     }
 
+    // サーバーに接続する
     public IEnumerator ConnectServer(string connectURL, List<IMultipartFormSection> parameter)
     {
         // *** リクエストの送付 ***
@@ -191,15 +170,12 @@ public class GachaMove : MonoBehaviour
                     {
                         case GameUtil.Const.ERROR_MASTER_DATA_UPDATE:
                             Debug.LogError("マスタの状態が古いようです。[マスタバージョン不整合]");
-                            // ここにアップデートができたことを表示するイメージを表示する処理を追記
                             break;
                         case GameUtil.Const.ERROR_DB_UPDATE:
                             Debug.LogError("サーバーでエラーが発生しました。[データベース更新エラー]");
                             break;
                         default:
-                            string debugTex = string.Format("テキストの内容:{0}", text);
-                            Debug.LogError(debugTex);
-                            // Debug.LogError("サーバーでエラーが発生しました。[システムエラー]");
+                            Debug.LogError("サーバーでエラーが発生しました。[システムエラー]");
                             break;
                     }
                     yield break;
@@ -207,9 +183,27 @@ public class GachaMove : MonoBehaviour
 
                 // *** SQLiteへの保存処理 ***
                 ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
-                TestGachaMove(responseObjects);
+                yield return new WaitForSeconds(0.5f);
+                GachaSetting(responseObjects);
             }
         }
+    }
+
+    // 10個の結果を出す
+    public IEnumerator MultiGachaResult()
+    {
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < 10; i++)
+        {
+            weaponClone[i] = Instantiate(resultWeapon, MultiPos[i], Quaternion.identity);
+            weaponClone[i].transform.SetParent(gachaMultiResult.transform, false);
+            int weaponId = resultWeapons[i];
+            WeaponSetting(weaponClone[i], weaponId);
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        Invoke("HidePanel", 1f);
+        yield return null;
     }
 
 }

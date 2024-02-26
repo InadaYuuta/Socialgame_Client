@@ -1,47 +1,63 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BagSortManager : MonoBehaviour
+public class BagSortManager : WeaponBase
 {
     [SerializeField] GameObject itemPrefab;
-    [SerializeField] Canvas bagCanvas;
-    GameObject[] itemClone;
+    [SerializeField] GameObject items;
+    [SerializeField] GameObject lineupButton;
+    [SerializeField] GameObject[] itemClone;
+    [SerializeField] Sprite[] lineUpImage;
     Vector3 referencePoint = new Vector3(170, 620, 0); // 基準点
 
     int generateVerticalNum = 3; // 生成する縦の個数
-    int generateBesideNum = 8;   // 生成する横の個数
+    int generateBesideNum = 5;   // 生成する横の個数
     int changeNum = 200;         // 縦横の配置で変化する量  
 
     int weaponNum;
 
     int[] weaponId, weaponLevel, weaponExp, weaponCategory;
-    string[] weaponName;
+    [SerializeField] string[] weaponName;
 
     [SerializeField] WeaponModel[] weaponModel;
 
+    bool sortMode = true; // 昇順か降順か、trueが昇順
+
+    const string DEFAULTSORT = "DEFAULT";
+    const string RARITYSORTASC = "RARITYASC";
+    const string RARITYSORTDESC = "RARITYDESC";
+
     private void OnEnable()
     {
-        SetWeaponParameters();
+        itemClone = new GameObject[generateVerticalNum * generateBesideNum];
+        SetWeaponParameters(DEFAULTSORT);
         SortGenerate();
     }
 
     private void OnDisable() => DestroyItemClone();
 
-    void Update()
-    {
-
-    }
-
     // TODO: ここもあらかじめWeaponMasterのデータを保持しているオブジェクトを用意してそこから取得するようにする
-    void SetWeaponParameters()
+    void SetWeaponParameters(string setMode)
     {
-        weaponModel = Weapons.GetWeaponDataAll();
+        switch (setMode)
+        {
+            case DEFAULTSORT:
+            case RARITYSORTASC:
+                weaponModel = Weapons.GetRaritySortDesc(true); // レアリティ順に昇順で取得
+                break;
+            case RARITYSORTDESC:
+                weaponModel = Weapons.GetRaritySortDesc(false); // レアリティ順に降順で取得
+                break;
+            default:
+                weaponModel = Weapons.GetWeaponDataAll();
+                break;
+        }
         weaponNum = weaponModel.Length;
         weaponId = new int[weaponNum];
         weaponLevel = new int[weaponNum];
         weaponExp = new int[weaponNum];
         weaponCategory = new int[weaponNum];
         weaponName = new string[weaponNum];
-        itemClone = new GameObject[generateVerticalNum * generateBesideNum];
 
         for (int i = 0; i < weaponNum; i++)
         {
@@ -53,7 +69,7 @@ public class BagSortManager : MonoBehaviour
         }
     }
 
-    // アイテムを並べる
+    // アイテムを並べて生成する
     public void SortGenerate()
     {
         int count = 0;
@@ -67,14 +83,44 @@ public class BagSortManager : MonoBehaviour
                     itemClone[count] = Instantiate(itemPrefab, setPos, Quaternion.identity);
                     if (weaponName.Length > count)
                     {
-                        itemClone[count].name = string.Format("{0}", weaponName[j]);
+                        itemClone[count].name = weaponName[j].ToString();
+                        WeaponSetting(itemClone[count], weaponId[j]);
                     }
-                    itemClone[count].transform.parent = bagCanvas.transform;
+                    itemClone[count].transform.parent = items.transform;
                 }
                 count++;
             }
         }
     }
+
+    // アイテムを並び替える
+    void SortItems()
+    {
+        int count = 0;
+        for (int i = 0; i < generateVerticalNum; i++)
+        {
+            for (int j = 0; j < generateBesideNum; j++)
+            {
+                Vector3 setPos = new Vector3(referencePoint.x + (changeNum * j), referencePoint.y - (changeNum * i), 0);
+                if (count < itemClone.Length)
+                {
+                    if (weaponName.Length > count)
+                    {
+                        itemClone[count].name = weaponName[j].ToString();
+                        WeaponSetting(itemClone[count], weaponId[j]);
+                    }
+                    itemClone[count].transform.position = setPos;
+                }
+                count++;
+            }
+        }
+    }
+
+    public void RaritySort()
+    {
+
+    }
+
 
     // アイテムを削除する
     void DestroyItemClone()
@@ -83,7 +129,7 @@ public class BagSortManager : MonoBehaviour
         {
             for (int j = 0; j < generateBesideNum; j++)
             {
-                Destroy(itemClone[j]);
+                if (itemClone[j] != null) { Destroy(itemClone[j]); }
             }
         }
     }
@@ -103,6 +149,19 @@ public class BagSortManager : MonoBehaviour
     // 昇順、降順のボタンが押されたら
     public void PushLineUpButton()
     {
-        StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
+        Image image = lineupButton.transform.GetChild(0).GetComponent<Image>();
+        if (!sortMode)
+        {
+            SetWeaponParameters(RARITYSORTASC);
+            sortMode = true;
+            image.sprite = lineUpImage[0];
+        }
+        else
+        {
+            SetWeaponParameters(RARITYSORTDESC);
+            sortMode = false;
+            image.sprite = lineUpImage[1];
+        }
+        SortItems();
     }
 }

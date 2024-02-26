@@ -37,7 +37,7 @@ public class GachaEmissionProbabilityManager : MonoBehaviour
     }
 
     // 情報の取得
-    void Get()
+    void GetData()
     {
         gachaWeaponModel = GachaWeapons.GetSortDataAll();
         foreach (GachaWeaponModel gachaWeaponData in gachaWeaponModel)
@@ -45,17 +45,18 @@ public class GachaEmissionProbabilityManager : MonoBehaviour
             weaponIds[count] = gachaWeaponData.weapon_id;
             weaponNames[count] = WeaponsMaster.GetWeaponMasterData(weaponIds[count]).weapon_name;
             weights[count] = gachaWeaponData.weight;
-            emissionProbabilityString = string.Format("{0}{1}:{2}%\r\n", emissionProbabilityString, weaponNames[count], weights[count]/1000);
+            emissionProbabilityString = string.Format("{0}{1}:{2}%\r\n", emissionProbabilityString, weaponNames[count], weights[count] / 1000);
             count++;
         }
+        count = 0;
     }
 
     // テキストの更新
     void UpdateText()
     {
-        Get();
+        GetData();
         ePText.text = emissionProbabilityString;
     }
 
-    
+
 }

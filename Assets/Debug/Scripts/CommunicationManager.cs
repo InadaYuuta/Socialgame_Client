@@ -26,9 +26,15 @@ public class ResponseObjects
     public GachaWeaponModel[] gacha_weapon;
 
     // ガチャ用
-    public string[] new_weaponIds;
-    public string[] gacha_result;
+    //public string[] new_weaponIds;
+    //public string[] gacha_result;
+    public int[] new_weaponIds;
+    // public int[] gacha_result;
+    public string gacha_result;
     public int fragment_num;
+
+    // ログデータ
+    public GachaLogModel[] gacha_log;
 }
 
 public class CommunicationManager : MonoBehaviour
@@ -100,25 +106,16 @@ public class CommunicationManager : MonoBehaviour
         }
     }
 
-    static void GachaMove(ResponseObjects responseObjects)
+    /// <summary>
+    ///  ガチャログの情報を更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateGachaLogData(ResponseObjects responseObjects)
     {
-        UpdateWeaponData(responseObjects);
-        UpdateItemData(responseObjects);
-        UpdateWalletData(responseObjects);
-        UpdateMasterData(responseObjects);
-        if (responseObjects.new_weaponIds != null)
+        if (responseObjects.gacha_log != null)
         {
-            SaveManager.Instance.SetNewWeapons(responseObjects.new_weaponIds);
+            GachaLogs.Set(responseObjects.gacha_log);
         }
-        if (responseObjects.fragment_num != null && responseObjects.fragment_num >= 0)
-        {
-            SaveManager.Instance.SetFragmentItem(responseObjects.fragment_num);
-        }
-        if (responseObjects.weapons != null)
-        {
-            SaveManager.Instance.SetResultWeapons(responseObjects.gacha_result);
-        }
-
     }
 
     /// <summary>
@@ -213,7 +210,10 @@ public class CommunicationManager : MonoBehaviour
                 UpdateMasterData(responseObjects);
                 break;
             case GameUtil.Const.GACHA_URL:
-                GachaMove(responseObjects);
+                // TODO:ガチャもここでできるようにする
+                break;
+            case GameUtil.Const.GET_GACHA_LOG:
+                UpdateGachaLogData(responseObjects);
                 break;
             default:
                 break;

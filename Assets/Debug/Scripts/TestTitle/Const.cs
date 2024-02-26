@@ -20,6 +20,7 @@ namespace GameUtil
         public const string ITEM_UPDATE_URL = "http://localhost/api/itemUpdate";            // アイテムの更新URL
         public const string BUY_EXCHANGE_SHOP_URL = "http://localhost/api/exchangeShop";    // 交換ショップでのアイテム購入URL
         public const string GACHA_URL = "http://localhost/api/gachaExcute";                 // ガチャURL
+        public const string GET_GACHA_LOG = "http://localhost/api/getGachaLog";             // ガチャログ入手
 #elif DEVELOP_SERVER
  /** DB情報 */
         public const string REGISTRATION_URL = "http://localhost/api/register";             // 登録URL
@@ -33,6 +34,7 @@ namespace GameUtil
         public const string ITEM_UPDATE_URL = "http://localhost/api/itemUpdate";            // アイテムの更新URL
         public const string BUY_EXCHANGE_SHOP_URL = "http://localhost/api/exchangeShop";    // 交換ショップでのアイテム購入URL
         public const string GACHA_URL = "http://localhost/api/gachaExcute";                 // ガチャURL
+        public const string GET_GACHA_LOG = "http://localhost/api/getGachaLog";             // ガチャログ入手
 #endif
 
 
