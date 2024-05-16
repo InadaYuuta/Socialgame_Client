@@ -8,8 +8,8 @@ using UnityEngine.Networking;
 [Serializable]
 public class ResponseObjects
 {
-    public UsersModel users;
-    public WalletsModel wallets;
+    public UsersModel user;
+    public WalletsModel wallet;
     public ItemsModel[] items;
     public WeaponModel[] weapons;
     // マスターデータ
@@ -19,6 +19,7 @@ public class ResponseObjects
     public ExchangeItemCategoryModel[] exchange_item_category;
     public PaymentShopModel[] payment_shop;
     public ExchangeShopModel[] exchange_item_shop;
+    public WeaponExpModel[] weapon_exp;
     // 武器データ
     public WeaponsMasterModel[] weapon_master;
     public WeaponCategoryModel[] weapon_category;
@@ -35,6 +36,9 @@ public class ResponseObjects
 
     // ログデータ
     public GachaLogModel[] gacha_log;
+
+    // エラーコード
+    public string errcode;
 }
 
 public class CommunicationManager : MonoBehaviour
@@ -62,9 +66,9 @@ public class CommunicationManager : MonoBehaviour
     /// <param name="responseObjects"></param>
     static void UpdateUserData(ResponseObjects responseObjects)
     {
-        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
+        if (responseObjects.user != null && !string.IsNullOrEmpty(responseObjects.user.user_id))
         {
-            Users.Set(responseObjects.users);
+            Users.Set(responseObjects.user);
         }
     }
 
@@ -74,10 +78,10 @@ public class CommunicationManager : MonoBehaviour
     /// <param name="responseObjects"></param>
     static void UpdateWalletData(ResponseObjects responseObjects)
     {
-        if (responseObjects.wallets != null)
+        if (responseObjects.wallet != null)
         {
             UsersModel usersModel = Users.Get();
-            Wallets.Set(responseObjects.wallets, usersModel.user_id);
+            Wallets.Set(responseObjects.wallet, usersModel.user_id);
         }
     }
 
@@ -174,6 +178,12 @@ public class CommunicationManager : MonoBehaviour
         {
             GachaWeapons.Set(responseObjects.gacha_weapon);
         }
+        // 武器必要経験値データ保存
+        if (responseObjects.weapon_exp != null)
+        {
+            UsersModel usersModel = Users.Get();
+            WeaponExps.Set(responseObjects.weapon_exp, usersModel.user_id);
+        }
     }
 
     /// <summary>
@@ -186,6 +196,7 @@ public class CommunicationManager : MonoBehaviour
         switch (connectURL)
         {
             case GameUtil.Const.LOGIN_URL:
+            case GameUtil.Const.HOME_URL:
             case GameUtil.Const.STAMINA_CONSUMPTION:
                 UpdateUserData(responseObjects);
                 break;
@@ -193,7 +204,6 @@ public class CommunicationManager : MonoBehaviour
                 UpdateWalletData(responseObjects);
                 break;
             case GameUtil.Const.ITEM_REGISTRATION_URL:
-            case GameUtil.Const.ITEM_UPDATE_URL:
                 UpdateItemData(responseObjects);
                 break;
             case GameUtil.Const.REGISTRATION_URL:
@@ -265,7 +275,7 @@ public class CommunicationManager : MonoBehaviour
                 // *** SQLiteへの保存処理 ***
                 ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
                 ConnectMove(connectURL, responseObjects);
-
+                if (responseObjects.errcode != null) { Debug.LogError("ErrorCode:" + responseObjects.errcode); }
                 // 正常終了アクション実行
                 if (action != null)
                 {

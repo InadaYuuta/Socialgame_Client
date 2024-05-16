@@ -12,6 +12,7 @@ public class UsersModel
     public int login_days;           // 累計ログイン日数
     public int max_stamina;          // 最大スタミナ
     public int last_stamina;         // 最終更新時スタミナ
+    // TODO: ここにlast_loginを追加する
 }
 
 public class Users : TableBase
@@ -43,7 +44,7 @@ public class Users : TableBase
     {
         getQuery = "select * from users";
         DataTable dataTable = RunQuery(getQuery);
-        UsersModel usersModel = new ();
+        UsersModel usersModel = new();
         foreach (DataRow dr in dataTable.Rows)
         {
             usersModel.user_id = dr["user_id"].ToString();
@@ -57,6 +58,16 @@ public class Users : TableBase
             usersModel.last_stamina = int.Parse(dr["last_stamina"].ToString());
         }
         return usersModel;
+    }
+
+    // 最終ログイン更新　ラストログインのカラムをこっちにも追加したら使う
+    public static void SetLastLogin(string userId)
+    {
+        DateTime dt = DateTime.Now;
+        string nowTimeStamp = dt.ToString("yyyy-MM-dd HH:mm:ss");
+        string query = "update users set last_login = '" + nowTimeStamp + "' where user_id = '" + userId + "'";
+        SqliteDatabase sqlDB = new(GameUtil.Const.SQLITE_FILE_NAME);
+        sqlDB.ExecuteNonQuery(query);
     }
 
     // レコード更新

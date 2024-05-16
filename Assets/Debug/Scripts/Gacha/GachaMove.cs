@@ -102,14 +102,14 @@ public class GachaMove : WeaponBase
         {
             Items.Set(responseObjects.items);
         }
-        if (responseObjects.wallets != null)
+        if (responseObjects.wallet != null)
         {
             UsersModel usersModel = Users.Get();
-            Wallets.Set(responseObjects.wallets, usersModel.user_id);
+            Wallets.Set(responseObjects.wallet, usersModel.user_id);
         }
-        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
+        if (responseObjects.user != null && !string.IsNullOrEmpty(responseObjects.user.user_id))
         {
-            Users.Set(responseObjects.users);
+            Users.Set(responseObjects.user);
         }
         if (responseObjects.new_weaponIds != null)
         {

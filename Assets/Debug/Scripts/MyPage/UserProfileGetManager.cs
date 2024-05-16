@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class UserProfileGetManager : UsersBase
 {
@@ -23,6 +25,11 @@ public class UserProfileGetManager : UsersBase
     void Start()
     {
         base.Awake();
+        List<IMultipartFormSection> homeForm = new(); // WWWFormÇÃêVÇµÇ¢Ç‚ÇËï˚
+        string user_id = Users.Get().user_id;
+        homeForm.Add(new MultipartFormDataSection("uid", user_id));
+        Debug.Log("Homecontroller");
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.HOME_URL, homeForm, null));
         DisplayUI();
     }
 

@@ -32,6 +32,7 @@ public class TestTitleManager : MonoBehaviour
         Weapons.CreateTable();
         GachaWeapons.CreateTable();
         GachaLogs.Createtable();
+        WeaponExps.CreateTable();
     }
 
     private void Update()
@@ -39,12 +40,12 @@ public class TestTitleManager : MonoBehaviour
         if (Users.Get().user_id != null && !isFlag)
         {
             // マスターデータチェック
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
+           // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
 
             List<IMultipartFormSection> form = new();
             form.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
             // アイテムデータ作成
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.ITEM_REGISTRATION_URL, form, null));
+            // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.ITEM_REGISTRATION_URL, form, null));
             isFlag = true;
         }
     }

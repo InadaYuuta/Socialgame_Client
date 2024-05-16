@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BagItemManager : MonoBehaviour
 {
-    int level, Exp, Category, id;
+    int level, Exp, Category, id, rarity_id;
     string Name;
 
     // 各自パラメータを設定する
