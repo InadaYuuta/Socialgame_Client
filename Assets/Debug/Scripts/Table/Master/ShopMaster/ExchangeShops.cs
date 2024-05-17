@@ -16,7 +16,7 @@ public class ExchangeShops : TableBase
     // ÉeÅ[ÉuÉãçÏê¨
     public static void CreateTable()
     {
-        createQuery = "create table if not exists exchange_item_shops(exchange_product_id bigint,exchange_item_category tinyint,exchange_item_name varchar,exchange_item_amount smallint,exchange_price tinyint,primary key(exchange_product_id))";
+        createQuery = "create table if not exists exchange_item_shops(exchange_product_id bigint,exchange_item_category tinyint,exchange_item_name varchar,exchange_item_amount smallint,exchange_price smallint,primary key(exchange_product_id))";
         RunQuery(createQuery);
     }
 
