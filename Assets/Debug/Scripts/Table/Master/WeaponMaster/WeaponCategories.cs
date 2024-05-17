@@ -13,7 +13,7 @@ public class WeaponCategories : TableBase
     // ƒe[ƒuƒ‹ì¬
     public static void CreateTable()
     {
-        createQuery = "create table if not exists weapon_categories(weapon_category bigint,category_name varchar,primary key(weapon_category))";
+        createQuery = "create table if not exists weapon_categories(weapon_category tinyint,category_name varchar,primary key(weapon_category))";
         RunQuery(createQuery);
     }
 
