@@ -12,7 +12,7 @@ public class UsersModel
     public int login_days;           // 累計ログイン日数
     public int max_stamina;          // 最大スタミナ
     public int last_stamina;         // 最終更新時スタミナ
-    // TODO: ここにlast_loginを追加する
+    public string last_login;        // 最終ログイン時間
 }
 
 public class Users : TableBase
@@ -20,7 +20,7 @@ public class Users : TableBase
     // テーブル作成
     public static void CreateTable()
     {
-        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_reinforce_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,unique (user_id))";
+        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_reinforce_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,last_login varchar,unique (user_id))";
         RunQuery(createQuery);
     }
 
@@ -35,7 +35,7 @@ public class Users : TableBase
     // レコード登録処理
     public static void Set(UsersModel users)
     {
-        setQuery = "insert or replace into users(user_id ,user_name ,handover_passhash ,has_reinforce_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina) values(\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_reinforce_point + "," + users.user_rank + "," + users.user_rank_exp + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ")";
+        setQuery = "insert or replace into users(user_id ,user_name ,handover_passhash ,has_reinforce_point , user_rank ,user_rank_exp ,login_days ,max_stamina ,last_stamina,last_login) values(\"" + users.user_id + "\",\"" + users.user_name + "\",\"" + users.handover_passhash + "\"," + users.has_reinforce_point + "," + users.user_rank + "," + users.user_rank_exp + ", " + users.login_days + "," + users.max_stamina + ", " + users.last_stamina + ",\"" + users.last_login + "\")";
         RunQuery(setQuery);
     }
 
@@ -56,6 +56,7 @@ public class Users : TableBase
             usersModel.login_days = int.Parse(dr["login_days"].ToString());
             usersModel.max_stamina = int.Parse(dr["max_stamina"].ToString());
             usersModel.last_stamina = int.Parse(dr["last_stamina"].ToString());
+            usersModel.last_login = dr["last_login"].ToString();
         }
         return usersModel;
     }
