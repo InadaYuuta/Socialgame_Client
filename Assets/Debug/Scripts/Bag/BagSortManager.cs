@@ -64,8 +64,8 @@ public class BagSortManager : WeaponBase
             weaponId[i] = weaponModel[i].weapon_id;
             weaponLevel[i] = weaponModel[i].level;
             weaponExp[i] = weaponModel[i].current_exp;
-            weaponCategory[i] = WeaponsMaster.GetWeaponMasterData(weaponId[i]).weapon_category;
-            weaponName[i] = WeaponsMaster.GetWeaponMasterData(weaponId[i]).weapon_name;
+            weaponCategory[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_category;
+            weaponName[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_name;
         }
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.Rendering;
 
 [Serializable]
-public class WeaponsMasterModel
+public class WeaponMasterModel
 {
     public int weapon_id;
     public int rarity_id;
@@ -14,7 +14,7 @@ public class WeaponsMasterModel
     public int evolution_special_attack_id;
 }
 
-public class WeaponsMaster : TableBase
+public class WeaponMaster : TableBase
 {
     // テーブル作成
     public static void CreateTable()
@@ -27,9 +27,9 @@ public class WeaponsMaster : TableBase
     }
 
     // レコード登録処理
-    public static void Set(WeaponsMasterModel[] weapon_master_model_list)
+    public static void Set(WeaponMasterModel[] weapon_master_model_list)
     {
-        foreach (WeaponsMasterModel weaponsMaster in weapon_master_model_list)
+        foreach (WeaponMasterModel weaponsMaster in weapon_master_model_list)
         {
             setQuery = "insert or replace into weapon_masters(weapon_id,rarity_id,weapon_category,weapon_name,evolution_weapon_id,special_attack_id,evolution_special_attack_id) values(" + weaponsMaster.weapon_id + "," + weaponsMaster.rarity_id + "," + weaponsMaster.weapon_category + ",\"" + weaponsMaster.weapon_name + "\"," + weaponsMaster.evolution_weapon_id + "," + weaponsMaster.special_attack_id + "," + weaponsMaster.evolution_special_attack_id + ")";
             RunQuery(setQuery);
@@ -37,14 +37,14 @@ public class WeaponsMaster : TableBase
     }
 
     // 全ての武器マスターデータを取得
-    public static WeaponsMasterModel[] GetWeaponMasterDataAll()
+    public static WeaponMasterModel[] GetWeaponMasterDataAll()
     {
-        List<WeaponsMasterModel> weaponMasterList = new();
+        List<WeaponMasterModel> weaponMasterList = new();
         getQuery = "select * from weapon_masters";
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            WeaponsMasterModel weaponMasterModel = new();
+            WeaponMasterModel weaponMasterModel = new();
             weaponMasterModel.weapon_id = int.Parse(dr["weapon_id"].ToString());
             weaponMasterModel.rarity_id = int.Parse(dr["rarity_id"].ToString());
             weaponMasterModel.weapon_category = int.Parse(dr["weapon_category"].ToString());
@@ -58,9 +58,9 @@ public class WeaponsMaster : TableBase
     }
 
     // 指定された武器IDのマスターデータのみを取得
-    public static WeaponsMasterModel GetWeaponMasterData(int weapon_id)
+    public static WeaponMasterModel GetWeaponMasterData(int weapon_id)
     {
-        WeaponsMasterModel weaponMasterModel = new();
+        WeaponMasterModel weaponMasterModel = new();
         getQuery = "select * from weapon_masters where weapon_id=" + weapon_id;
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)

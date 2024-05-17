@@ -43,7 +43,7 @@ public class GachaEmissionProbabilityManager : MonoBehaviour
         foreach (GachaWeaponModel gachaWeaponData in gachaWeaponModel)
         {
             weaponIds[count] = gachaWeaponData.weapon_id;
-            weaponNames[count] = WeaponsMaster.GetWeaponMasterData(weaponIds[count]).weapon_name;
+            weaponNames[count] = WeaponMaster.GetWeaponMasterData(weaponIds[count]).weapon_name;
             weights[count] = gachaWeaponData.weight;
             emissionProbabilityString = string.Format("{0}{1}:{2}%\r\n", emissionProbabilityString, weaponNames[count], weights[count] / 1000);
             count++;

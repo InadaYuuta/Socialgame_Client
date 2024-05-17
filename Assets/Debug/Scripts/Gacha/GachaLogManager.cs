@@ -83,7 +83,7 @@ public class GachaLogManager : WeaponBase
             {
                 weaponIds[count] = gachaLogData.weapon_id;
                 gachaNames[count] = "テストガチャ"; // TODO: ガチャの種類が増えたらガチャのテーブル追加してそこから取得できるようにする
-                weaponNames[count] = WeaponsMaster.GetWeaponMasterData(weaponIds[count]).weapon_name;
+                weaponNames[count] = WeaponMaster.GetWeaponMasterData(weaponIds[count]).weapon_name;
                 createds[count] = gachaLogData.created;
                 if (count > displayMin && count <= displayMax)
                 {

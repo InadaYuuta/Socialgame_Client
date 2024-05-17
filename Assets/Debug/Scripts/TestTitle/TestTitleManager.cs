@@ -26,7 +26,7 @@ public class TestTitleManager : MonoBehaviour
         ExchangeShopCategories.CreateTable();
         PaymentShops.CreateTable();
         ExchangeShops.CreateTable();
-        WeaponsMaster.CreateTable();
+        WeaponMaster.CreateTable();
         WeaponCategories.CreateTable();
         WeaponRarities.CreateTable();
         Weapons.CreateTable();

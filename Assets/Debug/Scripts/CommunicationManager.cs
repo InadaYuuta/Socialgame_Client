@@ -21,7 +21,7 @@ public class ResponseObjects
     public ExchangeShopModel[] exchange_item_shop;
     public WeaponExpModel[] weapon_exp;
     // 武器データ
-    public WeaponsMasterModel[] weapon_master;
+    public WeaponMasterModel[] weapon_master;
     public WeaponCategoryModel[] weapon_category;
     public WeaponRarityModel[] weapon_rarity;
     public GachaWeaponModel[] gacha_weapon;
@@ -161,7 +161,7 @@ public class CommunicationManager : MonoBehaviour
         // 武器マスタデータ情報保存
         if (responseObjects.weapon_master != null)
         {
-            WeaponsMaster.Set(responseObjects.weapon_master);
+            WeaponMaster.Set(responseObjects.weapon_master);
         }
         // 武器カテゴリー保存
         if (responseObjects.weapon_category != null)
