@@ -56,7 +56,7 @@ public class Users : TableBase
             usersModel.login_days = int.Parse(dr["login_days"].ToString());
             usersModel.max_stamina = int.Parse(dr["max_stamina"].ToString());
             usersModel.last_stamina = int.Parse(dr["last_stamina"].ToString());
-            usersModel.last_login = dr["last_login"].ToString();
+           // usersModel.last_login = dr["last_login"].ToString();
         }
         return usersModel;
     }

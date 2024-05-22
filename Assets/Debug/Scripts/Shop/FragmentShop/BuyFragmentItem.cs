@@ -41,7 +41,7 @@ public class BuyFragmentItem : MonoBehaviour
 
     void SetProductText()
     {
-        ExchangeShopModel product = ExchangeShops.GetExchangeShop(int.Parse(exchange_product_id));
+        ExchangeShopModel product = ExchangeShops.GetExchangeShopData(int.Parse(exchange_product_id));
         productStr = string.Format("{0}\n必要アイテム数{1}個", product.exchange_item_name, product.exchange_price);
         productText.text = productStr;
     }

@@ -13,11 +13,11 @@ public class GetPaymentShopData : MonoBehaviour
     void Start()
     {
         //model = PaymentShops.Get();
-        var b = PaymentShops.GetPaymentShop(10001);
+        var b = PaymentShops.GetPaymentShopData(10001);
         Debug.Log(b.product_name);
 
 
-        PaymentShopModel[] list = PaymentShops.GetPaymentShopAll();
+        PaymentShopModel[] list = PaymentShops.GetPaymentShopDataAll();
         int count = 0;
         foreach (var element in list)
         {

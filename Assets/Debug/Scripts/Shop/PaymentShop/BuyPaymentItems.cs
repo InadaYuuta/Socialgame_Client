@@ -31,7 +31,7 @@ public class BuyPaymentItems : MonoBehaviour
 
     void SetProductText()
     {
-        PaymentShopModel product = PaymentShops.GetPaymentShop(int.Parse(product_id));
+        PaymentShopModel product = PaymentShops.GetPaymentShopData(int.Parse(product_id));
         productStr = string.Format("¤•i–¼:{0}\n{1}‰~\n—L•ª:{2}ŒÂ\n–³•ª{3}ŒÂ", product.product_name, product.price, product.paid_currency, product.bonus_currency);
         productText.text = productStr;
     }

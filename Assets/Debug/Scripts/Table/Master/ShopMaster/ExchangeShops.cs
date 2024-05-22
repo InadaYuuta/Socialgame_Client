@@ -31,7 +31,7 @@ public class ExchangeShops : TableBase
     }
 
     // 全ての商品を取得
-    public static ExchangeShopModel[] GetExchangeShopAll()
+    public static ExchangeShopModel[] GetExchangeShopDataAll()
     {
         List<ExchangeShopModel> list = new();
         getQuery = "select * from exchange_item_shops";
@@ -50,7 +50,7 @@ public class ExchangeShops : TableBase
     }
 
     // 指定された商品IDの商品だけを取得
-    public static ExchangeShopModel GetExchangeShop(int exchange_product_id)
+    public static ExchangeShopModel GetExchangeShopData(int exchange_product_id)
     {
         ExchangeShopModel exchangeShopModel = new();
         getQuery = "select * from exchange_item_shops where exchange_product_id =" + exchange_product_id;

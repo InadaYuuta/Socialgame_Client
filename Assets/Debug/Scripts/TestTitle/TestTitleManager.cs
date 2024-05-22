@@ -15,11 +15,36 @@ public class TestTitleManager : MonoBehaviour
             File.Create(DBPath);
         }
 
+        CreateTables();
+    }
+
+    private void Update()
+    {
+        if (Users.Get().user_id != null && !isFlag)
+        {
+            // マスターデータチェック
+            // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
+
+            List<IMultipartFormSection> form = new();
+            form.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
+            // アイテムデータ作成
+            // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.ITEM_REGISTRATION_URL, form, null));
+            isFlag = true;
+        }
+    }
+
+    // テーブル作成の処理を呼び出す
+    void CreateTables()
+    {
+        // インスタンステーブル
         Users.CreateTable();
         Wallets.CreateTable();
         Items.CreateTable();
+        Weapons.CreateTable();
+        PresentBoxes.CreateTable();
+        Missions.CreateTable();
 
-        // 各マスターテーブル作成
+        // 各マスターテーブル
         ItemsMaster.CreateTable();
         ItemCategories.CreateTable();
         Items.CreateTable();
@@ -29,25 +54,19 @@ public class TestTitleManager : MonoBehaviour
         WeaponMaster.CreateTable();
         WeaponCategories.CreateTable();
         WeaponRarities.CreateTable();
-        Weapons.CreateTable();
-        GachaWeapons.CreateTable();
-        GachaLogs.Createtable();
         WeaponExps.CreateTable();
-    }
+        EvolutionWeapons.CreateTable();
+        MissionMaster.CreateTable();
+        MissionCategories.CreateTable();
+        NewsMaster.CreateTable();
 
-    private void Update()
-    {
-        if (Users.Get().user_id != null && !isFlag)
-        {
-            // マスターデータチェック
-           // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
+        // ガチャ
+        GachaLogs.Createtable();
+        GachaWeapons.CreateTable();
 
-            List<IMultipartFormSection> form = new();
-            form.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
-            // アイテムデータ作成
-            // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.ITEM_REGISTRATION_URL, form, null));
-            isFlag = true;
-        }
+        // ログテーブル
+        LogCategories.CreateTable();
+        LogMaster.CreateTable();
     }
 
     public void ResetGame()

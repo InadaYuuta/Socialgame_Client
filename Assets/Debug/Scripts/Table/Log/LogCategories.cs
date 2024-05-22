@@ -4,18 +4,20 @@ using UnityEngine;
 [SelectionBase]
 public class LogCategoryModel
 {
-    public int log_category;
-    public string category_name;
+    public int log_category;     // ログのカテゴリー
+    public string category_name; // カテゴリーの名前
 }
 
 public class LogCategories : TableBase
 {
+    // テーブル作成
     public static void CreateTable()
     {
         createQuery = "create table if not exists log_categories (log_category tinyint, category_name varchar,primary key(log_category))";
         RunQuery(createQuery);
     }
 
+    // レコード登録処理
     public static void Set(LogCategoryModel[] log_category_model_list)
     {
         foreach (LogCategoryModel logCategoryModel in log_category_model_list)

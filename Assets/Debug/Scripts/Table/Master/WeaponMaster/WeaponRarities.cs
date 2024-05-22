@@ -28,7 +28,7 @@ public class WeaponRarities : TableBase
     }
 
     // 全てのガチャ武器データを取得
-    public static WeaponRarityModel[] GetGachaWeaponDataAll()
+    public static WeaponRarityModel[] GetWeaponRarityDataAll()
     {
         List<WeaponRarityModel> weaponRarityList = new();
         getQuery = "select * from weapon_rarities";
@@ -44,7 +44,7 @@ public class WeaponRarities : TableBase
     }
 
     // 指定されたガチャの武器データのみ取得
-    public static WeaponRarityModel GetGachaWeaponData(int rarity_id)
+    public static WeaponRarityModel GetWeaponRarityData(int rarity_id)
     {
         WeaponRarityModel weaponRarityModel = new();
         getQuery = "select * from weapon_rarities where rarity_id =" + rarity_id;

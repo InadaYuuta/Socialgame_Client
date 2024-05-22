@@ -31,7 +31,7 @@ public class PaymentShops : TableBase
     }
 
     // 全ての商品を取得
-    public static PaymentShopModel[] GetPaymentShopAll()
+    public static PaymentShopModel[] GetPaymentShopDataAll()
     {
         List<PaymentShopModel> list = new();
         getQuery = "select * from payment_shops";
@@ -50,7 +50,7 @@ public class PaymentShops : TableBase
     }
 
     // 指定された商品IDの商品だけを取得
-    public static PaymentShopModel GetPaymentShop(int product_id)
+    public static PaymentShopModel GetPaymentShopData(int product_id)
     {
         PaymentShopModel paymentShopsModel = new();
         getQuery = "select * from payment_shops where product_id =" + product_id;

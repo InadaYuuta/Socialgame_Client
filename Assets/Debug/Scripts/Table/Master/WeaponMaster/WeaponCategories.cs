@@ -28,7 +28,7 @@ public class WeaponCategories : TableBase
     }
 
     // 全てのガチャカテゴリーデータを取得
-    public static WeaponCategoryModel[] GetGachaWeaponDataAll()
+    public static WeaponCategoryModel[] GetWeaponCategoryDataAll()
     {
         List<WeaponCategoryModel> weaponCategoryList = new();
         getQuery = "select * from weapon_categories";
@@ -44,7 +44,7 @@ public class WeaponCategories : TableBase
     }
 
     // 指定された武器カテゴリーのデータのみ取得
-    public static WeaponCategoryModel GetGachaWeaponData(int weapon_category)
+    public static WeaponCategoryModel GetWeaponCategoryData(int weapon_category)
     {
         WeaponCategoryModel weaponCategoryModel = new();
         getQuery = "select * from weapon_categories where weapon_category =" + weapon_category;
