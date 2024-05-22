@@ -7,11 +7,11 @@ public class UsersBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (Users.Get() != null)
+        if (Users.Get().user_id != null)
         {
             usersModel = Users.Get();
         }
-        if (Wallets.Get() != null)
+        if (Wallets.Get().free_amount != null)
         {
             walletsModel = Wallets.Get();
         }
@@ -19,11 +19,11 @@ public class UsersBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (Users.Get() != null)
+        if (Users.Get().user_id != null)
         {
             usersModel = Users.Get();
         }
-        if (Wallets.Get() != null)
+        if (Wallets.Get().free_amount != null)
         {
             walletsModel = Wallets.Get();
         }

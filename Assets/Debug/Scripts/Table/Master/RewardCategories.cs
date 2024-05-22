@@ -13,7 +13,7 @@ public class RewardCategories : TableBase
     // ƒe[ƒuƒ‹ì¬
     public static void CreateTable()
     {
-        createQuery = "create table if not exists reward_categories(reward_category tinyint,category_name varchar,primary key(mission_category))";
+        createQuery = "create table if not exists reward_categories(reward_category tinyint,category_name varchar,primary key(reward_category))";
         RunQuery(createQuery);
     }
 

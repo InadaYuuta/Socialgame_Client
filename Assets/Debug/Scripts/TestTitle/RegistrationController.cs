@@ -25,11 +25,8 @@ public class RegistrationController : UsersBase
         base.Awake();
         loginChecker = FindObjectOfType<LoginChecker>();
 
-        string deviceId = string.Format("デバイスのユニークID:{0}", SystemInfo.deviceUniqueIdentifier);
-        Debug.Log(deviceId);
-
-        //CreateSQLiteFile();
-        //CheckCreateTables();
+        CreateSQLiteFile();
+        CheckCreateTables();
 
         if (usersModel != null && !string.IsNullOrEmpty(usersModel.user_id))
         {
@@ -47,14 +44,14 @@ public class RegistrationController : UsersBase
 
     private void Start()
     {
-        if (Users.Get() == null) { return; }
+        if (Users.Get().user_id == null) { return; }
         GetUserID();
         DisplayUI();
     }
 
     private void Update()
     {
-        if (Users.Get() == null) { return; }
+        if (Users.Get().user_id == null) { return; }
         if (usersModel != null && !string.IsNullOrEmpty(usersModel.user_id))
         {
             loginChecker.OnLoginFlag();
@@ -101,11 +98,11 @@ public class RegistrationController : UsersBase
         {
             List<IMultipartFormSection> registForm = new(); // WWWFormの新しいやり方
             registForm.Add(new MultipartFormDataSection("un", name));
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.REGISTRATION_URL, registForm, null));
             if (Users.Get().user_id != null)
             {
                 loginChecker.OnLoginFlag(); // 登録完了
             }
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.REGISTRATION_URL, registForm, null));
         }
         else
         {

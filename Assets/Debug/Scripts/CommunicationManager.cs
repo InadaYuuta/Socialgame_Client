@@ -8,8 +8,8 @@ using UnityEngine.Networking;
 [Serializable]
 public class ResponseObjects
 {
-    public UsersModel user;
-    public WalletsModel wallet;
+    public UsersModel users;
+    public WalletsModel wallets;
     public ItemsModel[] items;
     public WeaponModel[] weapons;
     // マスターデータ
@@ -66,9 +66,9 @@ public class CommunicationManager : MonoBehaviour
     /// <param name="responseObjects"></param>
     static void UpdateUserData(ResponseObjects responseObjects)
     {
-        if (responseObjects.user != null && !string.IsNullOrEmpty(responseObjects.user.user_id))
+        if (responseObjects.users != null && !string.IsNullOrEmpty(responseObjects.users.user_id))
         {
-            Users.Set(responseObjects.user);
+            Users.Set(responseObjects.users);
         }
     }
 
@@ -78,10 +78,10 @@ public class CommunicationManager : MonoBehaviour
     /// <param name="responseObjects"></param>
     static void UpdateWalletData(ResponseObjects responseObjects)
     {
-        if (responseObjects.wallet != null)
+        if (responseObjects.wallets != null)
         {
             UsersModel usersModel = Users.Get();
-            Wallets.Set(responseObjects.wallet, usersModel.user_id);
+            Wallets.Set(responseObjects.wallets, usersModel.user_id);
         }
     }
 
