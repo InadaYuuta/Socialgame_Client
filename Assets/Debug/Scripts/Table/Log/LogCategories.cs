@@ -47,7 +47,7 @@ public class LogCategories : TableBase
     public static LogCategoryModel GetLogCategory(string log_category)
     {
         LogCategoryModel logCategoryModel = new();
-        getQuery = "select * from log_categories where log_category" + log_category;
+        getQuery = string.Format("select * from log_categories where log_category = {0}", log_category);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

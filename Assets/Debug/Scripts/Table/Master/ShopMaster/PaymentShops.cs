@@ -16,7 +16,7 @@ public class PaymentShops : TableBase
     // ÉeÅ[ÉuÉãçÏê¨
     public static void CreateTable()
     {
-        createQuery = "create table if not exists payment_shops(product_id bigint,product_name varchar,price smallint,paid_currency smallint,bonus_currency smallint,unique(product_id))";
+        createQuery = "create table if not exists payment_shops(product_id bigint,product_name varchar,price smallint,paid_currency smallint,bonus_currency smallint,primary key(product_id))";
         RunQuery(createQuery);
     }
 
@@ -53,7 +53,8 @@ public class PaymentShops : TableBase
     public static PaymentShopModel GetPaymentShopData(int product_id)
     {
         PaymentShopModel paymentShopsModel = new();
-        getQuery = "select * from payment_shops where product_id =" + product_id;
+        getQuery = string.Format("select * from payment_shops where product_id = {0}", product_id);
+
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

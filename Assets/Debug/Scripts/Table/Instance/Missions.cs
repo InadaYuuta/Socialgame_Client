@@ -52,22 +52,20 @@ public class Missions : TableBase
     }
 
     // 指定された進化後武器データを取得
-    public static MissionsModel[] GetPresentBoxData(int mission_id)
+    public static MissionsModel GetPresentBoxData(int mission_id)
     {
-        List<MissionsModel> MissionList = new();
+        MissionsModel MissionModel = new();
         getQuery = string.Format("select * from missions where mission_id={0}", mission_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            MissionsModel MissionModel = new();
             MissionModel.mission_id = int.Parse(dr["mission_id"].ToString());
             MissionModel.achieved = int.Parse(dr["achieved"].ToString());
             MissionModel.receipt = int.Parse(dr["receipt"].ToString());
             MissionModel.progress = int.Parse(dr["progress"].ToString());
             MissionModel.term = dr["term"].ToString(); // TODO: 今後ミッション関連を作るときに日時で取得できるメソッドを追加する
             MissionModel.validity_term = dr["validity_term"].ToString(); // TODO: 今後ミッション関連を作るときに日時で取得できるメソッドを追加する
-            MissionList.Add(MissionModel);
         }
-        return MissionList.ToArray();
+        return MissionModel;
     }
 }

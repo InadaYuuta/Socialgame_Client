@@ -20,7 +20,7 @@ public class Users : TableBase
     // ƒe[ƒuƒ‹ì¬
     public static void CreateTable()
     {
-        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_reinforce_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,last_login varchar,unique (user_id))";
+        createQuery = "create table if not exists users(user_id varchar,user_name varchar,handover_passhash varchar,has_reinforce_point mediumint, user_rank smallint,user_rank_exp mediumint,login_days int,max_stamina tinyint,last_stamina tinyint,last_login varchar,primary key (user_id))";
         RunQuery(createQuery);
     }
 

@@ -50,19 +50,17 @@ public class LogMaster : TableBase
     }
 
     // 指定されたミッションデータを取得
-    public static LogMasterModel[] GetLogData(int log_id)
+    public static LogMasterModel GetLogData(int log_id)
     {
-        List<LogMasterModel> logMasterList = new();
+        LogMasterModel logMasterModel = new();
         getQuery = string.Format("select * from log_masters where log_id={0}", log_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            LogMasterModel logMasterModel = new();
             logMasterModel.log_id = int.Parse(dr["log_id"].ToString());
             logMasterModel.log_category = int.Parse(dr["log_category"].ToString());
             logMasterModel.log_content = dr["log_content"].ToString();
-            logMasterList.Add(logMasterModel);
         }
-        return logMasterList.ToArray();
+        return logMasterModel;
     }
 }

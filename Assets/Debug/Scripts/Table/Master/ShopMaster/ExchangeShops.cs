@@ -53,7 +53,8 @@ public class ExchangeShops : TableBase
     public static ExchangeShopModel GetExchangeShopData(int exchange_product_id)
     {
         ExchangeShopModel exchangeShopModel = new();
-        getQuery = "select * from exchange_item_shops where exchange_product_id =" + exchange_product_id;
+        getQuery = string.Format("select * from exchange_item_shops where exchange_product_id = {0}", exchange_product_id);
+
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

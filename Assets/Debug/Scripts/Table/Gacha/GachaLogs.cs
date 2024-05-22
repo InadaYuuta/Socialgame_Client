@@ -12,12 +12,14 @@ public class GachaLogModel
 
 public class GachaLogs : TableBase
 {
+    // テーブル作成
     public static void Createtable()
     {
-        createQuery = "create table if not exists gacha_logs(gacha_log_id bigint,gacha_id bigint, weapon_id bigint,created varchar, primary key(gacha_log_id))";
+        createQuery = "create table if not exists gacha_logs( gacha_log_id bigint,gacha_id bigint, weapon_id bigint,created varchar, primary key(gacha_log_id))";
         RunQuery(createQuery);
     }
 
+    // レコード登録
     public static void Set(GachaLogModel[] gacha_log_model_list)
     {
         if (gacha_log_model_list == null) { return; }
@@ -28,10 +30,12 @@ public class GachaLogs : TableBase
         }
     }
 
+    // 指定したユーザーIDのガチャ履歴をすべて取得
     public static GachaLogModel[] GetGacaLogDataAll()
     {
         List<GachaLogModel> gachaLogList = new();
-        getQuery = "select * from gacha_logs";
+        getQuery = string.Format("select * from gacha_logs where user_id={0}");
+
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

@@ -30,30 +30,31 @@ public class MissionCategories : TableBase
     // 全てのガチャカテゴリーデータを取得
     public static MissionCategoryModel[] GetMissionCategoryDataAll()
     {
-        List<MissionCategoryModel> weaponCategoryList = new();
+        List<MissionCategoryModel> missionCategoryList = new();
         getQuery = "select * from mission_categories";
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            MissionCategoryModel weaponCategoryModel = new();
-            weaponCategoryModel.mission_category = int.Parse(dr["mission_category"].ToString());
-            weaponCategoryModel.category_name = dr["category_name"].ToString();
-            weaponCategoryList.Add(weaponCategoryModel);
+            MissionCategoryModel missionCategoryModel = new();
+            missionCategoryModel.mission_category = int.Parse(dr["mission_category"].ToString());
+            missionCategoryModel.category_name = dr["category_name"].ToString();
+            missionCategoryList.Add(missionCategoryModel);
         }
-        return weaponCategoryList.ToArray();
+        return missionCategoryList.ToArray();
     }
 
     // 指定された武器カテゴリーのデータのみ取得
-    public static MissionCategoryModel GeMissionCategoryData(int mission_category)
+    public static MissionCategoryModel GetMissionCategoryData(int mission_category)
     {
-        MissionCategoryModel weaponCategoryModel = new();
-        getQuery = "select * from mission_categories where mission_category =" + mission_category;
+        MissionCategoryModel missionCategoryModel = new();
+        getQuery = string.Format("select * from mission_categories where mission_category = {0}", mission_category);
+
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            weaponCategoryModel.mission_category = int.Parse(dr["mission_category"].ToString());
-            weaponCategoryModel.category_name = dr["category_name"].ToString();
+            missionCategoryModel.mission_category = int.Parse(dr["mission_category"].ToString());
+            missionCategoryModel.category_name = dr["category_name"].ToString();
         }
-        return weaponCategoryModel;
+        return missionCategoryModel;
     }
 }

@@ -57,14 +57,13 @@ public class NewsMaster : TableBase
     }
 
     // 指定されたミッションデータを取得
-    public static NewsMasterModel[] GetNewsData(int news_id)
+    public static NewsMasterModel GetNewsData(int news_id)
     {
-        List<NewsMasterModel> newsMasterList = new();
+        NewsMasterModel newsMasterModel = new();
         getQuery = string.Format("select * from news_masters where news_id={0}", news_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            NewsMasterModel newsMasterModel = new();
             newsMasterModel.news_id = int.Parse(dr["news_id"].ToString());
             newsMasterModel.news_category = int.Parse(dr["news_category"].ToString());
             newsMasterModel.news_name = dr["news_name"].ToString();
@@ -72,8 +71,7 @@ public class NewsMaster : TableBase
             newsMasterModel.display_priority = int.Parse(dr["display_priority"].ToString());
             newsMasterModel.period_start = dr["period_start"].ToString(); // TODO: 今後お知らせ関連を作るときに日時で取得できるメソッドを追加する
             newsMasterModel.period_end = dr["period_end"].ToString(); // TODO: 今後お知らせ関連を作るときに日時で取得できるメソッドを追加する
-            newsMasterList.Add(newsMasterModel);
         }
-        return newsMasterList.ToArray();
+        return newsMasterModel;
     }
 }

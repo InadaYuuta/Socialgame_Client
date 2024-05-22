@@ -13,6 +13,7 @@ public class GachaLogManager : WeaponBase
     int[] weaponIds;
     string gachaLogTitleString = "ガチャ履歴\n\n";
     string gachaLogString = " ";
+    string user_id;
 
     int count = 0;     // 表示する分のカウント
     int pageCount = 1; // 今何枚目のページか
@@ -24,6 +25,7 @@ public class GachaLogManager : WeaponBase
     {
         GetGachaLog();
         gachaLogPanel.SetActive(false);
+        user_id = Users.Get().user_id;
     }
 
     public void GetGachaLog()

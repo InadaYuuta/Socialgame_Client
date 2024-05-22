@@ -47,7 +47,7 @@ public class WeaponCategories : TableBase
     public static WeaponCategoryModel GetWeaponCategoryData(int weapon_category)
     {
         WeaponCategoryModel weaponCategoryModel = new();
-        getQuery = "select * from weapon_categories where weapon_category =" + weapon_category;
+        getQuery = string.Format("select * from weapon_categories where weapon_category = {0}", weapon_category);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

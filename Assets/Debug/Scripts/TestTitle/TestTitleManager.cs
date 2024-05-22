@@ -59,6 +59,7 @@ public class TestTitleManager : MonoBehaviour
         MissionMaster.CreateTable();
         MissionCategories.CreateTable();
         NewsMaster.CreateTable();
+        RewardCategories.CreateTable();
 
         // ƒKƒ`ƒƒ
         GachaLogs.Createtable();

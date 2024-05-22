@@ -90,7 +90,7 @@ public class Weapons : TableBase
     public static WeaponModel GetWeaponData(int weapon_id)
     {
         WeaponModel weaponModel = new();
-        getQuery = "select * from weapons where weapon_id =" + weapon_id;
+        getQuery = string.Format("select * from weapons where weapon_id = {0}", weapon_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

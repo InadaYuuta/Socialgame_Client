@@ -48,7 +48,7 @@ public class ItemCategories : TableBase
     public static ItemCategoryModel GetItemCategory(int item_category)
     {
         ItemCategoryModel itemCategoryModel = new();
-        getQuery = "select * from item_categories where item_category" + item_category;
+        getQuery = string.Format("select * from item_categories where item_category = {0}", item_category);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

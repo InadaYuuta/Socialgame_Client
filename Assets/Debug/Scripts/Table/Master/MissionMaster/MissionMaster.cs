@@ -61,14 +61,13 @@ public class MissionMaster : TableBase
     }
 
     // 指定されたミッションデータを取得
-    public static MissionMasterModel[] GetMissionMasterData(int mission_id)
+    public static MissionMasterModel GetMissionMasterData(int mission_id)
     {
-        List<MissionMasterModel> MissionMasterList = new();
+            MissionMasterModel MissionMasterModel = new();
         getQuery = string.Format("select * from mission_masters where mission_id={0}", mission_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
-            MissionMasterModel MissionMasterModel = new();
             MissionMasterModel.mission_id = int.Parse(dr["mission_id"].ToString());
             MissionMasterModel.next_mission_id = int.Parse(dr["next_mission_id"].ToString());
             MissionMasterModel.mission_name = dr["mission_name"].ToString();
@@ -78,8 +77,7 @@ public class MissionMaster : TableBase
             MissionMasterModel.mission_reward = dr["mission_reward"].ToString();
             MissionMasterModel.achievement_condition = dr["achievement_condition"].ToString();
             MissionMasterModel.period_end = dr["period_end"].ToString(); // TODO: 今後ミッション関連を作るときに日時で取得できるメソッドを追加する
-            MissionMasterList.Add(MissionMasterModel);
         }
-        return MissionMasterList.ToArray();
+        return MissionMasterModel;
     }
 }

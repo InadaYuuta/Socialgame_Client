@@ -49,7 +49,7 @@ public class Items : TableBase
     public static ItemsModel GetItemData(int item_id)
     {
         ItemsModel itemsModel = new();
-        getQuery = "select * from items where item_id =" + item_id;
+        getQuery = string.Format("select * from items where item_id = {0}", item_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

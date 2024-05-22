@@ -46,7 +46,7 @@ public class ExchangeShopCategories : TableBase
     public static ExchangeItemCategoryModel GetExchangeModelCategory(int exchangeShopCategory)
     {
         ExchangeItemCategoryModel itemCategoryModel = new();
-        getQuery = "select * from exchange_item_categories where exchange_item_category" + exchangeShopCategory;
+        getQuery = string.Format("select * from exchange_item_categories where exchange_item_category = {0}", exchangeShopCategory);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

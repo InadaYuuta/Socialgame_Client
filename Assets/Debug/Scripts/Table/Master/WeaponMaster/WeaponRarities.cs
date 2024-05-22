@@ -47,7 +47,7 @@ public class WeaponRarities : TableBase
     public static WeaponRarityModel GetWeaponRarityData(int rarity_id)
     {
         WeaponRarityModel weaponRarityModel = new();
-        getQuery = "select * from weapon_rarities where rarity_id =" + rarity_id;
+        getQuery = string.Format("select * from weapon_rarities where rarity_id = {0}", rarity_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {

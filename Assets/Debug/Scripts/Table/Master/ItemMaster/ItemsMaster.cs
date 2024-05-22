@@ -52,7 +52,7 @@ public class ItemsMaster : TableBase
     public static ItemMasterModel GetItemMasterData(int item_id)
     {
         ItemMasterModel itemMasterModel = new();
-        getQuery = "select * from item_masters where item_id =" + item_id;
+        getQuery = string.Format("select * from item_masters where item_id = {0}", item_id);
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)
         {
