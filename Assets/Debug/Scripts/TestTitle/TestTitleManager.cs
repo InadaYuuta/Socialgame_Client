@@ -23,7 +23,7 @@ public class TestTitleManager : MonoBehaviour
         if (Users.Get().user_id != null && !isFlag)
         {
             // マスターデータチェック
-            // StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
+             StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.MASTER_GET_URL, null, null));
 
             List<IMultipartFormSection> form = new();
             form.Add(new MultipartFormDataSection("uid", Users.Get().user_id));

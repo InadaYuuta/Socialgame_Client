@@ -26,7 +26,7 @@ public class BuyFragmentItem : MonoBehaviour
         if (exchangeItemNum > 10)
         {
             StartCoroutine(ResultPanelController.DisplayResultPanel(buyStr));
-            buyButton.SetActive(false);
+            //buyButton.SetActive(false);
             List<IMultipartFormSection> buyForm = new();
             buyForm.Add(new MultipartFormDataSection("uid", user_id));
             buyForm.Add(new MultipartFormDataSection("epid", exchange_product_id));
