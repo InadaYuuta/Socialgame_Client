@@ -34,7 +34,7 @@ public class GachaLogs : TableBase
     public static GachaLogModel[] GetGacaLogDataAll()
     {
         List<GachaLogModel> gachaLogList = new();
-        getQuery = string.Format("select * from gacha_logs where user_id={0}");
+        getQuery = string.Format("select * from gacha_logs");
 
         DataTable dataTable = RunQuery(getQuery);
         foreach (DataRow dr in dataTable.Rows)

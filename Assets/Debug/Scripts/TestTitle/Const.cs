@@ -19,7 +19,7 @@ namespace GameUtil
         public const string STAMINA_CONSUMPTION = "http://localhost/api/testConsumption";   // スタミナ消費URL(仮)
         public const string ITEM_REGISTRATION_URL = "http://localhost/api/itemRegist";      // アイテムの登録URL
         public const string BUY_EXCHANGE_SHOP_URL = "http://localhost/api/exchangeShop";    // 交換ショップでのアイテム購入URL
-        public const string GACHA_URL = "http://localhost/api/gachaExcute";                 // ガチャURL
+        public const string GACHA_URL = "http://localhost/api/gachaExecute";                 // ガチャURL
         public const string GET_GACHA_LOG = "http://localhost/api/getGachaLog";             // ガチャログ入手
 #elif DEVELOP_SERVER
  /** DB情報 */
