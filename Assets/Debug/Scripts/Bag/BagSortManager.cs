@@ -8,6 +8,7 @@ public class BagSortManager : WeaponBase
     [SerializeField] GameObject lineupButton;
     [SerializeField] GameObject[] itemClone;
     [SerializeField] Sprite[] lineUpImage;
+    [SerializeField] GameObject detailBack;
     Vector3 referencePoint = new Vector3(170, 620, 0); // Šî€“_
 
     int generateVerticalNum = 3; // ¶¬‚·‚éc‚ÌŒÂ”
@@ -27,11 +28,13 @@ public class BagSortManager : WeaponBase
     const string RARITYSORTASC = "RARITYASC";
     const string RARITYSORTDESC = "RARITYDESC";
 
-    private void OnEnable()
+
+    private void Awake()
     {
         itemClone = new GameObject[generateVerticalNum * generateBesideNum];
         SetWeaponParameters(DEFAULTSORT);
         SortGenerate();
+        //detailBack.SetActive(false);
     }
 
     private void OnDisable() => DestroyItemClone();
@@ -81,10 +84,19 @@ public class BagSortManager : WeaponBase
                 if (count < itemClone.Length && itemClone[count] == null)
                 {
                     itemClone[count] = Instantiate(itemPrefab, setPos, Quaternion.identity);
+                    GameObject currentClone = itemClone[count];
                     if (weaponName.Length > count)
                     {
-                        itemClone[count].name = weaponName[j].ToString();
-                        WeaponSetting(itemClone[count], weaponId[j]);
+                        currentClone.name = weaponName[j].ToString();
+                        WeaponSetting(currentClone, weaponId[j]);
+                        if (currentClone.GetComponent<BagItemManager>() != null)
+                        {
+                            BagItemManager bagItemManager = currentClone.GetComponent<BagItemManager>();
+                            if (bagItemManager != null)
+                            {
+                                bagItemManager.SetParameters(weaponId[j], weaponLevel[j], weaponExp[j], weaponCategory[j], weaponName[j]);
+                            }
+                        }
                     }
                     itemClone[count].transform.parent = items.transform;
                 }
