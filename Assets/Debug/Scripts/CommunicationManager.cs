@@ -55,7 +55,7 @@ public class CommunicationManager : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
     }
@@ -220,10 +220,13 @@ public class CommunicationManager : MonoBehaviour
                 UpdateMasterData(responseObjects);
                 break;
             case GameUtil.Const.GACHA_URL:
-                // TODO:ガチャもここでできるようにする
                 break;
             case GameUtil.Const.GET_GACHA_LOG:
                 UpdateGachaLogData(responseObjects);
+                break;
+            case GameUtil.Const.WEAPON_LEVEL_UP_URL:
+                UpdateUserData(responseObjects);
+                UpdateWeaponData(responseObjects);
                 break;
             default:
                 break;
@@ -275,7 +278,11 @@ public class CommunicationManager : MonoBehaviour
                 // *** SQLiteへの保存処理 ***
                 ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
                 ConnectMove(connectURL, responseObjects);
-                if (responseObjects.errcode != null) { Debug.LogError("ErrorCode:" + responseObjects.errcode); }
+                // エラーコードがあったらエラーを表示
+                if (responseObjects.errcode != null)
+                {
+                    DisplayErrorTextManager.Instance.DisplayError(responseObjects.errcode);
+                }
                 // 正常終了アクション実行
                 if (action != null)
                 {

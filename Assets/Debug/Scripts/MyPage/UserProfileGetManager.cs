@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -88,5 +90,56 @@ public class UserProfileGetManager : UsersBase
         GetUserRankExp();
         GetStamina();
         GetWallet();
+    }
+
+    // 指定された数値が何桁か
+    int CheckDigitNum(int currentRPoint)
+    {
+        int count = 1;
+        while (currentRPoint / 10 > 0)
+        {
+            currentRPoint /= 10;
+            count++;
+        }
+        return count;
+    }
+
+    // 指定された数字を桁分けした配列に変換
+    int[] ConvertNumToList(int target)
+    {
+        int digit = CheckDigitNum(target);
+        int[] result = new int[digit];
+
+        for (int i = 0; i < digit; i++)
+        {
+            int overNum = target % 10;
+            if (overNum != 0) { result[i] = overNum; }
+
+            target /= 10;
+        }
+        Array.Reverse(result); // ここで配列を逆順にする
+        return result;
+    }
+
+    // 渡された数字の三桁目に,を挿入した文字列を返す
+    string PutCommaInThaThirdDigit(int currentRPoint)
+    {
+        string resultStr = "";
+
+        int[] listNum = ConvertNumToList(currentRPoint); // ここで数値をリスト化する
+
+        for (int i = 0; i < listNum.Length; i++)
+        {
+            if (listNum.Length > 3 && i == 1) { resultStr += ","; }
+            resultStr += listNum[i].ToString();
+        }
+        return resultStr;
+    }
+
+    // 強化ポイントを,を付けた形で取得
+    public string GetCurrentRPointStr()
+    {
+        int currntRPoint = Users.Get().has_reinforce_point;
+        return PutCommaInThaThirdDigit(currntRPoint);
     }
 }

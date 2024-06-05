@@ -8,6 +8,7 @@ public class BagSortManager : WeaponBase
     [SerializeField] GameObject lineupButton;
     [SerializeField] GameObject[] itemClone;
     [SerializeField] Sprite[] lineUpImage;
+    [SerializeField] GameObject detailBack;
     Vector3 referencePoint = new Vector3(170, 620, 0); // Šî€“_
 
     int generateVerticalNum = 3; // ¶¬‚·‚éc‚ÌŒÂ”
@@ -27,11 +28,13 @@ public class BagSortManager : WeaponBase
     const string RARITYSORTASC = "RARITYASC";
     const string RARITYSORTDESC = "RARITYDESC";
 
+
     private void Awake()
     {
         itemClone = new GameObject[generateVerticalNum * generateBesideNum];
         SetWeaponParameters(DEFAULTSORT);
         SortGenerate();
+        //detailBack.SetActive(false);
     }
 
     private void OnDisable() => DestroyItemClone();

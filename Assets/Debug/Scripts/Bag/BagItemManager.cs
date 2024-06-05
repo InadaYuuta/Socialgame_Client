@@ -7,17 +7,17 @@ public class BagItemManager : WeaponBase
     [SerializeField] string item_name = "no name";
     string default_name = "no name";
 
-    [SerializeField] TextMeshProUGUI name;
-    [SerializeField] GameObject weaponBack;
+    [SerializeField] TextMeshProUGUI detailNameText, reinforceNameText;
+    [SerializeField] GameObject detailWaponBack, reinforceWeaponBack;
+    GameObject detailBack;
+    ChoiceWeaponDataManager choiceManager;
 
     void OnEnable()
     {
-        if (GameObject.Find("DetailBack") != null)
+        choiceManager = FindObjectOfType<ChoiceWeaponDataManager>();
+        if (choiceManager != null)
         {
-            GameObject detailBack = GameObject.Find("DetailBack");
-            if (detailBack.activeInHierarchy == false) { return; }
-            name = GameObject.Find("BagWeaponName").GetComponent<TextMeshProUGUI>();
-            weaponBack = GameObject.Find("WeaponImageData");
+            detailBack = choiceManager.DetailBack;
         }
     }
 
@@ -41,8 +41,9 @@ public class BagItemManager : WeaponBase
     // クリックされた時に指定されたIDの武器の情報を表示する
     public void DisplayWeaponData()
     {
-        if (item_name == default_name || name == null || weaponBack == null) { return; }
-        name.text = item_name;
-        WeaponSetting(weaponBack, weapon_id);
+        if (item_name == default_name) { return; }
+        detailBack.SetActive(true);
+        choiceManager.SetChoiceWeaponData(weapon_id, weapon_level);
+        choiceManager.SetDetailData(item_name);
     }
 }
