@@ -225,6 +225,7 @@ public class CommunicationManager : MonoBehaviour
                 UpdateGachaLogData(responseObjects);
                 break;
             case GameUtil.Const.WEAPON_LEVEL_UP_URL:
+            case GameUtil.Const.WEAPON_LIMIT_BREAK_URL:
                 UpdateUserData(responseObjects);
                 UpdateWeaponData(responseObjects);
                 break;

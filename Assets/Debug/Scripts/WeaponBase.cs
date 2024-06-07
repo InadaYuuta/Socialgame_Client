@@ -25,6 +25,10 @@ public class WeaponBase : MonoBehaviour
         }
     }
 
+    // 武器のイメージだけを変える
+    protected void ChangeOnlyWeaponImage(Image weaponImage, int weaponId) => weaponImage.sprite = Resources.Load<Sprite>(string.Format("WeaponImage/w{0}", weaponId.ToString())); // Resourcesフォルダの中の特定の画像を取得して入れる
+
+
     // 指定した数字の指定の桁の数値を返す 参考サイトhttps://santerabyte.com/c-sharp-get-nth-digit-num/
     protected int GetNthDigitNum(int num, int digit)
     {

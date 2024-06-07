@@ -19,7 +19,7 @@ public class ResultPanelController : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
         resultPanel = GameObject.Find("ResultPanel");
