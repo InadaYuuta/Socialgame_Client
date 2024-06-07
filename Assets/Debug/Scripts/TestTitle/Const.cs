@@ -22,6 +22,7 @@ namespace GameUtil
         public const string GACHA_URL = "http://localhost/api/gachaExecute";                // ƒKƒ`ƒƒURL
         public const string GET_GACHA_LOG = "http://localhost/api/getGachaLog";             // ƒKƒ`ƒƒƒƒO“üè
         public const string WEAPON_LEVEL_UP_URL = "http://localhost/api/levelUp";           // •Ší‹­‰»
+        public const string WEAPON_LIMIT_BREAK_URL = "http://localhost/api/limitBreak";     // •ŠíŒÀŠE“Ë”j
 #elif DEVELOP_SERVER
         /** DBî•ñ */
         public const string REGISTRATION_URL = "http://localhost/api/register";             // “o˜^URL
@@ -38,6 +39,7 @@ namespace GameUtil
         public const string GACHA_URL = "http://localhost/api/gachaExcute";                 // ƒKƒ`ƒƒURL
         public const string GET_GACHA_LOG = "http://localhost/api/getGachaLog";             // ƒKƒ`ƒƒƒƒO“üè
         public const string WEAPON_LEVEL_UP_URL = "http://localhost/api/levelUp";           // •Ší‹­‰»
+        public const string WEAPON_LIMIT_BREAK_URL = "http://localhost/api/limitBreak";     // •ŠíŒÀŠE“Ë”j
 #endif
 
 
