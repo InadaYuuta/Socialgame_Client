@@ -3,11 +3,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using System;
 
 public class LimitBreakManager : MonoBehaviour
 {
     [SerializeField] GameObject reinforcePanel;
-    [SerializeField] TextMeshProUGUI changeLimitBreaklText, consumptionConvexItemText, weaponDataLimitBreakText;
+    [SerializeField] TextMeshProUGUI changeLimitBreakText, consumptionConvexItemText, weaponDataLimitBreakText;
     [SerializeField] Image LimitBreakButton;
 
     string ConvexStr = "凸";
@@ -16,7 +17,7 @@ public class LimitBreakManager : MonoBehaviour
     string spaceStr = "   ";
     string slashStr = " / ";
     int currentLimitBreak, afterLimitBreak, consumptionItem, currentItem;
-    int limitBreakpWeaponId;
+    int limitBreakWeaponId;
 
     bool isPush = false; // ボタンを押せるか
     enum UnPushReason
@@ -43,32 +44,30 @@ public class LimitBreakManager : MonoBehaviour
     private void Update()
     {
         if (!reinforcePanel.activeInHierarchy) { return; }
-        if (limitBreakpWeaponId == 0) { return; }
+        if (limitBreakWeaponId == 0) { return; }
         // 武器や所持している強化アイテム等のテキスト更新
-        SetLimitBreakUpWeaponData();
+        SetLimitBreakWeaponData();
         CheckCanLimitBreak();
     }
 
     // 凸をする武器の情報を取得する
     public void SetLimitBreakWeaponParameter(int weapon_id)
     {
-        limitBreakpWeaponId = weapon_id;
-        SetLimitBreakUpWeaponData();
+        limitBreakWeaponId = weapon_id;
+        SetLimitBreakWeaponData();
     }
 
     // 限界突破する武器のIDから武器画像と現在の限界突破、所持凸アイテムなどを設定する
-    public void SetLimitBreakUpWeaponData()
+    public void SetLimitBreakWeaponData()
     {
-        currentLimitBreak = Weapons.GetWeaponData(limitBreakpWeaponId).limit_break;
+        currentLimitBreak = Weapons.GetWeaponData(limitBreakWeaponId).limit_break;
         if (currentLimitBreak < 5) { afterLimitBreak = currentLimitBreak + 1; }
         else { afterLimitBreak = 5; }
         consumptionItem = 1; // TODO: 今後凸に必要なアイテムが増えたら増やす
+        currentItem = Items.GetWeaponItemData(limitBreakWeaponId).item_num;
 
-        ItemsModel test = Items.GetWeaponItemData(limitBreakpWeaponId);
-
-        currentItem = Items.GetWeaponItemData(limitBreakpWeaponId).item_num;
         // 各テキストの中身を書き換え
-        changeLimitBreaklText.text = string.Format("{0}{1}{2}{3}{4}", ConvexStr, currentLimitBreak, arrowStr, ConvexStr, afterLimitBreak);
+        changeLimitBreakText.text = string.Format("{0}{1}{2}{3}{4}", ConvexStr, currentLimitBreak, arrowStr, ConvexStr, afterLimitBreak);
         consumptionConvexItemText.text = string.Format("{0}{1}{2}{3}{4}", necessaryImteStr, spaceStr, consumptionItem, slashStr, currentItem);
         weaponDataLimitBreakText.text = string.Format("{0}{1}", ConvexStr, currentLimitBreak);
     }
@@ -77,8 +76,8 @@ public class LimitBreakManager : MonoBehaviour
     void CheckCanLimitBreak()
     {
         consumptionItem = 1;
-        currentItem = Items.GetWeaponItemData(limitBreakpWeaponId).item_num;
-        currentLimitBreak = Weapons.GetWeaponData(limitBreakpWeaponId).limit_break;
+        currentItem = Items.GetWeaponItemData(limitBreakWeaponId).item_num;
+        currentLimitBreak = Weapons.GetWeaponData(limitBreakWeaponId).limit_break;
 
         ChangeImageColor.ChangeMode changeMode = ChangeImageColor.ChangeMode.UNSELECT;
 
@@ -95,6 +94,12 @@ public class LimitBreakManager : MonoBehaviour
         { currentState = UnPushReason.MAX; } // 限界突破が上限まで行われていたら選択できなくする
 
         changeImageColor.ChangeTargetColor(LimitBreakButton, changeMode);
+    }
+
+    // 成功した場合に呼ぶ関数
+    void SuccessLimitBreak()
+    {
+        StartCoroutine(ResultPanelController.DisplayResultPanel("限界突破しました。"));
     }
 
     // 武器の限界突破を行う
@@ -116,10 +121,10 @@ public class LimitBreakManager : MonoBehaviour
                 break;
         }
         if (!isPush) { return; }
-        List<IMultipartFormSection> levelUpForm = new();
-        levelUpForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
-        levelUpForm.Add(new MultipartFormDataSection("wid", limitBreakpWeaponId.ToString()));
-        Debug.Log("限界突破成功");
-        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_LIMIT_BREAK_URL, levelUpForm));
+        List<IMultipartFormSection> limitBreakForm = new();
+        limitBreakForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
+        limitBreakForm.Add(new MultipartFormDataSection("wid", limitBreakWeaponId.ToString()));
+        Action afterAction = new(() => SuccessLimitBreak());
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_LIMIT_BREAK_URL, limitBreakForm, afterAction));
     }
 }

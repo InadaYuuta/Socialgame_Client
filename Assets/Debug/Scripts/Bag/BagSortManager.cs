@@ -33,11 +33,17 @@ public class BagSortManager : WeaponBase
     {
         itemClone = new GameObject[generateVerticalNum * generateBesideNum];
         SetWeaponParameters(DEFAULTSORT);
-        SortGenerate();
-        //detailBack.SetActive(false);
     }
 
     private void OnDisable() => DestroyItemClone();
+
+    // 外部からバッグの情報更新
+    public void UpdateBag()
+    {
+        DestroyItemClone();
+        itemClone = new GameObject[generateVerticalNum * generateBesideNum];
+        SetWeaponParameters(DEFAULTSORT);
+    }
 
     // TODO: ここもあらかじめWeaponMasterのデータを保持しているオブジェクトを用意してそこから取得するようにする
     void SetWeaponParameters(string setMode)
@@ -64,12 +70,32 @@ public class BagSortManager : WeaponBase
 
         for (int i = 0; i < weaponNum; i++)
         {
-            weaponId[i] = weaponModel[i].weapon_id;
-            weaponLevel[i] = weaponModel[i].level;
-            weaponExp[i] = weaponModel[i].current_exp;
-            weaponCategory[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_category;
-            weaponName[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_name;
+            bool check = CheckSameId(weaponModel[i].weapon_id);
+            if (!check)
+            {
+                weaponId[i] = weaponModel[i].weapon_id;
+                weaponLevel[i] = weaponModel[i].level;
+                weaponExp[i] = weaponModel[i].current_exp;
+                weaponCategory[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_category;
+                weaponName[i] = WeaponMaster.GetWeaponMasterData(weaponId[i]).weapon_name;
+            }
+            else
+            { continue; }
         }
+        SortGenerate();
+    }
+
+    // 重複したIDがないか確認
+    bool CheckSameId(int checkId)
+    {
+        foreach (int id in weaponId)
+        {
+            if (id == 0) { continue; }
+            Debug.Log("target:" + checkId + "check:" + id);
+            if (checkId == id) { return true; }
+        }
+
+        return false;
     }
 
     // アイテムを並べて生成する
@@ -85,16 +111,16 @@ public class BagSortManager : WeaponBase
                 {
                     itemClone[count] = Instantiate(itemPrefab, setPos, Quaternion.identity);
                     GameObject currentClone = itemClone[count];
-                    if (weaponName.Length > count)
+                    if (weaponModel.Length > count)
                     {
-                        currentClone.name = weaponName[j].ToString();
-                        WeaponSetting(currentClone, weaponId[j]);
+                        currentClone.name = weaponName[count].ToString();
+                        WeaponSetting(currentClone, weaponId[count]);
                         if (currentClone.GetComponent<BagItemManager>() != null)
                         {
                             BagItemManager bagItemManager = currentClone.GetComponent<BagItemManager>();
                             if (bagItemManager != null)
                             {
-                                bagItemManager.SetParameters(weaponId[j], weaponLevel[j], weaponExp[j], weaponCategory[j], weaponName[j]);
+                                bagItemManager.SetParameters(weaponId[count], weaponLevel[count], weaponExp[count], weaponCategory[count], weaponName[count]);
                             }
                         }
                     }
@@ -118,8 +144,8 @@ public class BagSortManager : WeaponBase
                 {
                     if (weaponName.Length > count)
                     {
-                        itemClone[count].name = weaponName[j].ToString();
-                        WeaponSetting(itemClone[count], weaponId[j]);
+                        itemClone[count].name = weaponName[count].ToString();
+                        WeaponSetting(itemClone[count], weaponId[count]);
                     }
                     itemClone[count].transform.position = setPos;
                 }

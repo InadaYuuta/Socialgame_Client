@@ -32,7 +32,7 @@ public class MissionMaster : TableBase
     {
         foreach (MissionMasterModel mission_master in mission_master_model)
         {
-            setQuery = "insert or replace into mission_masters(mission_id,next_mission_id,mission_name,mission_content,mission_category ,reward_category ,mission_reward ,achievement_condition ,period_end ) values(\"" + mission_master.mission_id + "," + mission_master.next_mission_id + "\"," + mission_master.mission_name + "\"," + mission_master.mission_content + "\"," + mission_master.mission_category + "," + mission_master.reward_category + "\"," + mission_master.mission_reward + "\"," + mission_master.achievement_condition + "\"," + mission_master.period_end + ")";
+            setQuery = "insert or replace into mission_masters(mission_id,next_mission_id,mission_name,mission_content,mission_category ,reward_category ,mission_reward ,achievement_condition ,period_end ) values(" + mission_master.mission_id + "," + mission_master.next_mission_id + ",\"" + mission_master.mission_name + "\",\"" + mission_master.mission_content + "\"," + mission_master.mission_category + "," + mission_master.reward_category + ",\"" + mission_master.mission_reward + "\",\"" + mission_master.achievement_condition + "\",\"" + mission_master.period_end + "\")";
             RunQuery(setQuery);
         }
     }

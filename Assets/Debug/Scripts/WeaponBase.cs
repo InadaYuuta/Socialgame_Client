@@ -3,22 +3,42 @@ using UnityEngine.UI;
 
 public class WeaponBase : MonoBehaviour
 {
+    Color comonPlusColor = new(0.509804f, 0.6666667f, 1);
+    Color rarePlusColor = new(1, 0.509804f, 0.509804f);
+    Color srarePlusColor = new(1, 0.9758152f, 0.9758152f);
+
     protected void WeaponSetting(GameObject weapon, int weaponId)
     {
         Image weaponImage = weapon.transform.GetChild(0).GetComponent<Image>();
+        Image weaponBack = weapon.GetComponent<Image>();
         weaponImage.sprite = Resources.Load<Sprite>(string.Format("WeaponImage/w{0}", weaponId.ToString())); // Resourcesフォルダの中の特定の画像を取得して入れる
         Outline outline = weapon.GetComponent<Outline>();
-        int rarity = GetNthDigitNum(weaponId, 7);
+        int rarity = WeaponMaster.GetWeaponMasterData(weaponId).rarity_id;
         switch (rarity)
         {
             case 1: // Comon
                 outline.effectColor = Color.blue;
+                weaponBack.color = Color.white;
                 break;
             case 2: // Rare 
                 outline.effectColor = Color.red;
+                weaponBack.color = Color.white;
                 break;
             case 3: // SRare
                 outline.effectColor = Color.yellow;
+                weaponBack.color = Color.white;
+                break;
+            case 4: // Comon+
+                outline.effectColor = Color.blue;
+                weaponBack.color = comonPlusColor;
+                break;
+            case 5: // Rare+
+                outline.effectColor = Color.red;
+                weaponBack.color = rarePlusColor;
+                break;
+            case 6: // SRare+
+                outline.effectColor = Color.yellow;
+                weaponBack.color = srarePlusColor;
                 break;
             default:
                 break;
@@ -41,5 +61,33 @@ public class WeaponBase : MonoBehaviour
             currentDigitNum++;
         }
         return 0;
+    }
+
+    // 進化に必要なポイントを返す(今後の実装でテーブルができたりしたら変更する
+    protected int GetTheReinforcePointsNeededForEvolution(int weaponId)
+    {
+        int neededReinforcePoint = 0;
+
+        int rarityId = Weapons.GetWeaponData(weaponId).rarity_id;
+
+        switch (rarityId)
+        {
+            case 1:
+                neededReinforcePoint = 5000;
+                break;
+            case 2:
+                neededReinforcePoint = 10000;
+                break;
+            case 3:
+                neededReinforcePoint = 15000;
+                break;
+            default:
+                Debug.Log("指定外のレアリティ");
+                neededReinforcePoint = 0;
+                break;
+        }
+
+
+        return neededReinforcePoint;
     }
 }

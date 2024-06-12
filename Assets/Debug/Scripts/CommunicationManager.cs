@@ -16,15 +16,22 @@ public class ResponseObjects
     public int master_data_version;
     public ItemMasterModel[] item_master;
     public ItemCategoryModel[] item_category;
-    public ExchangeItemCategoryModel[] exchange_item_category;
     public PaymentShopModel[] payment_shop;
+    public ExchangeItemCategoryModel[] exchange_item_category;
     public ExchangeShopModel[] exchange_item_shop;
-    public WeaponExpModel[] weapon_exp;
+    public RewardCategoryModel[] reward_category;
+
     // 武器データ
     public WeaponMasterModel[] weapon_master;
     public WeaponCategoryModel[] weapon_category;
     public WeaponRarityModel[] weapon_rarity;
+    public WeaponExpModel[] weapon_exp;
+    public EvolutionWeaponModel[] evolution_weapon;
     public GachaWeaponModel[] gacha_weapon;
+
+    // ミッション
+    public MissionMasterModel[] mission;
+    public MissionCategoryModel[] mission_category;
 
     // ガチャ用
     //public string[] new_weaponIds;
@@ -184,6 +191,26 @@ public class CommunicationManager : MonoBehaviour
             UsersModel usersModel = Users.Get();
             WeaponExps.Set(responseObjects.weapon_exp, usersModel.user_id);
         }
+        // 進化後武器データ保存
+        if (responseObjects.evolution_weapon != null)
+        {
+            EvolutionWeapons.Set(responseObjects.evolution_weapon);
+        }
+        // ミッションデータ保存
+        if (responseObjects.mission != null)
+        {
+            MissionMaster.Set(responseObjects.mission);
+        }
+        // ミッションカテゴリーデータ保存
+        if (responseObjects.mission_category != null)
+        {
+            MissionCategories.Set(responseObjects.mission_category);
+        }
+        // 報酬カテゴリーデータ保存
+        if (responseObjects.reward_category != null)
+        {
+            RewardCategories.Set(responseObjects.reward_category);
+        }
     }
 
     /// <summary>
@@ -225,9 +252,13 @@ public class CommunicationManager : MonoBehaviour
                 UpdateGachaLogData(responseObjects);
                 break;
             case GameUtil.Const.WEAPON_LEVEL_UP_URL:
+                UpdateUserData(responseObjects);
+                UpdateWeaponData(responseObjects);
+                break;
             case GameUtil.Const.WEAPON_LIMIT_BREAK_URL:
                 UpdateUserData(responseObjects);
                 UpdateWeaponData(responseObjects);
+                UpdateItemData(responseObjects);
                 break;
             default:
                 break;

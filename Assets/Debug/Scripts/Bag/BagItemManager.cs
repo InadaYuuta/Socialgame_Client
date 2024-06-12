@@ -44,6 +44,6 @@ public class BagItemManager : WeaponBase
         if (item_name == default_name) { return; }
         detailBack.SetActive(true);
         choiceManager.SetChoiceWeaponData(weapon_id, weapon_level);
-        choiceManager.SetDetailData(item_name);
+        choiceManager.SetDetailData(weapon_id);
     }
 }

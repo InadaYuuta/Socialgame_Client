@@ -24,7 +24,7 @@ public class EvolutionWeapons : TableBase
     {
         foreach (EvolutionWeaponModel evolution_weapon in evolution_weapon_model)
         {
-            setQuery = "insert or replace into evolution_weapons(evolution_weapon_id,rarity_id,weapon_category,weapon_name) values(\"" + evolution_weapon.evolution_weapon_id + "," + evolution_weapon.rarity_id + "," + evolution_weapon.weapon_category + "\"," + evolution_weapon.weapon_name + ")";
+            setQuery = "insert or replace into evolution_weapons(evolution_weapon_id,rarity_id,weapon_category,weapon_name) values(" + evolution_weapon.evolution_weapon_id + "," + evolution_weapon.rarity_id + "," + evolution_weapon.weapon_category + ",\"" + evolution_weapon.weapon_name + "\")";
             RunQuery(setQuery);
         }
     }

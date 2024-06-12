@@ -68,7 +68,7 @@ public class LevelUpManager : WeaponBase
     public void SetLevelUpWeaponData(int weapon_id)
     {
         currentLevel = Weapons.GetWeaponData(weapon_id).level;
-        afterLevel = currentLevel + 1;
+        afterLevel = currentLevel >= 50 ? 50 : currentLevel + 1; // 現在のレベルが50以下ならその値に＋１、５０なら５０
         consumptionRPoint = WeaponExps.GetWeaponExpData(weapon_id).use_reinforce_point;
         currentRPoint = Users.Get().has_reinforce_point;
         currentRPointStr = userProfile.GetCurrentRPointStr();
@@ -92,9 +92,9 @@ public class LevelUpManager : WeaponBase
                 changeMode = ChangeImageColor.ChangeMode.REINFORCE;
                 currentState = UnPushReason.NONE;
             }
-            else {  currentState = UnPushReason.SHORTAGE; } // 所持ポイントが足りなかったら選択できなくする
+            else { currentState = UnPushReason.SHORTAGE; } // 所持ポイントが足りなかったら選択できなくする
         }
-        else { currentState = UnPushReason.MAX;} // レベル上限なら選択できないようにする
+        else { currentState = UnPushReason.MAX; } // レベル上限なら選択できないようにする
 
         changeImageColor.ChangeTargetColor(LevelUpButton, changeMode);
     }
