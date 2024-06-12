@@ -26,7 +26,7 @@ public class Missions : TableBase
     {
         foreach (MissionsModel mission in missions_model)
         {
-            setQuery = "insert or replace into missions(user_id,mission_id ,achieved ,receipt ,progress ,term ,validity_term) values(\"" + user_id + "\"," + mission.mission_id + "," + mission.achieved + "," + mission.receipt + "," + mission.progress + "\"," + mission.term + "\"," + mission.validity_term + ")";
+            setQuery = "insert or replace into missions(user_id,mission_id ,achieved ,receipt ,progress ,term ,validity_term) values(\"" + user_id + "\"," + mission.mission_id + "," + mission.achieved + "," + mission.receipt + "," + mission.progress + ",\"" + mission.term + "\",\"" + mission.validity_term + "\")";
             RunQuery(setQuery);
         }
     }

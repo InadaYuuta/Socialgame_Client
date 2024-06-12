@@ -105,4 +105,13 @@ public class Weapons : TableBase
         }
         return weaponModel;
     }
+
+
+    // 指定された武器の削除(進化時にクライアント側だけ進化前の武器が残ってしまうため)
+    // 間違っても新海外の場所で呼ばないように注意、論理削除ではなく物理削除のため
+    public static void DeleteWeapon(int weapon_id)
+    {
+        getQuery = string.Format("delete from weapons where weapon_id = {0}", weapon_id);
+        RunQuery(getQuery);
+    }
 }
