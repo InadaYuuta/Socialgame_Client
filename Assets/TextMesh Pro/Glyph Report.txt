@@ -1,0 +1,12 @@
+Font: MaboroshinoNijimiMincho  Style: Regular
+Point Size: 80   SP/PD Ratio: 25.0%
+
+Characters included: 370/370
+Missing characters: 0
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+
+Characters excluded from packing:
+----------------------------------------
