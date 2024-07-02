@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -28,6 +29,9 @@ public class ResponseObjects
     public WeaponExpModel[] weapon_exp;
     public EvolutionWeaponModel[] evolution_weapon;
     public GachaWeaponModel[] gacha_weapon;
+
+    // プレゼントボックスデータ
+    public PresentBoxModel[] present_box;
 
     // ミッション
     public MissionMasterModel[] mission;
@@ -126,6 +130,18 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.gacha_log != null)
         {
             GachaLogs.Set(responseObjects.gacha_log);
+        }
+    }
+
+    ///<summary>
+    /// プレゼントボックスの情報更新
+    /// </summary>
+    static void UpdatePresentBoxData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.present_box != null)
+        {
+            UsersModel usersModel = Users.Get();
+            PresentBoxes.Set(responseObjects.present_box, usersModel.user_id);
         }
     }
 
@@ -259,6 +275,9 @@ public class CommunicationManager : MonoBehaviour
                 UpdateUserData(responseObjects);
                 UpdateWeaponData(responseObjects);
                 UpdateItemData(responseObjects);
+                break;
+            case GameUtil.Const.GET_PRESENT_BOX_URL:
+                UpdatePresentBoxData(responseObjects);
                 break;
             default:
                 break;

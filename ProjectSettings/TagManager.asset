@@ -6,6 +6,7 @@ TagManager:
   tags:
   - StaminaPlusButton
   - WalletPlusButton
+  - Present
   layers:
   - Default
   - TransparentFX
