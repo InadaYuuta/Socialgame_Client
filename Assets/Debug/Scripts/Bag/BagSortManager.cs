@@ -91,7 +91,6 @@ public class BagSortManager : WeaponBase
         foreach (int id in weaponId)
         {
             if (id == 0) { continue; }
-            Debug.Log("target:" + checkId + "check:" + id);
             if (checkId == id) { return true; }
         }
 
