@@ -9,8 +9,8 @@ public class CreatePresentObj : MonoBehaviour
 
     Vector3 generatePos;
 
+    int presentId, rewardCategory;
     string receiptReason, rewardNum, receiptTerm;
-    int rewardCategory;
 
     PresentBoxManager presentBoxManager;
     DisplayPresentsObj displayPresents;
@@ -32,13 +32,13 @@ public class CreatePresentObj : MonoBehaviour
             if (presents.Length - 1 < i) { break; }
             if (presents[i] == null) { break; }
             if (present == null) { continue; }
-            SetPresentParameter(present.receive_reason, present.present_box_reward, present.display, present.reward_category);
+            SetPresentParameter(present.present_id, present.receive_reason, present.present_box_reward, present.display, present.reward_category);
 
             clones[i] = Instantiate(prefab, generatePos, Quaternion.identity);
             clones[i].transform.parent = presentsParent.transform;
 
             PresentManager presentManager = clones[i].GetComponent<PresentManager>();
-            presentManager.SetPresentParameter(receiptReason, rewardNum, receiptTerm, rewardCategory);
+            presentManager.SetPresentParameter(presentId, receiptReason, rewardNum, receiptTerm, rewardCategory);
             clones[i].SetActive(false);
             i++;
         }
@@ -68,8 +68,9 @@ public class CreatePresentObj : MonoBehaviour
     }
 
     // Šeí•Ï”‚É‘Î‰‚·‚é’l‚ğİ’è‚·‚é
-    void SetPresentParameter(string reason, string rewardNumber, string Term, int category)
+    void SetPresentParameter(int id, string reason, string rewardNumber, string Term, int category)
     {
+        presentId = id;
         receiptReason = reason;
         rewardNum = rewardNumber;
         receiptTerm = Term;

@@ -46,7 +46,8 @@ public class PresentBoxManager : MonoBehaviour
 
     void Update()
     {
-        totalPresentNum = unReceiptPresents.Length / 5; // TODO:—š—ð’Ç‰Á‚·‚é‚Æ‚«‚É‚±‚±‚à‰ü—Ç‚·‚é
+        if (displayLog) { totalPresentNum = receiptedPresents.Length / 5; /* TODO:—š—ð’Ç‰Á‚·‚é‚Æ‚«‚É‚±‚±‚à‰ü—Ç‚·‚é*/ }
+        else { totalPresentNum = unReceiptPresents.Length / 5; /* TODO:—š—ð’Ç‰Á‚·‚é‚Æ‚«‚É‚±‚±‚à‰ü—Ç‚·‚é */}
         if (totalPresentNum == 0) { pageNum = 0; }
         pageText.text = string.Format("{0}/{1}", pageNum, totalPresentNum);
     }
@@ -136,5 +137,7 @@ public class PresentBoxManager : MonoBehaviour
             displayLog = true;
             modeText.text = "–¢ŽóŽæ‚Ö";
         }
+        pageNum = 1;
+        displayPresent.DisplayPresents(pageNum, displayLog);
     }
 }

@@ -36,6 +36,20 @@ public class DisplayPresentsObj : MonoBehaviour
         }
     }
 
+    // 元々表示されていたものと今回表示するものが違ったら元のプレゼント達を非表示にする
+    void CheckPresentsAndHide(GameObject[] checks)
+    {
+        bool hide = false;
+        if (checks[0] != currentDisplayPresents[0]) { hide = true; }
+        if (hide)
+        {
+            for (int i = 0; i < currentDisplayPresents.Length; i++)
+            {
+                currentDisplayPresents[i].SetActive(false);
+            }
+        }
+    }
+
     ///<summary>
     /// 指定されたページのプレゼントを表示する
     ///</summary>
@@ -45,22 +59,17 @@ public class DisplayPresentsObj : MonoBehaviour
     {
         SetClones();
         if (currentDisplayPresents[0] != null) { ResetDisplayPresents(); }
-
         int displayNum = (pageNum * 5);
         int firstNum = displayNum - 5 > 0 ? displayNum - 5 : 0;
         int count = 0;
         GameObject[] displayClones;
 
-        if (isReceipt)
-        {
-            displayClones = receiptedPresentClones;
-        }
-        else
-        {
-            displayClones = unReceiptPresentClones;
-        }
+        if (isReceipt) { displayClones = receiptedPresentClones; }
+        else { displayClones = unReceiptPresentClones; }
+
         for (int i = firstNum; i < displayNum; i++)
         {
+            if (displayClones == null) { continue; }
             displayClones[i].SetActive(true);
             RectTransform rect = displayClones[i].GetComponent<RectTransform>();
             rect.anchoredPosition = displayPos[count];
