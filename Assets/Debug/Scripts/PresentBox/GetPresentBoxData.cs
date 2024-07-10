@@ -5,25 +5,16 @@ using UnityEngine.Networking;
 
 public class GetPresentBoxData : MonoBehaviour
 {
-    [SerializeField] PresentBoxModel[] unReceiptPresents;   // 受取前のプレゼントデータ
-    [SerializeField] PresentBoxModel[] receiptedPresents;   // 受取済のプレゼントデータ
+    [SerializeField] List<PresentBoxModel> unReceiptPresents;   // 受取前のプレゼントデータ
+    [SerializeField] List<PresentBoxModel> receiptedPresents;   // 受取済のプレゼントデータ
 
     PresentBoxManager presentBoxManager;
 
     private void Awake()
     {
         presentBoxManager = GetComponent<PresentBoxManager>();
-        unReceiptPresents = new PresentBoxModel[0];
-        receiptedPresents = new PresentBoxModel[0];
-    }
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-
+        unReceiptPresents = new List<PresentBoxModel>();
+        receiptedPresents = new List<PresentBoxModel>();
     }
 
     // 成功した場合に呼ぶ関数
@@ -49,21 +40,48 @@ public class GetPresentBoxData : MonoBehaviour
 
         foreach (var data in allData)
         {
+            if (CheckDuplication(data)) { continue; }
             string display = data.display;
             // 表示可能期間かつ受け取っていなければ受取可能な配列に保存、そうでなければ受取済みの配列に保存
             if (presentBoxManager.CheckCanDisplay(display) && data.receipt != 1)
             {
-                Array.Resize(ref unReceiptPresents, unReceiptPresents.Length + 1);
-                unReceiptPresents[unReceiptPresents.Length - 1] = data;
+                unReceiptPresents.Add(data);
             }
             else
             {
-                Array.Resize(ref receiptedPresents, receiptedPresents.Length + 1);
-                receiptedPresents[receiptedPresents.Length - 1] = data;
+                receiptedPresents.Add(data);
             }
         }
         presentBoxManager.SetPresentData(unReceiptPresents, receiptedPresents);
     }
 
+    /// <summary>
+    /// データのIDが重複しているかどうかを確認する、重複していたらTrueを返す
+    /// </summary>
+    /// <param name="target">確認するモデル</param>
+    /// <returns></returns>
+    bool CheckDuplication(PresentBoxModel target)
+    {
+        bool result = false;
+
+        bool isReceipt = target.receipt > 0 ? true : false;
+
+        if (isReceipt)
+        {
+            foreach (var receiptedData in receiptedPresents)
+            {
+                if (receiptedData.present_id == target.present_id) { result = true; }
+            }
+        }
+        else
+        {
+            foreach (var unReceiptData in unReceiptPresents)
+            {
+                if (unReceiptData.present_id == target.present_id) { result = true; }
+            }
+        }
+
+        return result;
+    }
 
 }

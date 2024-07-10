@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -277,6 +276,12 @@ public class CommunicationManager : MonoBehaviour
                 UpdateItemData(responseObjects);
                 break;
             case GameUtil.Const.GET_PRESENT_BOX_URL:
+                UpdatePresentBoxData(responseObjects);
+                break;
+            case GameUtil.Const.RECEIVE_PRESENT_BOX_URL:
+                UpdateUserData(responseObjects);
+                UpdateWalletData(responseObjects);
+                UpdateItemData(responseObjects);
                 UpdatePresentBoxData(responseObjects);
                 break;
             default:

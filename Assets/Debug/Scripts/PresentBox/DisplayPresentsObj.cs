@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DisplayPresentsObj : MonoBehaviour
 {
-    GameObject[] unReceiptPresentClones, receiptedPresentClones;
-    GameObject[] currentDisplayPresents; // 現在表示中のプレゼント
+    List<GameObject> unReceiptPresentClones, receiptedPresentClones;
+    List<GameObject> currentDisplayPresents; // 現在表示中のプレゼント
 
     Vector3[] displayPos;
 
@@ -17,7 +18,7 @@ public class DisplayPresentsObj : MonoBehaviour
         {
             displayPos[i] = new(0, y - (130 * i), 0);
         }
-        currentDisplayPresents = new GameObject[5];
+        currentDisplayPresents = new List<GameObject>();
 
         presentBoxManager = GetComponent<PresentBoxManager>();
     }
@@ -36,6 +37,20 @@ public class DisplayPresentsObj : MonoBehaviour
         }
     }
 
+    // 元々表示されていたものと今回表示するものが違ったら元のプレゼント達を非表示にする
+    void CheckPresentsAndHide(GameObject[] checks)
+    {
+        bool hide = false;
+        if (checks[0] != currentDisplayPresents[0]) { hide = true; }
+        if (hide)
+        {
+            for (int i = 0; i < currentDisplayPresents.Count; i++)
+            {
+                currentDisplayPresents[i].SetActive(false);
+            }
+        }
+    }
+
     ///<summary>
     /// 指定されたページのプレゼントを表示する
     ///</summary>
@@ -44,27 +59,25 @@ public class DisplayPresentsObj : MonoBehaviour
     public void DisplayPresents(int pageNum, bool isReceipt)
     {
         SetClones();
-        if (currentDisplayPresents[0] != null) { ResetDisplayPresents(); }
-
+        if (currentDisplayPresents.Count > 0 && currentDisplayPresents[0] != null) { ResetDisplayPresents(); }
         int displayNum = (pageNum * 5);
         int firstNum = displayNum - 5 > 0 ? displayNum - 5 : 0;
         int count = 0;
-        GameObject[] displayClones;
+        List<GameObject> displayClones;
 
-        if (isReceipt)
-        {
-            displayClones = receiptedPresentClones;
-        }
-        else
-        {
-            displayClones = unReceiptPresentClones;
-        }
+        if (isReceipt) { displayClones = receiptedPresentClones; }
+        else { displayClones = unReceiptPresentClones; }
+
         for (int i = firstNum; i < displayNum; i++)
         {
+            if (displayClones == null || displayClones[i] == null)
+            {
+                continue;
+            }
             displayClones[i].SetActive(true);
             RectTransform rect = displayClones[i].GetComponent<RectTransform>();
             rect.anchoredPosition = displayPos[count];
-            currentDisplayPresents[count] = displayClones[i]; // 現在表示中のものを格納
+            currentDisplayPresents.Add(displayClones[i]); // 現在表示中のものを格納
             count++;
         }
     }
@@ -76,5 +89,12 @@ public class DisplayPresentsObj : MonoBehaviour
         {
             display.SetActive(false);
         }
+    }
+
+    // 受け取りされた時に呼び出す
+    public void RemoveListItem(GameObject target)
+    {
+        currentDisplayPresents.Remove(target);
+        DisplayPresents(1, false);
     }
 }

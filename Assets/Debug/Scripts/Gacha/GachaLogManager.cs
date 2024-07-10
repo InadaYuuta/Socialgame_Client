@@ -113,7 +113,7 @@ public class GachaLogManager : WeaponBase
     }
 
     // テキストをアップデートしたりモデルを取得したりする
-    void UpdateText()
+    public void UpdateText()
     {
         gachaLogModel = GachaLogs.GetGacaLogDataAll();
         if (gachaLogModel != null)

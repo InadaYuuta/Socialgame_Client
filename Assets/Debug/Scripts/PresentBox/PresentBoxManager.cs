@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +10,16 @@ public class PresentBoxManager : MonoBehaviour
     [SerializeField] GameObject PresentPanel;
     [SerializeField] TextMeshProUGUI pageText, modeText;
 
-    PresentBoxModel[] unReceiptPresents;   // 受取前のプレゼントデータ
-    PresentBoxModel[] receiptedPresents;   // 受取済のプレゼントデータ
+    List<PresentBoxModel> unReceiptPresents;   // 受取前のプレゼントデータ
+    List<PresentBoxModel> receiptedPresents;   // 受取済のプレゼントデータ
 
-    GameObject[] unReceiptPresentClones;
-    GameObject[] receiptedPresentClones;
+    public List<PresentBoxModel> ReceiptedPresents { get { return receiptedPresents; } }
 
-    public GameObject[] UnReceiptPresentClones { get { return unReceiptPresentClones; } }
-    public GameObject[] ReceiptedPresentClones { get { return receiptedPresentClones; } }
+    List<GameObject> unReceiptPresentClones;
+    List<GameObject> receiptedPresentClones;
+
+    public List<GameObject> UnReceiptPresentClones { get { return unReceiptPresentClones; } }
+    public List<GameObject> ReceiptedPresentClones { get { return receiptedPresentClones; } }
 
     GetPresentBoxData getPresent;
     CreatePresentObj createPresent;
@@ -25,28 +29,43 @@ public class PresentBoxManager : MonoBehaviour
     [SerializeField] int totalPresentNum = 0;
 
     bool isSet = false;
-    bool displayLog = false;
+    bool displayLog = false; // 表示するのが履歴かどうか(trueが履歴)
 
     private void Awake()
     {
-        unReceiptPresents = new PresentBoxModel[PresentBoxes.GetPresentBoxDataAll().Length];
-        receiptedPresents = new PresentBoxModel[PresentBoxes.GetPresentBoxDataAll().Length];
+        unReceiptPresents = new List<PresentBoxModel>();
+        receiptedPresents = new List<PresentBoxModel>();
         getPresent = GetComponent<GetPresentBoxData>();
         createPresent = GetComponent<CreatePresentObj>();
         displayPresent = GetComponent<DisplayPresentsObj>();
+
+        PresentPanel.SetActive(false);
 
         getPresent.CheckUpdatePresentBox(); // データ取得
     }
 
     void Start()
     {
-        totalPresentNum = unReceiptPresents.Length / 5; // TODO:履歴追加するときにここも改良する
+        totalPresentNum = unReceiptPresents.Count / 5;
         pageText.text = string.Format("{0}/{1}", pageNum, totalPresentNum);
+    }
+
+    // 開いたときに毎回履歴ではなく受取可能なプレゼントが表示されるようにする
+    private void OnEnable()
+    {
+        displayLog = false;
     }
 
     void Update()
     {
-        totalPresentNum = unReceiptPresents.Length / 5; // TODO:履歴追加するときにここも改良する
+        ChangePageText();
+    }
+
+    // 表示するプレゼントのページ数を変更
+    void ChangePageText()
+    {
+        if (displayLog) { totalPresentNum = receiptedPresents.Count / 5; }
+        else { totalPresentNum = unReceiptPresents.Count / 5; }
         if (totalPresentNum == 0) { pageNum = 0; }
         pageText.text = string.Format("{0}/{1}", pageNum, totalPresentNum);
     }
@@ -65,7 +84,7 @@ public class PresentBoxManager : MonoBehaviour
     }
 
     // プレゼントデータを設定
-    public void SetPresentData(PresentBoxModel[] unReceiptPresentsData, PresentBoxModel[] receiptedPresentData)
+    public void SetPresentData(List<PresentBoxModel> unReceiptPresentsData, List<PresentBoxModel> receiptedPresentData)
     {
         unReceiptPresents = unReceiptPresentsData;
         receiptedPresents = receiptedPresentData;
@@ -78,7 +97,7 @@ public class PresentBoxManager : MonoBehaviour
     }
 
     // プレゼントクローン設定
-    public void SetPresentClones(GameObject[] unreceipts, GameObject[] receipteds)
+    public void SetPresentClones(List<GameObject> unreceipts, List<GameObject> receipteds)
     {
         if (unreceipts != null)
         {
@@ -117,6 +136,12 @@ public class PresentBoxManager : MonoBehaviour
         }
     }
 
+    // パネルを開く
+    public void OnPushOpenButton()
+    {
+        PresentPanel.SetActive(true);
+    }
+
     // 戻るボタンが押されたらパネルを閉じる
     public void OnPushBackButton()
     {
@@ -136,5 +161,7 @@ public class PresentBoxManager : MonoBehaviour
             displayLog = true;
             modeText.text = "未受取へ";
         }
+        pageNum = 1;
+        displayPresent.DisplayPresents(pageNum, displayLog);
     }
 }

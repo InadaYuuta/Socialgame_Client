@@ -10,6 +10,7 @@ public class PresentBoxModel
     public string present_box_reward;  // 報酬の内容
     public string receive_reason;      // 受け取った理由
     public int receipt;                // 受取
+    public string receipt_date;           // 受取日
     public string display;             // 表示期限
 }
 
@@ -18,7 +19,7 @@ public class PresentBoxes : TableBase
     // テーブル作成
     public static void CreateTable()
     {
-        createQuery = "create table if not exists present_boxes(user_id varchar,present_id bigint,whole_present_id bigint,reward_category tinyint,present_box_reward text,receive_reason text,receipt tinyint,display varchar,primary key(user_id,present_id))";
+        createQuery = "create table if not exists present_boxes(user_id varchar,present_id bigint,whole_present_id bigint,reward_category tinyint,present_box_reward text,receive_reason text,receipt tinyint,receipt_date varchar,display varchar,primary key(user_id,present_id))";
         RunQuery(createQuery);
         //// インデックス作成 TODO:今後サーバー側でリワードカテゴリーをインデックスにする場合はコメントアウト解除
         //createQuery = "CREATE INDEX IF NOT EXISTS reward_category_index ON present_boxes(reward_category);";
@@ -34,8 +35,18 @@ public class PresentBoxes : TableBase
             string escapedPresentBoxReward = EscapeString(present_box.present_box_reward);
             string escapedReceiveReason = EscapeString(present_box.receive_reason);
             string escapedDisplay = EscapeString(present_box.display);
+            string escapedReceipted = EscapeString(present_box.receipt_date);
 
-            setQuery = "insert or replace into present_boxes(user_id,present_id,whole_present_id,reward_category,present_box_reward,receive_reason,receipt,display) values(\"" + user_id + "\"," + present_box.present_id + "," + present_box.whole_present_id + "," + present_box.reward_category + ",\"" + escapedPresentBoxReward + "\",\"" + escapedReceiveReason + "\"," + present_box.receipt + ",\"" + escapedDisplay + "\")";
+            setQuery = "insert or replace into present_boxes(user_id, present_id, whole_present_id, reward_category, present_box_reward, receive_reason, receipt, receipt_date, display) values(" +
+                       "\"" + user_id + "\", " +
+                       present_box.present_id + ", " +
+                       present_box.whole_present_id + ", " +
+                       present_box.reward_category + ", " +
+                       "\"" + escapedPresentBoxReward + "\", " +
+                       "\"" + escapedReceiveReason + "\", " +
+                       present_box.receipt + ", " +
+                       "\"" + escapedReceipted + "\", " +
+                       "\"" + escapedDisplay + "\")";
             RunQuery(setQuery);
         }
     }
@@ -55,7 +66,8 @@ public class PresentBoxes : TableBase
             PresentBoxModel.present_box_reward = dr["present_box_reward"].ToString();
             PresentBoxModel.receive_reason = dr["receive_reason"].ToString();
             PresentBoxModel.receipt = int.Parse(dr["receipt"].ToString());
-            PresentBoxModel.display = dr["display"].ToString(); // TODO: 今後プレゼント関連を作るときに日時で取得できるメソッドを追加する
+            PresentBoxModel.receipt_date = dr["receipt_date"].ToString();
+            PresentBoxModel.display = dr["display"].ToString();
             PresentBoxList.Add(PresentBoxModel);
         }
         return PresentBoxList.ToArray();
@@ -75,7 +87,8 @@ public class PresentBoxes : TableBase
             PresentBoxModel.present_box_reward = dr["present_box_reward"].ToString();
             PresentBoxModel.receive_reason = dr["receive_reason"].ToString();
             PresentBoxModel.receipt = int.Parse(dr["receipt"].ToString());
-            PresentBoxModel.display = dr["display"].ToString(); // TODO: 今後プレゼント関連を作るときに日時で取得できるメソッドを追加する
+            PresentBoxModel.receipt_date = dr["receipt_date"].ToString();
+            PresentBoxModel.display = dr["display"].ToString();
         }
         return PresentBoxModel;
     }

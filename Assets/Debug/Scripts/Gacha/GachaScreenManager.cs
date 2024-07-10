@@ -11,6 +11,7 @@ public class GachaScreenManager : MonoBehaviour
 
     GachaMove gachaMoveManager;
     GachaLogManager gachaLogManager;
+    BagSortManager bagSortManager;
 
     void Start()
     {
@@ -18,10 +19,7 @@ public class GachaScreenManager : MonoBehaviour
         UpdateNum();
         gachaMoveManager = FindObjectOfType<GachaMove>();
         gachaLogManager = FindObjectOfType<GachaLogManager>();
-    }
-
-    void Update()
-    {
+        bagSortManager = FindObjectOfType<BagSortManager>();
     }
 
     void FixedUpdate() => UpdateNum();
@@ -49,6 +47,7 @@ public class GachaScreenManager : MonoBehaviour
     public void PushBackGachaButton()
     {
         gachaCanvas.SetActive(false);
+        bagSortManager.UpdateBag();
     }
 
     // ガチャ排出確率ボタンが押されたら
@@ -61,6 +60,7 @@ public class GachaScreenManager : MonoBehaviour
     public void PushGachaLogButton()
     {
         gachaLogManager.GetGachaLog();
+        gachaLogManager.UpdateText();
         gachaLogPanel.SetActive(true);
     }
 
