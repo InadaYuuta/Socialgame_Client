@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class RewardCategoryModel
 {
     public int reward_category;  // 報酬カテゴリー
-    public string category_name; // カテゴリーの名前
+    public string reward_category_name; // カテゴリーの名前
 }
 
 public class RewardCategories : TableBase
@@ -22,7 +22,7 @@ public class RewardCategories : TableBase
     {
         foreach (RewardCategoryModel mission_category in mission_categories_list)
         {
-            setQuery = "insert or replace into reward_categories(reward_category,category_name) values(" + mission_category.reward_category + ",\"" + mission_category.category_name + "\")";
+            setQuery = "insert or replace into reward_categories(reward_category,category_name) values(" + mission_category.reward_category + ",\"" + mission_category.reward_category_name + "\")";
             RunQuery(setQuery);
         }
     }
@@ -37,7 +37,7 @@ public class RewardCategories : TableBase
         {
             RewardCategoryModel rewardCategoryModel = new();
             rewardCategoryModel.reward_category = int.Parse(dr["reward_category"].ToString());
-            rewardCategoryModel.category_name = dr["category_name"].ToString();
+            rewardCategoryModel.reward_category_name = dr["category_name"].ToString();
             weaponCategoryList.Add(rewardCategoryModel);
         }
         return weaponCategoryList.ToArray();
@@ -53,7 +53,7 @@ public class RewardCategories : TableBase
         foreach (DataRow dr in dataTable.Rows)
         {
             rewardCategoryModel.reward_category = int.Parse(dr["reward_category"].ToString());
-            rewardCategoryModel.category_name = dr["category_name"].ToString();
+            rewardCategoryModel.reward_category_name = dr["category_name"].ToString();
         }
         return rewardCategoryModel;
     }
