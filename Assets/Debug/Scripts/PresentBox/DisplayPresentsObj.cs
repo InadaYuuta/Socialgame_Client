@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class DisplayPresentsObj : MonoBehaviour
 {
-    List<GameObject> unReceiptPresentClones, receiptedPresentClones;
-    List<GameObject> currentDisplayPresents; // 現在表示中のプレゼント
+    List<GameObject> unReceiptPresentClones = new(), receiptedPresentClones = new();
+    List<GameObject> currentDisplayPresents = new(); // 現在表示中のプレゼント
 
     Vector3[] displayPos;
 
@@ -63,22 +63,32 @@ public class DisplayPresentsObj : MonoBehaviour
         int displayNum = (pageNum * 5);
         int firstNum = displayNum - 5 > 0 ? displayNum - 5 : 0;
         int count = 0;
-        List<GameObject> displayClones;
+
+        List<GameObject> displayClones = new();
 
         if (isReceipt) { displayClones = receiptedPresentClones; }
         else { displayClones = unReceiptPresentClones; }
 
         for (int i = firstNum; i < displayNum; i++)
         {
-            if (displayClones == null || displayClones[i] == null)
+            if (displayClones.Count - 1 < i)
+            {
+                break;
+            }
+
+            if (displayClones == null || displayClones[i] == null) //　ここが指定個数以下だとエラーが出るっぽい
             {
                 continue;
             }
-            displayClones[i].SetActive(true);
-            RectTransform rect = displayClones[i].GetComponent<RectTransform>();
-            rect.anchoredPosition = displayPos[count];
-            currentDisplayPresents.Add(displayClones[i]); // 現在表示中のものを格納
+            else
+            {
+                displayClones[i].SetActive(true);
+                RectTransform rect = displayClones[i].GetComponent<RectTransform>();
+                rect.anchoredPosition = displayPos[count];
+                currentDisplayPresents.Add(displayClones[i]); // 現在表示中のものを格納
+            }
             count++;
+
         }
     }
 
@@ -87,6 +97,7 @@ public class DisplayPresentsObj : MonoBehaviour
     {
         foreach (var display in currentDisplayPresents)
         {
+            if (display == null) { continue; }
             display.SetActive(false);
         }
     }

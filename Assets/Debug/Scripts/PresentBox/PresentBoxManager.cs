@@ -1,22 +1,20 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PresentBoxManager : MonoBehaviour
 {
     [SerializeField] GameObject PresentPanel;
     [SerializeField] TextMeshProUGUI pageText, modeText;
 
-    List<PresentBoxModel> unReceiptPresents;   // 受取前のプレゼントデータ
-    List<PresentBoxModel> receiptedPresents;   // 受取済のプレゼントデータ
+    List<PresentBoxModel> unReceiptPresents = new();   // 受取前のプレゼントデータ
+    List<PresentBoxModel> receiptedPresents = new();   // 受取済のプレゼントデータ
 
     public List<PresentBoxModel> ReceiptedPresents { get { return receiptedPresents; } }
 
-    List<GameObject> unReceiptPresentClones;
-    List<GameObject> receiptedPresentClones;
+    [SerializeField] List<GameObject> unReceiptPresentClones = new();
+    List<GameObject> receiptedPresentClones = new();
 
     public List<GameObject> UnReceiptPresentClones { get { return unReceiptPresentClones; } }
     public List<GameObject> ReceiptedPresentClones { get { return receiptedPresentClones; } }
@@ -26,7 +24,9 @@ public class PresentBoxManager : MonoBehaviour
     DisplayPresentsObj displayPresent;
 
     int pageNum = 1;
-    [SerializeField] int totalPresentNum = 0;
+    [SerializeField] int totalPresentsPageNum = 0;
+    int totalPresentsNum = 0;
+    public int TotalPresentsNum { get { return totalPresentsNum; } }
 
     bool isSet = false;
     bool displayLog = false; // 表示するのが履歴かどうか(trueが履歴)
@@ -46,8 +46,9 @@ public class PresentBoxManager : MonoBehaviour
 
     void Start()
     {
-        totalPresentNum = unReceiptPresents.Count / 5;
-        pageText.text = string.Format("{0}/{1}", pageNum, totalPresentNum);
+        totalPresentsPageNum = unReceiptPresents.Count / 5;
+        if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+        pageText.text = string.Format("{0}/{1}", pageNum, totalPresentsPageNum);
     }
 
     // 開いたときに毎回履歴ではなく受取可能なプレゼントが表示されるようにする
@@ -58,16 +59,25 @@ public class PresentBoxManager : MonoBehaviour
 
     void Update()
     {
+        totalPresentsNum = unReceiptPresentClones.Count; // 現在の受け取れるプレゼントの数を更新
         ChangePageText();
     }
 
     // 表示するプレゼントのページ数を変更
     void ChangePageText()
     {
-        if (displayLog) { totalPresentNum = receiptedPresents.Count / 5; }
-        else { totalPresentNum = unReceiptPresents.Count / 5; }
-        if (totalPresentNum == 0) { pageNum = 0; }
-        pageText.text = string.Format("{0}/{1}", pageNum, totalPresentNum);
+        if (displayLog)
+        {
+            totalPresentsPageNum = receiptedPresents.Count / 5;
+            if (receiptedPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+        }
+        else
+        {
+            totalPresentsPageNum = unReceiptPresents.Count / 5;
+            if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+        }
+        if (totalPresentsPageNum == 0) { pageNum = 0; }
+        pageText.text = string.Format("{0}/{1}", pageNum, totalPresentsPageNum);
     }
 
     // 表示できるかを確認
@@ -119,7 +129,7 @@ public class PresentBoxManager : MonoBehaviour
     // 次へのボタンが押されたら次のページへ
     public void OnPushNextButton()
     {
-        if (pageNum < totalPresentNum)
+        if (pageNum < totalPresentsPageNum)
         {
             pageNum++;
             displayPresent.DisplayPresents(pageNum, displayLog);

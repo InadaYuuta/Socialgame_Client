@@ -140,7 +140,9 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.present_box != null)
         {
             UsersModel usersModel = Users.Get();
-            PresentBoxes.Set(responseObjects.present_box, usersModel.user_id);
+            // TODO: Å‰‚Ìˆê‰ñ‚Ì‚İSet‚·‚é‚æ‚¤‚Éˆ—‚ğ•ÏX
+            PresentBoxes.UpdateDate(responseObjects.present_box, usersModel.user_id);
+            //PresentBoxes.Set(responseObjects.present_box, usersModel.user_id);
         }
     }
 
