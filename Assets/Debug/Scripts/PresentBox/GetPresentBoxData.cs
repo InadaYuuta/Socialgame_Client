@@ -5,16 +5,14 @@ using UnityEngine.Networking;
 
 public class GetPresentBoxData : MonoBehaviour
 {
-    [SerializeField] List<PresentBoxModel> unReceiptPresents;   // 受取前のプレゼントデータ
-    [SerializeField] List<PresentBoxModel> receiptedPresents;   // 受取済のプレゼントデータ
+    List<PresentBoxModel> unReceiptPresents = new();   // 受取前のプレゼントデータ
+    List<PresentBoxModel> receiptedPresents = new();   // 受取済のプレゼントデータ
 
     PresentBoxManager presentBoxManager;
 
     private void Awake()
     {
         presentBoxManager = GetComponent<PresentBoxManager>();
-        unReceiptPresents = new List<PresentBoxModel>();
-        receiptedPresents = new List<PresentBoxModel>();
     }
 
     // 成功した場合に呼ぶ関数

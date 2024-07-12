@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class ReceivePresent : MonoBehaviour
@@ -89,12 +92,11 @@ public class ReceivePresent : MonoBehaviour
     // 受け取りボタンが押された時
     public void OnpushReceiveButton()
     {
-        SuccessReceivePresent();
-        //List<IMultipartFormSection> receiveForm = new();
-        //receiveForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
-        //receiveForm.Add(new MultipartFormDataSection("pid", receive_present_id.ToString()));
-        //Action afterAction = new(() => SuccessReceivePresent());
-        //StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.RECEIVE_PRESENT_BOX_URL, receiveForm, afterAction));
+        List<IMultipartFormSection> receiveForm = new();
+        receiveForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
+        receiveForm.Add(new MultipartFormDataSection("pid", receive_present_id.ToString()));
+        Action afterAction = new(() => SuccessReceivePresent());
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.RECEIVE_PRESENT_BOX_URL, receiveForm, afterAction));
     }
 
     // やめるボタンが押された時

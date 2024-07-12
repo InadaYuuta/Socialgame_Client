@@ -10,7 +10,7 @@ public class PresentBoxModel
     public string present_box_reward;  // 報酬の内容
     public string receive_reason;      // 受け取った理由
     public int receipt;                // 受取
-    public string receipt_date;           // 受取日
+    public string receipt_date;        // 受取日
     public string display;             // 表示期限
 }
 
@@ -47,6 +47,34 @@ public class PresentBoxes : TableBase
                        present_box.receipt + ", " +
                        "\"" + escapedReceipted + "\", " +
                        "\"" + escapedDisplay + "\")";
+            RunQuery(setQuery);
+        }
+    }
+
+    // レコードの更新処理
+    public static void UpdateDate(PresentBoxModel[] present_box_model, string user_id)
+    {
+        foreach (PresentBoxModel present_box in present_box_model)
+        {
+            // エスケープ処理を行う
+            string escapedPresentBoxReward = EscapeString(present_box.present_box_reward);
+            string escapedReceiveReason = EscapeString(present_box.receive_reason);
+            string escapedDisplay = EscapeString(present_box.display);
+            string escapedReceipted = EscapeString(present_box.receipt_date);
+
+            setQuery = string.Format("UPDATE present_boxes SET " +
+            "whole_present_id = {1}, " +
+            "receipt = {2}, " +
+            "receipt_date = \"{3}\", " +
+            "display = \"{4}\" " +
+            "WHERE user_id = \"{0}\" AND present_id = {5} AND receipt = 0",
+            user_id,
+            present_box.whole_present_id,
+            present_box.receipt,
+            escapedReceipted,
+            escapedDisplay,
+            present_box.present_id);
+
             RunQuery(setQuery);
         }
     }
@@ -91,6 +119,18 @@ public class PresentBoxes : TableBase
             PresentBoxModel.display = dr["display"].ToString();
         }
         return PresentBoxModel;
+    }
+
+
+
+    // エスケープ処理
+    private static string TestEscapeString(string input)
+    {
+        if (input == null)
+        {
+            return null;
+        }
+        return input.Replace("'", "''");
     }
 
 
