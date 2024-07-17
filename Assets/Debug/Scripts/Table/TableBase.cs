@@ -49,4 +49,14 @@ public class TableBase : MonoBehaviour
         DataTable dataTable = sqlDB.ExecuteQuery(query);
         return dataTable;
     }
+
+    /// <summary>
+    /// エスケープ処理を行う(返ってくる文字列の中に/があると文字列にしたときにおかしくなるからエスケープ処理を行う)
+    /// </summary>
+    /// <param name="target">エスケープ処理したい文字列</param>
+    /// <returns></returns>
+    protected static string EscapeString(string target)
+    {
+        return target.Replace("\"", "\"\"");
+    }
 }

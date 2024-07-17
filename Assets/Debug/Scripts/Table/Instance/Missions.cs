@@ -22,11 +22,34 @@ public class Missions : TableBase
     }
 
     // レコード登録処理
+    // TODO:ここでセットする対象が存在していればUpdateそうでなければSetという処理に書き換える
     public static void Set(MissionsModel[] missions_model, string user_id)
     {
         foreach (MissionsModel mission in missions_model)
         {
             setQuery = "insert or replace into missions(user_id,mission_id ,achieved ,receipt ,progress ,term ,validity_term) values(\"" + user_id + "\"," + mission.mission_id + "," + mission.achieved + "," + mission.receipt + "," + mission.progress + ",\"" + mission.term + "\",\"" + mission.validity_term + "\")";
+            RunQuery(setQuery);
+        }
+    }
+
+    // レコードの更新処理
+    public static void UpdateDate(MissionsModel[] missions_model, string user_id)
+    {
+        foreach (MissionsModel mission in missions_model)
+        {
+            // エスケープ処理を行う
+            string escapedTerm = EscapeString(mission.term);
+            string escapedValidityTerm = EscapeString(mission.validity_term);
+            setQuery = string.Format("UPDATE missions SET " +
+                "mission_id = {1}," +
+                " achieved = {2}," +
+                " receipt = \"{3}\"," +
+                " progress = \"{4}\"" +
+                "term = {5}" +
+                "validity_term = {6}" +
+                " WHERE user_id = \"{0}\" AND mission_id = {7} AND receipt = 0",
+                user_id // TODO: ここに要素追加
+                );
             RunQuery(setQuery);
         }
     }

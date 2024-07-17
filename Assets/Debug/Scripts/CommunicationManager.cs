@@ -33,7 +33,8 @@ public class ResponseObjects
     public PresentBoxModel[] present_box;
 
     // ミッション
-    public MissionMasterModel[] mission;
+    public MissionsModel[] missions;
+    public MissionMasterModel[] mission_master;
     public MissionCategoryModel[] mission_category;
 
     // ガチャ用
@@ -146,6 +147,20 @@ public class CommunicationManager : MonoBehaviour
         }
     }
 
+    ///<summary>
+    /// ミッションの情報更新
+    /// </summary>
+    static void UpdateMissionData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.missions != null)
+        {
+            UsersModel usersModel = Users.Get();
+            // TODO: 最初の一回のみSetするように処理を変更
+            Missions.Set(responseObjects.missions, usersModel.user_id);
+            //Missions.UpdateDate(responseObjects.missions, usersModel.user_id);
+        }
+    }
+
     /// <summary>
     /// マスターデータの更新
     /// </summary>
@@ -213,10 +228,10 @@ public class CommunicationManager : MonoBehaviour
         {
             EvolutionWeapons.Set(responseObjects.evolution_weapon);
         }
-        // ミッションデータ保存
-        if (responseObjects.mission != null)
+        // ミッションマスタデータ保存
+        if (responseObjects.mission_master != null)
         {
-            MissionMaster.Set(responseObjects.mission);
+            MissionMaster.Set(responseObjects.mission_master);
         }
         // ミッションカテゴリーデータ保存
         if (responseObjects.mission_category != null)
@@ -285,6 +300,9 @@ public class CommunicationManager : MonoBehaviour
                 UpdateWalletData(responseObjects);
                 UpdateItemData(responseObjects);
                 UpdatePresentBoxData(responseObjects);
+                break;
+            case GameUtil.Const.GET_MISSION_URL:
+                UpdateMissionData(responseObjects);
                 break;
             default:
                 break;

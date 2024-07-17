@@ -27,6 +27,7 @@ public class PresentBoxes : TableBase
     }
 
     // レコード登録処理
+    // TODO:ここでセットする対象が存在していればUpdateそうでなければSetという処理に書き換える
     public static void Set(PresentBoxModel[] present_box_model, string user_id)
     {
         foreach (PresentBoxModel present_box in present_box_model)
@@ -57,24 +58,9 @@ public class PresentBoxes : TableBase
         foreach (PresentBoxModel present_box in present_box_model)
         {
             // エスケープ処理を行う
-            string escapedPresentBoxReward = EscapeString(present_box.present_box_reward);
-            string escapedReceiveReason = EscapeString(present_box.receive_reason);
             string escapedDisplay = EscapeString(present_box.display);
             string escapedReceipted = EscapeString(present_box.receipt_date);
-
-            setQuery = string.Format("UPDATE present_boxes SET " +
-            "whole_present_id = {1}, " +
-            "receipt = {2}, " +
-            "receipt_date = \"{3}\", " +
-            "display = \"{4}\" " +
-            "WHERE user_id = \"{0}\" AND present_id = {5} AND receipt = 0",
-            user_id,
-            present_box.whole_present_id,
-            present_box.receipt,
-            escapedReceipted,
-            escapedDisplay,
-            present_box.present_id);
-
+            setQuery = string.Format("UPDATE present_boxes SET whole_present_id = {1}, receipt = {2}, receipt_date = \"{3}\", display = \"{4}\" WHERE user_id = \"{0}\" AND present_id = {5} AND receipt = 0",user_id,present_box.whole_present_id,present_box.receipt,escapedReceipted,escapedDisplay,present_box.present_id);
             RunQuery(setQuery);
         }
     }
@@ -119,24 +105,5 @@ public class PresentBoxes : TableBase
             PresentBoxModel.display = dr["display"].ToString();
         }
         return PresentBoxModel;
-    }
-
-
-
-    // エスケープ処理
-    private static string TestEscapeString(string input)
-    {
-        if (input == null)
-        {
-            return null;
-        }
-        return input.Replace("'", "''");
-    }
-
-
-    // エスケープ処理を行う(返ってくる文字列の中に/があると文字列にしたときにおかしくなるからエスケープ処理を行う)
-    public static string EscapeString(string value)
-    {
-        return value.Replace("\"", "\"\"");
     }
 }
