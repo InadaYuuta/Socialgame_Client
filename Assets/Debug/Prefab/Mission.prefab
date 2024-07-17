@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 310872139334001957}
   - component: {fileID: 7547697910623655089}
   m_Layer: 5
-  m_Name: PresentReasonText (1)
+  m_Name: MissionProgressText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 7432687043292595963}
   - component: {fileID: 4741716044302612350}
   m_Layer: 5
-  m_Name: PresentNumText
+  m_Name: RewardNumText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 9032341229551131320}
   - component: {fileID: 7175644639742131428}
   m_Layer: 5
-  m_Name: AchieveSlider
+  m_Name: ProgressSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 734757395854633582}
   - component: {fileID: 3962324022804743368}
   m_Layer: 5
-  m_Name: PresentReasonText
+  m_Name: MissionAchievementConditionText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -788,7 +788,7 @@ GameObject:
   - component: {fileID: 9192673798836298735}
   - component: {fileID: 6143200633039686775}
   m_Layer: 5
-  m_Name: PresentImage
+  m_Name: RewardImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1077,6 +1077,7 @@ GameObject:
   - component: {fileID: 5461455083744019071}
   - component: {fileID: 6883188950223457694}
   - component: {fileID: 4018334406806409959}
+  - component: {fileID: -106740326093234745}
   m_Layer: 5
   m_Name: Mission
   m_TagString: Untagged
@@ -1178,6 +1179,23 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
+--- !u!114 &-106740326093234745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036388636685333517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6654bfd651a33af48aa5d8a0cc1376b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementConditionText: {fileID: 3962324022804743368}
+  progressText: {fileID: 7547697910623655089}
+  termText: {fileID: 4688185940320610293}
+  rewardImage: {fileID: 6143200633039686775}
+  progressSlider: {fileID: 7175644639742131428}
 --- !u!1 &9041845561855368714
 GameObject:
   m_ObjectHideFlags: 0
@@ -1190,7 +1208,7 @@ GameObject:
   - component: {fileID: 1123379123250077738}
   - component: {fileID: 4688185940320610293}
   m_Layer: 5
-  m_Name: PresentReceiptDateText
+  m_Name: MissionTermText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

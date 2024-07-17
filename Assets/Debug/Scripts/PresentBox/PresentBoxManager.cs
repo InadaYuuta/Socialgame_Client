@@ -19,7 +19,6 @@ public class PresentBoxManager : MonoBehaviour
     public List<GameObject> UnReceiptPresentClones { get { return unReceiptPresentClones; } }
     public List<GameObject> ReceiptedPresentClones { get { return receiptedPresentClones; } }
 
-    GetPresentBoxData getPresent;
     CreatePresentObj createPresent;
     DisplayPresentsObj displayPresent;
 
@@ -35,19 +34,19 @@ public class PresentBoxManager : MonoBehaviour
     {
         unReceiptPresents = new List<PresentBoxModel>();
         receiptedPresents = new List<PresentBoxModel>();
-        getPresent = GetComponent<GetPresentBoxData>();
         createPresent = GetComponent<CreatePresentObj>();
         displayPresent = GetComponent<DisplayPresentsObj>();
 
         PresentPanel.SetActive(false);
 
+        GetPresentBoxData getPresent = GetComponent<GetPresentBoxData>();
         getPresent.CheckUpdatePresentBox(); // データ取得
     }
 
     void Start()
     {
         totalPresentsPageNum = unReceiptPresents.Count / 5;
-        if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+        if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; }
         pageText.text = string.Format("{0}/{1}", pageNum, totalPresentsPageNum);
     }
 
@@ -69,12 +68,12 @@ public class PresentBoxManager : MonoBehaviour
         if (displayLog)
         {
             totalPresentsPageNum = receiptedPresents.Count / 5;
-            if (receiptedPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+            if (receiptedPresents.Count % 5 > 0) { totalPresentsPageNum++; }
         }
         else
         {
             totalPresentsPageNum = unReceiptPresents.Count / 5;
-            if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; } // ===========================TODO:これを下にも適応させる
+            if (unReceiptPresents.Count % 5 > 0) { totalPresentsPageNum++; }
         }
         if (totalPresentsPageNum == 0) { pageNum = 0; }
         pageText.text = string.Format("{0}/{1}", pageNum, totalPresentsPageNum);

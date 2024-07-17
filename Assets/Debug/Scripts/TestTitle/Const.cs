@@ -26,6 +26,7 @@ namespace GameUtil
         public const string WEAPON_EVOLUTION_URL = "http://localhost/api/evolution";            // 武器進化
         public const string GET_PRESENT_BOX_URL = "http://localhost/api/getPresentBox";         // プレゼントボックスデータ取得
         public const string RECEIVE_PRESENT_BOX_URL = "http://localhost/api/receivePresent";    // プレゼント受取
+        public const string GET_MISSION_URL = "http://localhost/api/getMission";                // ミッションデータ取得
 #elif DEVELOP_SERVER
         /** DB情報 */
         public const string REGISTRATION_URL = "http://localhost/api/register";                // 登録URL
@@ -46,6 +47,7 @@ namespace GameUtil
         public const string WEAPON_EVOLUTION_URL = "http://localhost/api/evolution";           // 武器進化
         public const string GET_PRESENT_BOX_URL = "http://localhost/api/getPresentBox";        // プレゼントボックスデータ取得
         public const string RECEIVE_PRESENT_BOX_URL = "http://localhost/api/receivePresent";   // プレゼント受取
+        public const string GET_MISSION_URL = "http://localhost/api/getMission";               // ミッションデータ取得
 #endif
 
 
