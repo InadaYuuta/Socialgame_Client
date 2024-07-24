@@ -10,10 +10,9 @@ public class GetMissionData : MonoBehaviour
 
     MissionManager missionManager;
 
-    void Start()
+    private void Awake()
     {
         missionManager = GetComponent<MissionManager>();
-        CheckUpdateMission();
     }
 
     // ¬Œ÷‚µ‚½ê‡‚ÉŒÄ‚ÔŠÖ”
