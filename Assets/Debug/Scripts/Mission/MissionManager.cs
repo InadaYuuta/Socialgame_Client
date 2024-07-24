@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MissionManager : MonoBehaviour
+public class MissionManager : DisplayTotalTargetNum
 {
     [SerializeField] GameObject missionPanel;
     [SerializeField] TextMeshProUGUI pageText, modeText;
 
     [SerializeField] List<MissionsModel> unReceiptMissions = new();   // 受取前のプレゼントデータ
-    List<MissionsModel> receiptedMissions = new();   // 受取済のプレゼントデータ
+    [SerializeField] List<MissionsModel> canReceiptMissions = new();   // 受取可能なプレゼントデータ
+    List<MissionsModel> receiptedMissions = new();    // 受取済のプレゼントデータ
 
     public List<MissionsModel> ReceiptedMissions { get { return receiptedMissions; } }
 
@@ -20,36 +21,26 @@ public class MissionManager : MonoBehaviour
     public List<GameObject> ReceiptedMissionClones { get { return receiptedMissionClones; } }
 
     CreateMissionObj createMissions;
-    DisplayPresentsObj displayPresent;
 
-    int pageNum = 1;
-    [SerializeField] int totalPresentsPageNum = 0;
     int totalMissionsNum = 0;
     public int TotalMissionsNum { get { return totalMissionsNum; } }
 
     bool isSet = false;
-    bool displayLog = false; // 表示するのが履歴かどうか(trueが履歴)
 
     private void Awake()
     {
         createMissions = GetComponent<CreateMissionObj>();
-        displayPresent = GetComponent<DisplayPresentsObj>();
 
-        //  missionPanel.SetActive(false);
+        missionPanel.SetActive(false);
 
         GetMissionData getMissions = GetComponent<GetMissionData>();
         getMissions.CheckUpdateMission(); // データ取得
     }
 
-    // 開いたときに毎回履歴ではなく受取可能なプレゼントが表示されるようにする
-    private void OnEnable()
-    {
-        displayLog = false;
-    }
-
     void Update()
     {
-        totalMissionsNum = unReceiptMissionClones.Count; // 現在の受け取れるプレゼントの数を更新
+        totalTargetNum = canReceiptMissions.Count;
+        DisplayText();
     }
 
     // 表示できるかを確認
@@ -65,6 +56,31 @@ public class MissionManager : MonoBehaviour
         return false;
     }
 
+    // 重複チェック
+    bool CheckDuplication(MissionsModel target)
+    {
+        foreach (var canReceiptMission in canReceiptMissions)
+        {
+            if (canReceiptMission.mission_id != target.mission_id)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 受取済のものがあればそれを削除
+    void DeleteCanReceiveMissions()
+    {
+        foreach (var target in canReceiptMissions)
+        {
+            if (target.receipt != 0)
+            {
+                canReceiptMissions.Remove(target);
+            }
+        }
+    }
+
     // プレゼントデータを設定
     public void SetMissionData(List<MissionsModel> unReceiptMissionsData, List<MissionsModel> receiptedMissionData)
     {
@@ -75,6 +91,22 @@ public class MissionManager : MonoBehaviour
         if (!isSet)
         {
             createMissions.CreateMissions(unReceiptMissions, receiptedMissions);
+            isSet = true;
+        }
+
+        DeleteCanReceiveMissions();
+
+        // 受取可能なものを保存
+        foreach (var target in unReceiptMissionsData)
+        {
+            if (target.achieved == 1 && target.receipt == 0)
+            {
+                bool isDuplication = CheckDuplication(target);
+                if (!isDuplication)
+                {
+                    canReceiptMissions.Add(target);
+                }
+            }
         }
     }
 
@@ -89,33 +121,6 @@ public class MissionManager : MonoBehaviour
         {
             receiptedMissionClones = receipteds;
         }
-        // 最初の一回のみプレゼントボックスの１ページ目を表示
-        //if (!isSet)
-        //{
-        //    pageNum = 1;
-        //    displayPresent.DisplayPresents(pageNum, false);
-        //    isSet = true;
-        //}
-    }
-
-    // 次へのボタンが押されたら次のページへ
-    public void OnPushNextButton()
-    {
-        if (pageNum < totalPresentsPageNum)
-        {
-            pageNum++;
-            displayPresent.DisplayPresents(pageNum, displayLog);
-        }
-    }
-
-    // 前へのボタンが押されたら前のページへ
-    public void OnPushPreviousButton()
-    {
-        if (pageNum > 1)
-        {
-            pageNum--;
-            displayPresent.DisplayPresents(pageNum, displayLog);
-        }
     }
 
     // パネルを開く
@@ -128,22 +133,5 @@ public class MissionManager : MonoBehaviour
     public void OnPushBackButton()
     {
         missionPanel.SetActive(false);
-    }
-
-    // 履歴ボタンが押されたら
-    public void OnPushLogButton()
-    {
-        if (displayLog)
-        {
-            displayLog = false;
-            modeText.text = "受取履歴";
-        }
-        else
-        {
-            displayLog = true;
-            modeText.text = "未受取へ";
-        }
-        pageNum = 1;
-        displayPresent.DisplayPresents(pageNum, displayLog);
     }
 }

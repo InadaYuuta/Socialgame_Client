@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PresentBoxManager : MonoBehaviour
+public class PresentBoxManager : DisplayTotalTargetNum
 {
     [SerializeField] GameObject PresentPanel;
     [SerializeField] TextMeshProUGUI pageText, modeText;
@@ -60,6 +60,8 @@ public class PresentBoxManager : MonoBehaviour
     {
         totalPresentsNum = unReceiptPresentClones.Count; // 現在の受け取れるプレゼントの数を更新
         ChangePageText();
+        totalTargetNum = totalPresentsNum;
+        DisplayText();
     }
 
     // 表示するプレゼントのページ数を変更

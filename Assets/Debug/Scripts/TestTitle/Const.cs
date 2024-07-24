@@ -27,6 +27,8 @@ namespace GameUtil
         public const string GET_PRESENT_BOX_URL = "http://localhost/api/getPresentBox";         // プレゼントボックスデータ取得
         public const string RECEIVE_PRESENT_BOX_URL = "http://localhost/api/receivePresent";    // プレゼント受取
         public const string GET_MISSION_URL = "http://localhost/api/getMission";                // ミッションデータ取得
+        public const string UPDATE_MISSION_URL = "http://localhost/api/updateMission";          // ミッションデータ更新
+        public const string RECEIVE_MISSION_URL = "http://localhost/api/receiveMission";        // ミッション受け取り
 #elif DEVELOP_SERVER
         /** DB情報 */
         public const string REGISTRATION_URL = "http://localhost/api/register";                // 登録URL
@@ -48,6 +50,8 @@ namespace GameUtil
         public const string GET_PRESENT_BOX_URL = "http://localhost/api/getPresentBox";        // プレゼントボックスデータ取得
         public const string RECEIVE_PRESENT_BOX_URL = "http://localhost/api/receivePresent";   // プレゼント受取
         public const string GET_MISSION_URL = "http://localhost/api/getMission";               // ミッションデータ取得
+        public const string UPDATE_MISSION_URL = "http://localhost/api/updateMission";         // ミッションデータ更新
+        public const string RECEIVE_MISSION_URL = "http://localhost/api/receiveMission";        // ミッション受け取り
 #endif
 
 

@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class ReceivePresent : MonoBehaviour
 {
-    [SerializeField] GameObject receivePanel, rewardPanel, receivePresent;
+    [SerializeField] GameObject receivePanel, rewardPanel;
     [SerializeField] Image beforeItemImage, afterItemImage;
     [SerializeField] TextMeshProUGUI beforeItemNumText, afterItemNumText;
+
+    GameObject receivePresent;
 
     int receive_present_id = -1;@// ó‚¯æ‚éƒvƒŒƒ[ƒ“ƒg‚ÌID
     int beforeNum, afterNum, rewardCategory;

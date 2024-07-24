@@ -28,7 +28,6 @@ public class DisplayErrorTextManager : MonoBehaviour
 
     private void Start() => CloseErrorCanvas();
 
-
     // エラーメッセージを表示する　
     public void DisplayError(string errorMessage)
     {
@@ -37,7 +36,7 @@ public class DisplayErrorTextManager : MonoBehaviour
     }
 
     // エラーキャンバスを非表示にする
-    void CloseErrorCanvas()
+    public void CloseErrorCanvas()
     {
         ErrorCanvas.SetActive(false);
     }

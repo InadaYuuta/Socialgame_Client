@@ -302,7 +302,15 @@ public class CommunicationManager : MonoBehaviour
                 UpdatePresentBoxData(responseObjects);
                 break;
             case GameUtil.Const.GET_MISSION_URL:
+            case GameUtil.Const.UPDATE_MISSION_URL:
                 UpdateMissionData(responseObjects);
+                break;
+            case GameUtil.Const.RECEIVE_MISSION_URL:
+                UpdateMissionData(responseObjects);
+                UpdateUserData(responseObjects);
+                UpdateWalletData(responseObjects);
+                UpdateItemData(responseObjects);
+                UpdatePresentBoxData(responseObjects);
                 break;
             default:
                 break;
@@ -321,7 +329,15 @@ public class CommunicationManager : MonoBehaviour
                 // エラーの場合
                 if (!string.IsNullOrEmpty(webRequest.error))
                 {
-                    Debug.LogError(webRequest.error);
+                    // パラメータの内容をログに出力
+                    foreach (var param in parameter)
+                    {
+                        var sectionName = param.sectionName;
+                        var sectionData = param.sectionData;
+                        Debug.Log($"Parameter Name: {sectionName}, Parameter Value: {System.Text.Encoding.UTF8.GetString(sectionData)}");
+                    }
+
+                    Debug.LogError("URL:" + connectURL + " のURLに接続した際にエラーが発生 " + webRequest.error);
                     yield break;
                 }
             }

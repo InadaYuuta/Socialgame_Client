@@ -222,7 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43d05b86acb71245a3e0dfdbd32b4a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushPanel: {fileID: 0}
   reasonText: {fileID: 3780644107133246716}
   numText: {fileID: 7882529885024997996}
   receiptTermText: {fileID: 2853989685706403182}
