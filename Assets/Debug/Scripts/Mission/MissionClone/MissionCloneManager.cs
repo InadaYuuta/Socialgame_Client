@@ -64,10 +64,6 @@ public class MissionCloneManager : MissionCloneBase
     private void Update()
     {
         if (isReceipt) { return; }
-        if (mission_id > -1)
-        {
-            UpdateProgress();
-        }
         if (achieved > 0) // 受け取り可能状態なら色を変えて受取メソッドを呼べるようにする
         {
             receiveButtonImage.color = new Color(1, 0.6572623f, 0);

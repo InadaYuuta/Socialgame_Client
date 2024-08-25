@@ -52,6 +52,7 @@ namespace GameUtil
         public const string GET_MISSION_URL = "https://yuu-game.com/api/getMission";               // ミッションデータ取得
         public const string UPDATE_MISSION_URL = "https://yuu-game.com/api/updateMission";         // ミッションデータ更新
         public const string RECEIVE_MISSION_URL = "https://yuu-game.com/api/receiveMission";       // ミッション受け取り
+        public const string GET_NEWS_URL = "https://yuu-game.com/api/getNews";                     // お知らせ取得
 #elif DEVELOP_SERVER
         /** DB情報 */
         public const string REGISTRATION_URL = "https://yuu-game.com/api/register";               // 登録URL
@@ -75,6 +76,7 @@ namespace GameUtil
         public const string GET_MISSION_URL = "https://yuu-game.com/api/getMission";               // ミッションデータ取得
         public const string UPDATE_MISSION_URL = "https://yuu-game.com/api/updateMission";         // ミッションデータ更新
         public const string RECEIVE_MISSION_URL = "https://yuu-game.com/api/receiveMission";       // ミッション受け取り
+         public const string GET_NEWS_URL = "https://yuu-game.com/api/getNews";                    // お知らせ取得
 #endif
 
 
