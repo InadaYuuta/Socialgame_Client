@@ -67,6 +67,8 @@ public class GachaMove : WeaponBase
 
     void SingleWait()
     {
+        gachaSingleResult.SetActive(false);
+        if (weaponClone[0] != null) { Destroy(weaponClone[0]); }
         gachaSingleResult.SetActive(true);
         weaponClone[0] = Instantiate(resultWeapon, new Vector3(0, 0, 0), Quaternion.identity);
         weaponClone[0].transform.SetParent(gachaSingleResult.transform, false);
@@ -78,7 +80,7 @@ public class GachaMove : WeaponBase
 
     void MultiWait()
     {
-        gachaMultiResult.SetActive(true);
+        gachaMultiResult.SetActive(false);
         StartCoroutine(MultiGachaResult());
         fragmentText[1].text = string.Format("取得かけら数:{0}個", fragmentNum);
     }
@@ -192,7 +194,18 @@ public class GachaMove : WeaponBase
     // 10個の結果を出す
     public IEnumerator MultiGachaResult()
     {
+        // 前のものが残っていないかチェック
+        for (int i = 0; i < 10; i++)
+        {
+            if (weaponClone[i] != null)
+            {
+                Destroy(weaponClone[i]);
+            }
+        }
+
         yield return new WaitForSeconds(0.5f);
+        gachaMultiResult.SetActive(true);
+
         for (int i = 0; i < 10; i++)
         {
             weaponClone[i] = Instantiate(resultWeapon, MultiPos[i], Quaternion.identity);

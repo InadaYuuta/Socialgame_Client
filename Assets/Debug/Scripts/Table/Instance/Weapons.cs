@@ -34,6 +34,35 @@ public class Weapons : TableBase
         }
     }
 
+    // 更新
+    public static void UpdateDate(WeaponModel[] weapons, string user_id)
+    {
+        foreach (WeaponModel weapon in weapons)
+        {
+            setQuery = string.Format("UPDATE weapons SET " +
+                "user_id = \"{0}\"," +
+                "weapon_id = {1}," +
+                "rarity_id = {2}," +
+                "level = {3}," +
+                "level_max = {4}," +
+                "current_exp = {5}," +
+                "limit_break = {6}," +
+                "limit_break_max = {7}," +
+                "evolution = {8}" +
+                " WHERE user_id = \"{0}\" AND weapon_id = {1}",
+                user_id,
+                weapon.weapon_id,
+                weapon.rarity_id,
+                weapon.level,
+                weapon.level_max,
+                weapon.current_exp,
+                weapon.limit_break,
+                weapon.limit_break_max,
+                weapon.evolution);
+            RunQuery(setQuery);
+        }
+    }
+
     // 全ての武器データの取得
     public static WeaponModel[] GetWeaponDataDefault(string selectQuery)
     {
@@ -108,7 +137,7 @@ public class Weapons : TableBase
 
 
     // 指定された武器の削除(進化時にクライアント側だけ進化前の武器が残ってしまうため)
-    // 間違っても新海外の場所で呼ばないように注意、論理削除ではなく物理削除のため
+    // 間違っても進化以外の場所で呼ばないように注意、論理削除ではなく物理削除のため
     public static void DeleteWeapon(int weapon_id)
     {
         getQuery = string.Format("delete from weapons where weapon_id = {0}", weapon_id);
