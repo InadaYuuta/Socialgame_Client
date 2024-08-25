@@ -21,6 +21,13 @@ public class ChangeHomeMode : MonoBehaviour
         StartCoroutine(ResultPanelController.DisplayResultPanel("¡ŒãÀ‘•—\’è!\nŒî‚¤‚²Šú‘Ò!"));
     }
 
+    // }ŠÓ‚ª‘I‘ğ‚³‚ê‚½
+    public void ChoicePictureBook()
+    {
+        currentMode = HomeMode.PictureBook;
+        StartCoroutine(ResultPanelController.DisplayResultPanel("¡ŒãÀ‘•—\’è!\nŒî‚¤‚²Šú‘Ò!"));
+    }
+
     // ƒz[ƒ€‚ª‘I‘ğ‚³‚ê‚½
     public void ChoiceHome()
     {
@@ -43,5 +50,10 @@ public class ChangeHomeMode : MonoBehaviour
         currentMode = HomeMode.Bag;
         bagCanvas.SetActive(true);
         shopCanvas.SetActive(false);
+    }
+
+    public void SeasonPass()
+    {
+        StartCoroutine(ResultPanelController.DisplayResultPanel("¡ŒãÀ‘•—\’è!\nŒî‚¤‚²Šú‘Ò!"));
     }
 }

@@ -46,6 +46,9 @@ public class ResponseObjects
     public string gacha_result;
     public int fragment_num;
 
+    // お知らせ
+    public NewsMasterModel[] news;
+
     // ログデータ
     public GachaLogModel[] gacha_log;
 
@@ -159,6 +162,18 @@ public class CommunicationManager : MonoBehaviour
             // TODO: 最初の一回のみSetするように処理を変更
             Missions.Set(responseObjects.missions, usersModel.user_id);
             //Missions.UpdateDate(responseObjects.missions, usersModel.user_id);
+        }
+    }
+
+    /// <summary>
+    /// お知らせ更新
+    /// </summary>
+    /// <param name="responseObjects"></param>
+    static void UpdateNewsData(ResponseObjects responseObjects)
+    {
+        if (responseObjects.news != null)
+        {
+            NewsMaster.Set(responseObjects.news);
         }
     }
 
@@ -317,6 +332,9 @@ public class CommunicationManager : MonoBehaviour
                 UpdateWalletData(responseObjects);
                 UpdateItemData(responseObjects);
                 UpdatePresentBoxData(responseObjects);
+                break;
+            case GameUtil.Const.GET_NEWS_URL:
+                UpdateNewsData(responseObjects);
                 break;
             default:
                 break;

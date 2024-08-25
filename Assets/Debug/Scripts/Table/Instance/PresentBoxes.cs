@@ -27,7 +27,6 @@ public class PresentBoxes : TableBase
     }
 
     // レコード登録処理
-    // TODO:ここでセットする対象が存在していればUpdateそうでなければSetという処理に書き換える
     public static void Set(PresentBoxModel[] present_box_model, string user_id)
     {
         foreach (PresentBoxModel present_box in present_box_model)
