@@ -28,6 +28,7 @@ public class ResponseObjects
     public WeaponExpModel[] weapon_exp;
     public EvolutionWeaponModel[] evolution_weapon;
     public GachaWeaponModel[] gacha_weapon;
+    public Weapons evolutionWeapons; // 進化時にデータを追加する用
 
     // プレゼントボックスデータ
     public PresentBoxModel[] present_box;
@@ -117,7 +118,7 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.weapons != null)
         {
             UsersModel usersModel = Users.Get();
-            Weapons.Set(responseObjects.weapons, usersModel.user_id);
+            Weapons.UpdateDate(responseObjects.weapons, usersModel.user_id);
         }
     }
 
@@ -255,9 +256,14 @@ public class CommunicationManager : MonoBehaviour
         switch (connectURL)
         {
             case GameUtil.Const.LOGIN_URL:
-            case GameUtil.Const.HOME_URL:
             case GameUtil.Const.STAMINA_CONSUMPTION:
                 UpdateUserData(responseObjects);
+                break;
+            case GameUtil.Const.HOME_URL:
+                UpdateUserData(responseObjects);
+                UpdateWeaponData(responseObjects);
+                UpdateWalletData(responseObjects);
+                UpdateItemData(responseObjects);
                 break;
             case GameUtil.Const.BUY_CURRENCY_URL:
                 UpdateWalletData(responseObjects);

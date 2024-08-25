@@ -8,7 +8,7 @@ public class MissionManager : DisplayTotalTargetNum
     [SerializeField] GameObject missionPanel;
     [SerializeField] TextMeshProUGUI pageText, modeText;
 
-    [SerializeField] List<MissionsModel> unReceiptMissions = new();   // 受取前のプレゼントデータ
+    [SerializeField] List<MissionsModel> unReceiptMissions = new();    // 受取前のプレゼントデータ
     [SerializeField] List<MissionsModel> canReceiptMissions = new();   // 受取可能なプレゼントデータ
     List<MissionsModel> receiptedMissions = new();    // 受取済のプレゼントデータ
 
@@ -39,8 +39,30 @@ public class MissionManager : DisplayTotalTargetNum
 
     void Update()
     {
+        UpdateCanReceiveMission();
         totalTargetNum = canReceiptMissions.Count;
         DisplayText();
+    }
+
+    // 現在受け取れるミッションを更新
+    void UpdateCanReceiveMission()
+    {
+        DeleteCanReceiveMissions(); // 受取済のものがあれば削除
+
+        if (unReceiptMissionClones.Count == 0) { return; }
+
+        // 受取可能なミッションを取得
+        foreach (var target in unReceiptMissions)
+        {
+            if (target.achieved == 1 && target.receipt == 0)
+            {
+                bool isDuplication = CheckDuplication(target);
+                if (!isDuplication)
+                {
+                    canReceiptMissions.Add(target);
+                }
+            }
+        }
     }
 
     // 表示できるかを確認
@@ -61,7 +83,7 @@ public class MissionManager : DisplayTotalTargetNum
     {
         foreach (var canReceiptMission in canReceiptMissions)
         {
-            if (canReceiptMission.mission_id != target.mission_id)
+            if (canReceiptMission.mission_id == target.mission_id)
             {
                 return true;
             }
@@ -95,19 +117,6 @@ public class MissionManager : DisplayTotalTargetNum
         }
 
         DeleteCanReceiveMissions();
-
-        // 受取可能なものを保存
-        foreach (var target in unReceiptMissionsData)
-        {
-            if (target.achieved == 1 && target.receipt == 0)
-            {
-                bool isDuplication = CheckDuplication(target);
-                if (!isDuplication)
-                {
-                    canReceiptMissions.Add(target);
-                }
-            }
-        }
     }
 
     // プレゼントクローン設定

@@ -107,6 +107,8 @@ public class EvolutionManager : WeaponBase
     // 進化が成功したら呼ぶ
     void SuccessEvolution()
     {
+        var evolutionWeapon = WeaponMaster.GetWeaponMasterData(EvolutionWeaponId).evolution_weapon_id;
+
         if (Weapons.GetWeaponData(EvolutionWeaponId) != null) { Weapons.DeleteWeapon(EvolutionWeaponId); } // 進化前の武器の削除
         choiceWeaponDataManager.SetDetailData(EvolutionWeaponId);
         StartCoroutine(ResultPanelController.DisplayResultPanel("進化完了"));
