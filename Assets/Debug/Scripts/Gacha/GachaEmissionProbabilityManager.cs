@@ -25,11 +25,6 @@ public class GachaEmissionProbabilityManager : MonoBehaviour
         ePPanel.SetActive(false);
     }
 
-    void Update()
-    {
-
-    }
-
     // –ß‚éƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚ç
     public void PushBackButton()
     {

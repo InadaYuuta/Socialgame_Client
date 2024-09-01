@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -23,7 +24,7 @@ public class LevelUpManager : WeaponBase
     bool isPush = false; // ƒ{ƒ^ƒ“‚ð‰Ÿ‚¹‚é‚©
 
     ChoiceWeaponDataManager weaponData;
-    UserProfileGetManager userProfile;
+    HomeManager userProfile;
     ChangeImageColor changeImageColor;
 
     enum UnPushReason
@@ -41,7 +42,7 @@ public class LevelUpManager : WeaponBase
             reinforcePanel.SetActive(false);
         }
         weaponData = FindObjectOfType<ChoiceWeaponDataManager>();
-        userProfile = FindObjectOfType<UserProfileGetManager>();
+        userProfile = FindObjectOfType<HomeManager>();
         changeImageColor = FindObjectOfType<ChangeImageColor>();
     }
 
@@ -118,9 +119,11 @@ public class LevelUpManager : WeaponBase
                 break;
         }
         if (!isPush) { return; }
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> levelUpForm = new();
         levelUpForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
         levelUpForm.Add(new MultipartFormDataSection("wid", levelUpWeaponId.ToString()));
-        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_LEVEL_UP_URL, levelUpForm));
+        Action afterAction = new(() => ResultPanelController.HideCommunicationPanel());
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_LEVEL_UP_URL, levelUpForm, afterAction));
     }
 }

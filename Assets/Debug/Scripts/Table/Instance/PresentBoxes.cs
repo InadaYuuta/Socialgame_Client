@@ -49,6 +49,7 @@ public class PresentBoxes : TableBase
                        "\"" + escapedDisplay + "\")";
             RunQuery(setQuery);
         }
+        UpdateDate(present_box_model, user_id); // 一応更新もする
     }
 
     // レコードの更新処理

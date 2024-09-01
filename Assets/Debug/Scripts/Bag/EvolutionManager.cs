@@ -18,7 +18,7 @@ public class EvolutionManager : WeaponBase
     string necessaryRPointStr = "必要P";
     string slashStr = " / ";
     int currentLimitBreak, currentLevel, maxLevel = 50, consumptionRPoint, currentRPoint;
-    int EvolutionWeaponId;
+    [SerializeField] int EvolutionWeaponId;
 
     bool isPush = false; // ボタンを押せるか
     enum UnPushReason
@@ -30,6 +30,7 @@ public class EvolutionManager : WeaponBase
     }
     UnPushReason currentState = UnPushReason.NONE; // ボタンが押せない理由
 
+    BagSortManager bagSortManager;
     ChoiceWeaponDataManager choiceWeaponDataManager;
     ChangeImageColor changeImageColor;
 
@@ -39,6 +40,7 @@ public class EvolutionManager : WeaponBase
         {
             EvolutionPanel.SetActive(false);
         }
+        bagSortManager = FindObjectOfType<BagSortManager>();
         choiceWeaponDataManager = FindObjectOfType<ChoiceWeaponDataManager>();
         changeImageColor = FindObjectOfType<ChangeImageColor>();
     }
@@ -83,8 +85,12 @@ public class EvolutionManager : WeaponBase
         currentLimitBreak = Weapons.GetWeaponData(EvolutionWeaponId).limit_break;
 
         ChangeImageColor.ChangeMode changeMode = ChangeImageColor.ChangeMode.UNSELECT;
-        int evoluted = Weapons.GetWeaponData(EvolutionWeaponId).evolution;
-        if (evoluted >= 1)
+
+        int evolut_weapon_id = WeaponMaster.GetWeaponMasterData(EvolutionWeaponId).evolution_weapon_id; // 進化先のID取得
+
+        int evoluted = Weapons.GetWeaponData(evolut_weapon_id).weapon_id; // 一度でもその武器を進化していたら進化不可
+        int evolution = Weapons.GetWeaponData(EvolutionWeaponId).evolution;
+        if (evoluted != 0 || evolution > 0)
         {
             currentState = UnPushReason.EVOLUTED;
         }
@@ -110,7 +116,9 @@ public class EvolutionManager : WeaponBase
         var evolutionWeapon = WeaponMaster.GetWeaponMasterData(EvolutionWeaponId).evolution_weapon_id;
 
         if (Weapons.GetWeaponData(EvolutionWeaponId) != null) { Weapons.DeleteWeapon(EvolutionWeaponId); } // 進化前の武器の削除
-        choiceWeaponDataManager.SetDetailData(EvolutionWeaponId);
+        choiceWeaponDataManager.SetDetailData(evolutionWeapon);
+        bagSortManager.UpdateBag();
+        ResultPanelController.HideCommunicationPanel();
         StartCoroutine(ResultPanelController.DisplayResultPanel("進化完了"));
     }
 
@@ -135,10 +143,11 @@ public class EvolutionManager : WeaponBase
                 break;
         }
         if (!isPush) { return; }
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> evolutionForm = new();
         evolutionForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
         evolutionForm.Add(new MultipartFormDataSection("wid", EvolutionWeaponId.ToString()));
         Action afterAction = new(() => SuccessEvolution());
-        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_EVOLUTION_URL, evolutionForm,afterAction));
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.WEAPON_EVOLUTION_URL, evolutionForm, afterAction));
     }
 }

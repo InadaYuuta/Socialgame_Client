@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Networking;
+using System;
 
 public class GachaLogManager : WeaponBase
 {
@@ -28,12 +29,20 @@ public class GachaLogManager : WeaponBase
         user_id = Users.Get().user_id;
     }
 
+    void SuccessGetLog()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        Invoke("UpdateText", 1.0f);
+    }
+
+    // ガチャログを取得
     public void GetGachaLog()
     {
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> gachaLogForm = new();
         gachaLogForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
-        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.GET_GACHA_LOG, gachaLogForm));
-        Invoke("UpdateText", 1.0f);
+        Action afterAction = new(() => SuccessGetLog());
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.GET_GACHA_LOG, gachaLogForm, afterAction));
     }
 
     // 戻るボタンが押されたら

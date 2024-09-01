@@ -59,6 +59,7 @@ public class NewsManager : MonoBehaviour
         CreateNews(2);
         CreateNews(3);
         CreateNews(4);
+        ResultPanelController.HideCommunicationPanel();
     }
 
     // 追加するものが重複していないかチェック
@@ -137,6 +138,7 @@ public class NewsManager : MonoBehaviour
     // お知らせを取得
     void GetMission()
     {
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> newsFrom = new();
         Action afterAction = new(() => GenerateNews());
         StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.GET_NEWS_URL, newsFrom, afterAction));

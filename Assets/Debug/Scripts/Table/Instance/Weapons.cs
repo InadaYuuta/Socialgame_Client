@@ -32,6 +32,7 @@ public class Weapons : TableBase
             setQuery = "insert or replace into weapons(user_id,weapon_id,rarity_id,level,level_max,current_exp,limit_break,limit_break_max,evolution) values(\"" + user_id + "\"," + weapons.weapon_id + "," + weapons.rarity_id + "," + weapons.level + "," + weapons.level_max + "," + weapons.current_exp + "," + weapons.limit_break + "," + weapons.limit_break_max + "," + weapons.evolution + ")";
             RunQuery(setQuery);
         }
+        UpdateDate(weapons_model_list, user_id);
     }
 
     // çXêV

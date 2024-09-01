@@ -99,6 +99,7 @@ public class LimitBreakManager : MonoBehaviour
     // ¬Œ÷‚µ‚½ê‡‚ÉŒÄ‚ÔŠÖ”
     void SuccessLimitBreak()
     {
+        ResultPanelController.HideCommunicationPanel();
         StartCoroutine(ResultPanelController.DisplayResultPanel("ŒÀŠE“Ë”j‚µ‚Ü‚µ‚½B"));
     }
 
@@ -121,6 +122,7 @@ public class LimitBreakManager : MonoBehaviour
                 break;
         }
         if (!isPush) { return; }
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> limitBreakForm = new();
         limitBreakForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
         limitBreakForm.Add(new MultipartFormDataSection("wid", limitBreakWeaponId.ToString()));

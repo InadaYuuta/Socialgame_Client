@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,16 +14,24 @@ public class ConsumptionStamina : MonoBehaviour
 
     private void Update() => currentStamina = Users.Get().last_stamina;
 
+    void SuccessConsumption()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        StartCoroutine(ResultPanelController.DisplayResultPanel(consumptionStr));
+    }
+
     // クエストができるまでの仮処理、スタミナを5消費する
-    public void TestConsumptionStamina()
+    public void ConsumptionStaminaMove()
     {
         // 現在のスタミナが5以上ならスタミナを消費、そうでなければスタミナが足りないことを示すイメージ表示
         if (currentStamina > 5)
         {
+            ResultPanelController.DisplayCommunicationPanel();
             List<IMultipartFormSection> consumptionStaminaForm = new();
             consumptionStaminaForm.Add(new MultipartFormDataSection("uid", user_id));
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.STAMINA_CONSUMPTION, consumptionStaminaForm, null));
-            StartCoroutine(ResultPanelController.DisplayResultPanel(consumptionStr));
+            Action afterAction = new(() => SuccessConsumption());
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.STAMINA_CONSUMPTION, consumptionStaminaForm, afterAction));
+
         }
         else
         {

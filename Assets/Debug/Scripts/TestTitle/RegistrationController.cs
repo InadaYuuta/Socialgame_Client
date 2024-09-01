@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using TMPro;
+using System;
 
 public class RegistrationController : UsersBase
 {
@@ -91,18 +92,25 @@ public class RegistrationController : UsersBase
         }
     }
 
-    public void TestResist()
+    void SuccessRegist()
+    {
+        ResultPanelController.HideCommunicationPanel();
+    }
+
+    public void Resist()
     {
         name = input.text;
         if (name.Length < 16)
         {
+            ResultPanelController.DisplayCommunicationPanel();
             List<IMultipartFormSection> registForm = new(); // WWWForm‚ÌV‚µ‚¢‚â‚è•û
             registForm.Add(new MultipartFormDataSection("un", name));
+            Action afterAction = new(() => SuccessRegist());
             if (Users.Get().user_id != null)
             {
                 loginChecker.OnLoginFlag(); // “o˜^Š®—¹
             }
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.REGISTRATION_URL, registForm, null));
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.REGISTRATION_URL, registForm, afterAction));
         }
         else
         {

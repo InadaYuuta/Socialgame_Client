@@ -18,6 +18,7 @@ public class GetPresentBoxData : MonoBehaviour
     // 成功した場合に呼ぶ関数
     void SuccessGetPresentBoxData()
     {
+        ResultPanelController.HideCommunicationPanel();
         Debug.Log("プレゼントデータの取得に成功しました。");
         GetPresentData();
     }
@@ -25,6 +26,7 @@ public class GetPresentBoxData : MonoBehaviour
     // プレゼントボックスデータを取得する
     public void CheckUpdatePresentBox()
     {
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> getPresentBoxForm = new();
         getPresentBoxForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
         Action afterAction = new(() => SuccessGetPresentBoxData());

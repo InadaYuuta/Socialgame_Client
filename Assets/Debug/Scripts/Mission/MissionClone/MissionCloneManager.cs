@@ -9,8 +9,6 @@ public class MissionCloneManager : MissionCloneBase
     [SerializeField] Slider progressSlider;
     [SerializeField] GameObject receiveButton;
 
-    GameObject receivePanel;
-
     int mission_id = -1;
     public int Mission_id { get { return mission_id; } }
 
@@ -38,9 +36,8 @@ public class MissionCloneManager : MissionCloneBase
     void Awake()
     {
         base.Awake();
-        updateMission = FindAnyObjectByType<UpdateMission>();
-        receiveMission = FindAnyObjectByType<ReceiveMission>();
-        receivePanel = receiveMission.ReceivePanel;
+        updateMission = FindObjectOfType<UpdateMission>();
+        receiveMission = FindObjectOfType<ReceiveMission>();
     }
 
     void Start()
@@ -53,7 +50,7 @@ public class MissionCloneManager : MissionCloneBase
         receiveMission = FindAnyObjectByType<ReceiveMission>();
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (mission_id > -1)
         {
@@ -67,7 +64,10 @@ public class MissionCloneManager : MissionCloneBase
         if (achieved > 0) // 受け取り可能状態なら色を変えて受取メソッドを呼べるようにする
         {
             receiveButtonImage.color = new Color(1, 0.6572623f, 0);
-            canReceive = true;
+            if (!canReceive)
+            {
+                canReceive = true;
+            }
         }
 
         if (mission_id > -1 && Missions.GetPresentBoxData(mission_id).receipt > 0)
@@ -75,6 +75,13 @@ public class MissionCloneManager : MissionCloneBase
             isReceipt = true;
             MissionReceivedAfterMove();
         }
+    }
+
+    // ミッションを更新する
+    public void UpdateMission()
+    {
+        MissionsModel updateModel = Missions.GetPresentBoxData(mission_id);
+        SetMissionObjParameter(updateModel);
     }
 
     // テキストやデータの設定
@@ -93,7 +100,7 @@ public class MissionCloneManager : MissionCloneBase
     }
 
     // テキストやデータの更新
-    public void UpdateMissionObjParameter(MissionsModel setTarget)
+    void UpdateMissionObjParameter(MissionsModel setTarget)
     {
         if (isReceipt) { return; }
         mission_id = setTarget.mission_id;
@@ -128,16 +135,14 @@ public class MissionCloneManager : MissionCloneBase
     {
         if (isReceipt) { return; }
         if (mission_id == -1) { return; }
-        MissionsModel updateModel = Missions.GetPresentBoxData(mission_id);
-        SetMissionObjParameter(updateModel);
+        UpdateMission();
     }
 
     // 受取後に呼ぶメソッド
     void MissionReceivedAfterMove()
     {
         if (mission_id == -1) { return; }
-        MissionsModel updateModel = Missions.GetPresentBoxData(mission_id);
-        SetMissionObjParameter(updateModel);
+        UpdateMission();
 
         // ボタンと受取期間を非表示にして受け取れないようにする
         termText.gameObject.SetActive(false);
@@ -149,11 +154,11 @@ public class MissionCloneManager : MissionCloneBase
         //　ヒエラルキーで一番下に移動し、一番前に表示される
         transform.SetAsLastSibling();
 
-        receivePanel.SetActive(false);
+        ResultPanelController.HideCommunicationPanel();
     }
 
     // 進捗を確認して更新(StartとOnEnableで呼ぶ、今後ガチャ等のミッションの進捗が進む際に更新するように変えてもいいかもしれない)
-    protected void UpdateProgress()
+    void UpdateProgress()
     {
         if (isReceipt) { return; }
         if (mission_id == -1 || oldProgress == -1) { return; }
@@ -214,10 +219,8 @@ public class MissionCloneManager : MissionCloneBase
         if (isReceipt) { return; }
         if (canReceive)
         {
-            receivePanel.SetActive(true);
+            ResultPanelController.DisplayCommunicationPanel();
             receiveMission.StartReceiveMission(mission_id, MissionReceivedAfterMove);
         }
     }
-
-    // ----------------------次ここから、受け取った後受取済プレゼントを作成する処理の追加と受け取っている最中クリックできないようにパネルの展開、受け取りできるかの確認-------------------
 }
