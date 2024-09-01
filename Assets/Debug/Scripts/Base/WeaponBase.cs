@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class WeaponBase : MonoBehaviour
 {
-    Color comonPlusColor = new(0.509804f, 0.6666667f, 1);
-    Color rarePlusColor = new(1, 0.509804f, 0.509804f);
-    Color srarePlusColor = new(1, 0.9758152f, 0.9758152f);
+    Color comonPlusColor = new(0.5f, 0.6f, 1);
+    Color rarePlusColor = new(1, 0.5f, 0.5f);
+    Color srarePlusColor = new(1, 0.9f, 0);
 
     protected void WeaponSetting(GameObject weapon, int weaponId)
     {

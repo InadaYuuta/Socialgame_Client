@@ -22,6 +22,8 @@ public class MissionManager : DisplayTotalTargetNum
 
     CreateMissionObj createMissions;
 
+    GetMissionData getMissions;
+
     int totalMissionsNum = 0;
     public int TotalMissionsNum { get { return totalMissionsNum; } }
 
@@ -33,14 +35,28 @@ public class MissionManager : DisplayTotalTargetNum
 
         missionPanel.SetActive(false);
 
-        GetMissionData getMissions = GetComponent<GetMissionData>();
+        getMissions = GetComponent<GetMissionData>();
         getMissions.CheckUpdateMission(); // データ取得
     }
 
     void Update()
     {
         UpdateCanReceiveMission();
-        totalTargetNum = canReceiptMissions.Count;
+        CheckDisplayCount();
+    }
+
+    void CheckDisplayCount()
+    {
+        var total = Missions.GetMissionDataAll();
+        int count = 0;
+        foreach (var mission in total)
+        {
+            if (mission.achieved > 0 && mission.receipt == 0)
+            {
+                count++;
+            }
+        }
+        totalTargetNum = count;
         DisplayText();
     }
 
@@ -92,7 +108,7 @@ public class MissionManager : DisplayTotalTargetNum
     }
 
     // 受取済のものがあればそれを削除
-    void DeleteCanReceiveMissions()
+    public void DeleteCanReceiveMissions()
     {
         foreach (var target in canReceiptMissions)
         {
@@ -112,8 +128,8 @@ public class MissionManager : DisplayTotalTargetNum
         // 最初の一回のみ生成
         if (!isSet)
         {
-            createMissions.CreateMissions(unReceiptMissions, receiptedMissions);
             isSet = true;
+            createMissions.CreateMissions(unReceiptMissions, receiptedMissions);
         }
 
         DeleteCanReceiveMissions();
@@ -136,11 +152,13 @@ public class MissionManager : DisplayTotalTargetNum
     public void OnPushOpenButton()
     {
         missionPanel.SetActive(true);
+        getMissions.CheckUpdateMission(); // データ取得
     }
 
     // 戻るボタンが押されたらパネルを閉じる
     public void OnPushBackButton()
     {
         missionPanel.SetActive(false);
+        getMissions.CheckUpdateMission(); // データ取得
     }
 }

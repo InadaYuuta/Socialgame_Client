@@ -7,16 +7,20 @@ public class ChangeHomeMode : MonoBehaviour
 
     [SerializeField] GameObject shopCanvas, bagCanvas;
 
+    HomeManager homeManager;
+
     void Awake()
     {
         currentMode = HomeMode.Home;
         shopCanvas.SetActive(false);
         bagCanvas.SetActive(false);
+        homeManager = FindObjectOfType<HomeManager>();
     }
 
     // オプションが選択された時
     public void ChoiceOption()
     {
+        homeManager.GetHomeData();
         currentMode = HomeMode.Option;
         StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
     }
@@ -24,6 +28,7 @@ public class ChangeHomeMode : MonoBehaviour
     // 図鑑が選択された時
     public void ChoicePictureBook()
     {
+        homeManager.GetHomeData();
         currentMode = HomeMode.PictureBook;
         StartCoroutine(ResultPanelController.DisplayResultPanel("今後実装予定!\n乞うご期待!"));
     }
@@ -31,6 +36,7 @@ public class ChangeHomeMode : MonoBehaviour
     // ホームが選択された時
     public void ChoiceHome()
     {
+        homeManager.GetHomeData();
         currentMode = HomeMode.Home;
         shopCanvas.SetActive(false);
         bagCanvas.SetActive(false);
@@ -39,6 +45,7 @@ public class ChangeHomeMode : MonoBehaviour
     // ショップが選択された時
     public void ChoiceShop()
     {
+        homeManager.GetHomeData();
         currentMode = HomeMode.Shop;
         shopCanvas.SetActive(true);
         bagCanvas.SetActive(false);
@@ -47,6 +54,7 @@ public class ChangeHomeMode : MonoBehaviour
     // バッグが選択された時
     public void ChoiceBag()
     {
+        homeManager.GetHomeData();
         currentMode = HomeMode.Bag;
         bagCanvas.SetActive(true);
         shopCanvas.SetActive(false);

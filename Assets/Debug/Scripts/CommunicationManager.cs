@@ -39,10 +39,7 @@ public class ResponseObjects
     public MissionCategoryModel[] mission_category;
 
     // ガチャ用
-    //public string[] new_weaponIds;
-    //public string[] gacha_result;
     public int[] new_weaponIds;
-    // public int[] gacha_result;
     public string gacha_result;
     public int fragment_num;
 
@@ -96,7 +93,10 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.wallets != null)
         {
             UsersModel usersModel = Users.Get();
-            Wallets.Set(responseObjects.wallets, usersModel.user_id);
+            if (responseObjects.wallets.paid_amount + responseObjects.wallets.free_amount > 0)
+            {
+                Wallets.Set(responseObjects.wallets, usersModel.user_id);
+            }
         }
     }
 
@@ -121,7 +121,7 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.weapons != null)
         {
             UsersModel usersModel = Users.Get();
-            Weapons.UpdateDate(responseObjects.weapons, usersModel.user_id);
+            Weapons.Set(responseObjects.weapons, usersModel.user_id);
         }
     }
 
@@ -145,9 +145,7 @@ public class CommunicationManager : MonoBehaviour
         if (responseObjects.present_box != null)
         {
             UsersModel usersModel = Users.Get();
-            // TODO: 最初の一回のみSetするように処理を変更
-            PresentBoxes.UpdateDate(responseObjects.present_box, usersModel.user_id);
-            //PresentBoxes.Set(responseObjects.present_box, usersModel.user_id);
+            PresentBoxes.Set(responseObjects.present_box, usersModel.user_id);
         }
     }
 
@@ -161,7 +159,6 @@ public class CommunicationManager : MonoBehaviour
             UsersModel usersModel = Users.Get();
             // TODO: 最初の一回のみSetするように処理を変更
             Missions.Set(responseObjects.missions, usersModel.user_id);
-            //Missions.UpdateDate(responseObjects.missions, usersModel.user_id);
         }
     }
 
@@ -276,9 +273,11 @@ public class CommunicationManager : MonoBehaviour
                 break;
             case GameUtil.Const.HOME_URL:
                 UpdateUserData(responseObjects);
-                UpdateWeaponData(responseObjects);
                 UpdateWalletData(responseObjects);
+                UpdateWeaponData(responseObjects);
                 UpdateItemData(responseObjects);
+                UpdateMissionData(responseObjects);
+                UpdatePresentBoxData(responseObjects);
                 break;
             case GameUtil.Const.BUY_CURRENCY_URL:
                 UpdateWalletData(responseObjects);
@@ -305,6 +304,7 @@ public class CommunicationManager : MonoBehaviour
                 UpdateGachaLogData(responseObjects);
                 break;
             case GameUtil.Const.WEAPON_LEVEL_UP_URL:
+            case GameUtil.Const.WEAPON_EVOLUTION_URL:
                 UpdateUserData(responseObjects);
                 UpdateWeaponData(responseObjects);
                 break;
@@ -360,7 +360,7 @@ public class CommunicationManager : MonoBehaviour
                         var sectionData = param.sectionData;
                         Debug.Log($"Parameter Name: {sectionName}, Parameter Value: {System.Text.Encoding.UTF8.GetString(sectionData)}");
                     }
-
+                    DisplayErrorTextManager.Instance.DisplayError("500\n通信エラーが発生\nしばらくしてからお試しください");
                     Debug.LogError("URL:" + connectURL + " のURLに接続した際にエラーが発生 " + webRequest.error);
                     yield break;
                 }
@@ -369,7 +369,7 @@ public class CommunicationManager : MonoBehaviour
             {
                 // *** レスポンスの取得 ***
                 string text = webRequest.downloadHandler.text;
-                Debug.Log("レスポンス : " + text);
+                Debug.Log("URL:" + connectURL + "レスポンス : " + text);
                 // エラーの場合
                 if (text.All(char.IsNumber))
                 {

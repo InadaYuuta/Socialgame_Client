@@ -4,6 +4,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using System;
+using Unity.VisualScripting;
 
 public class GachaMove : WeaponBase
 {
@@ -29,17 +31,30 @@ public class GachaMove : WeaponBase
         panel.SetActive(false);
     }
 
+    void SuccessGachaSingle()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        SingleWait();
+    }
+
+    void SuccessGachaMulti()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        MultiWait();
+    }
+
     // 単発ガチャの時の動き
     public void SingleMove()
     {
         if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 30)
         {
+            ResultPanelController.DisplayCommunicationPanel();
             panel.SetActive(true);
             List<IMultipartFormSection> gachaForm = new();
             gachaForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
             gachaForm.Add(new MultipartFormDataSection("gCount", "1"));
-            StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm));
-            Invoke("SingleWait", 1f);
+            Action afterAction = new(() => SuccessGachaSingle());
+            StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm, afterAction));
         }
         else
         {
@@ -52,12 +67,13 @@ public class GachaMove : WeaponBase
     {
         if (Wallets.Get().free_amount + Wallets.Get().paid_amount > 300)
         {
+            ResultPanelController.DisplayCommunicationPanel();
             panel.SetActive(true);
             List<IMultipartFormSection> gachaForm = new();
             gachaForm.Add(new MultipartFormDataSection("uid", Users.Get().user_id));
             gachaForm.Add(new MultipartFormDataSection("gCount", "10"));
-            StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm));
-            Invoke("MultiWait", 1f);
+            Action afterAction = new(() => SuccessGachaMulti());
+            StartCoroutine(ConnectServer(GameUtil.Const.GACHA_URL, gachaForm, afterAction));
         }
         else
         {
@@ -144,7 +160,7 @@ public class GachaMove : WeaponBase
     }
 
     // サーバーに接続する
-    public IEnumerator ConnectServer(string connectURL, List<IMultipartFormSection> parameter)
+    public IEnumerator ConnectServer(string connectURL, List<IMultipartFormSection> parameter, Action action)
     {
         // *** リクエストの送付 ***
         using (UnityWebRequest webRequest = UnityWebRequest.Post(connectURL, parameter))
@@ -187,6 +203,13 @@ public class GachaMove : WeaponBase
                 ResponseObjects responseObjects = JsonUtility.FromJson<ResponseObjects>(text);
                 yield return new WaitForSeconds(0.5f);
                 GachaSetting(responseObjects);
+
+                // 正常終了アクション実行
+                if (action != null)
+                {
+                    action();
+                    action = null;
+                }
             }
         }
     }

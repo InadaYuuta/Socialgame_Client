@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -32,7 +33,7 @@ public class StaminaRecoveryController : MonoBehaviour
         maxStamina = Users.Get().max_stamina;
     }
 
-     void StaminaRecovery()
+    void StaminaRecovery()
     {
         if (currentStamina >= maxStamina)
         {
@@ -41,10 +42,12 @@ public class StaminaRecoveryController : MonoBehaviour
         }
         else
         {
+            ResultPanelController.DisplayCommunicationPanel();
             List<IMultipartFormSection> recoveryForm = new();
             recoveryForm.Add(new MultipartFormDataSection("uid", user_id));
             recoveryForm.Add(new MultipartFormDataSection("remode", recoveryMode));
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.STAMINA_RECOVERY_URL, recoveryForm, null));
+            Action afterAction = new(() => ResultPanelController.HideCommunicationPanel());
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.STAMINA_RECOVERY_URL, recoveryForm, afterAction));
             StartCoroutine(ResultPanelController.DisplayResultPanel(recoveryStr));
         }
 
@@ -70,10 +73,10 @@ public class StaminaRecoveryController : MonoBehaviour
     public void StaminaRecoveryItem()
     {
         int staminaItem = Items.GetItemData(10001).item_num;
-        if(staminaItem > 0)
+        if (staminaItem > 0)
         {
-        recoveryStr = "スタミナを回復した\r\nスタミナアイテムを１消費した";
-        StaminaRecovery();
+            recoveryStr = "スタミナを回復した\r\nスタミナアイテムを１消費した";
+            StaminaRecovery();
         }
         else
         {

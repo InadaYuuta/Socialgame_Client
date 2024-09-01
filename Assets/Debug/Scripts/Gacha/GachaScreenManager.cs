@@ -13,6 +13,8 @@ public class GachaScreenManager : MonoBehaviour
     GachaLogManager gachaLogManager;
     BagSortManager bagSortManager;
 
+    HomeManager homeManager;
+
     void Start()
     {
         gachaCanvas.SetActive(false);
@@ -20,6 +22,7 @@ public class GachaScreenManager : MonoBehaviour
         gachaMoveManager = FindObjectOfType<GachaMove>();
         gachaLogManager = FindObjectOfType<GachaLogManager>();
         bagSortManager = FindObjectOfType<BagSortManager>();
+        homeManager = FindObjectOfType<HomeManager>();
     }
 
     void FixedUpdate() => UpdateNum();
@@ -40,12 +43,14 @@ public class GachaScreenManager : MonoBehaviour
     // ガチャボタンが押されたら
     public void PushGachaButton()
     {
+        homeManager.GetHomeData();
         gachaCanvas.SetActive(true);
     }
 
     // 戻るボタンが押されたら
     public void PushBackGachaButton()
     {
+        homeManager.GetHomeData();
         gachaCanvas.SetActive(false);
         bagSortManager.UpdateBag();
     }

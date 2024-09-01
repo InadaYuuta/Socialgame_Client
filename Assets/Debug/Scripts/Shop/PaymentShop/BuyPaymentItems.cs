@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,14 +19,21 @@ public class BuyPaymentItems : MonoBehaviour
         SetProductText();
     }
 
+    void SuccessBuy()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        StartCoroutine(ResultPanelController.DisplayResultPanel(buyStr));
+    }
+
     public void PushBuyButton()
     {
-        StartCoroutine(ResultPanelController.DisplayResultPanel(buyStr));
         buyButton.SetActive(false);
+        ResultPanelController.DisplayCommunicationPanel();
         List<IMultipartFormSection> buyForm = new();
         buyForm.Add(new MultipartFormDataSection("uid", user_id));
         buyForm.Add(new MultipartFormDataSection("pid", product_id));
-        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.BUY_CURRENCY_URL, buyForm, null));
+        Action afterAction = new(() => SuccessBuy());
+        StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.BUY_CURRENCY_URL, buyForm, afterAction));
         Invoke("DisplayButton", 1);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,18 +20,23 @@ public class BuyFragmentItem : MonoBehaviour
         SetProductText();
     }
 
+    void SuccessBuy()
+    {
+        ResultPanelController.HideCommunicationPanel();
+        StartCoroutine(ResultPanelController.DisplayResultPanel(buyStr));
+    }
+
     // 交換アイテムが必要数あれば購入、そうでなければパネルを表示
     public void PushBuyButton()
     {
         int exchangeItemNum = Items.GetItemData(30001).item_num;
         if (exchangeItemNum > 10)
         {
-            StartCoroutine(ResultPanelController.DisplayResultPanel(buyStr));
-            //buyButton.SetActive(false);
             List<IMultipartFormSection> buyForm = new();
             buyForm.Add(new MultipartFormDataSection("uid", user_id));
             buyForm.Add(new MultipartFormDataSection("epid", exchange_product_id));
-            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.BUY_EXCHANGE_SHOP_URL, buyForm, null));
+            Action afterAction = new(() => SuccessBuy());
+            StartCoroutine(CommunicationManager.ConnectServer(GameUtil.Const.BUY_EXCHANGE_SHOP_URL, buyForm, afterAction));
         }
         else
         {

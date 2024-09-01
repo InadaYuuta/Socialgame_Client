@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResultPanelController : MonoBehaviour
 {
-    static GameObject resultPanel;
+    static GameObject resultPanel, communicationPanel;
     static TextMeshProUGUI resultText;
 
     public static ResultPanelController Instance { get; private set; }
@@ -23,9 +23,23 @@ public class ResultPanelController : MonoBehaviour
             return;
         }
         resultPanel = GameObject.Find("ResultPanel");
+        communicationPanel = GameObject.Find("CommunicationPanel");
         resultText = GameObject.Find("ResultText").GetComponent<TextMeshProUGUI>();
         resultText.text = "";
         resultPanel.SetActive(false);
+        HideCommunicationPanel();
+    }
+
+    // 通信中を表示
+    public static void DisplayCommunicationPanel()
+    {
+        communicationPanel.SetActive(true);
+    }
+
+    // 通信中を非表示に
+    public static void HideCommunicationPanel()
+    {
+        communicationPanel.SetActive(false);
     }
 
     // 何かしらのメッセージを表示するときに呼び出す
