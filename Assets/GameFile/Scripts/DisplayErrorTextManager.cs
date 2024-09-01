@@ -45,7 +45,7 @@ public class DisplayErrorTextManager : MonoBehaviour
     public void TitleBack()
     {
         StartCoroutine(WaitCloseErrorCanvas());
-        FadeManager.Instance.LoadScene("TestScene");
+        FadeManager.Instance.LoadScene("TitleScene");
     }
 
     // TODO: 今後もう一度処理を試すようなコードを追加する

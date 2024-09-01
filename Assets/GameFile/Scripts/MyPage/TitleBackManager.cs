@@ -9,7 +9,7 @@ public class TitleBackManager : MonoBehaviour
         if (!isFinish)
         {
             isFinish = true;
-            FadeManager.Instance.LoadScene("TestScene", 0.5f);
+            FadeManager.Instance.LoadScene("TitleScene", 0.5f);
         }
     }
 }
