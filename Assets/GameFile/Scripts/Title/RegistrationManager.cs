@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.UI;
 using TMPro;
-using System.Runtime.CompilerServices;
 
-public class TestScript : UsersBase
+public class RegistrationManager : UsersBase
 {
     [SerializeField] TMP_InputField input;
 
