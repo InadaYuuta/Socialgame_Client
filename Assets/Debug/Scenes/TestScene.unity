@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 247375588}
   - component: {fileID: 247375587}
   m_Layer: 0
-  m_Name: TestTitleManager
+  m_Name: TitleManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3797,7 +3797,7 @@ GameObject:
   - component: {fileID: 1827482913}
   - component: {fileID: 1827482914}
   m_Layer: 0
-  m_Name: TitlelManager
+  m_Name: RegistrationManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,7 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TestTitleManager : MonoBehaviour
+public class TitleManager : MonoBehaviour
 {
     static bool isFlag = false;
     void Awake()
